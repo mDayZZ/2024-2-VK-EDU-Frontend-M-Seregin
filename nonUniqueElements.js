@@ -27,10 +27,11 @@ nonUniqueElements([10, 9, 10, 10, 9, 8]) == [10, 9, 10, 10, 9]
 export default function nonUniqueElements(data) {
   const dataCounter = {};
   data.forEach(element => {
-    if (element in dataCounter)
+    if (element in dataCounter) {
       dataCounter[element]++;
-    else
-      dataCounter[element] = 1;
+      return;
+    }
+    dataCounter[element] = 1;
   })
   return data.filter(element => dataCounter[element] > 1)
 }
