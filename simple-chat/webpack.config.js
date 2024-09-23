@@ -58,16 +58,27 @@ module.exports = {
                     },
                 ],
             },
+            // {
+            //     test: /\.css$/,
+            //     include: SRC_PATH,
+            //     use: [
+            //         {
+            //             loader: MiniCSSExtractPlugin.loader,
+            //         },
+            //         {
+            //             loader: 'css-loader',
+            //         },
+            //     ],
+            // },
             {
-                test: /index\.css$/,
-                include: SRC_PATH,
+                test: /\.s[ac]ss$/i,
                 use: [
-                    {
-                        loader: MiniCSSExtractPlugin.loader,
-                    },
-                    {
-                        loader: 'css-loader',
-                    },
+                    // Creates `style` nodes from JS strings
+                    "style-loader",
+                    // Translates CSS into CommonJS
+                    "css-loader",
+                    // Compiles Sass to CSS
+                    "sass-loader",
                 ],
             },
         ],

@@ -1,4 +1,4 @@
-import './styles/index.css';
+import './styles/index.scss';
 import {getChatById, getUserById} from "./js/api";
 import {createMessageElement} from "./js/utils/createElements";
 import {getDatetime} from "./js/utils/date";
@@ -56,7 +56,6 @@ const updateChatInfo = () => {
 
 document.addEventListener('DOMContentLoaded', () => {
     const messagesFromStorage = JSON.parse(localStorage.getItem('messages'));
-    console.log(messagesFromStorage)
     if (messagesFromStorage) {
         chatInfo.messages = messagesFromStorage;
     }

@@ -1,5 +1,7 @@
 logs
 *.log
+*.css
+*.css.map
 
 node_modules/
 dist/
