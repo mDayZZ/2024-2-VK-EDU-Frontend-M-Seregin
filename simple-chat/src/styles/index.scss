@@ -4,10 +4,10 @@
 @import "utils";
 @import "globals";
 
-@import './ui/avatar';
-@import './ui/buttons';
+@import 'ui/_avatar.scss';
+@import 'ui/_buttons.scss';
 
-@import "./blocks/header";
-@import "./blocks/chat";
+@import "blocks/_header.scss";
+@import "blocks/_chat.scss";
 
 
