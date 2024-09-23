@@ -1,7 +1,7 @@
 const users = [
-    {id: '12', avatarUrl: '/images/chat_avatar.jpg', username: 'Жанна Аркадьевна', status: 'В сети'},
-    {id: '24', avatarUrl: '/images/konst_avatar.jpeg', username: 'Константин', status: 'В сети'},
-    {id: '26', avatarUrl: '/images/shat_avatar.jpg', username: 'Максим Викторович', status: '2023-04-21T18:25:43-05:00'},
+    {id: '12', avatarUrl: './images/chat_avatar.jpg', username: 'Жанна Аркадьевна', status: 'В сети'},
+    {id: '24', avatarUrl: './images/konst_avatar.jpeg', username: 'Константин', status: 'В сети'},
+    {id: '26', avatarUrl: './images/shat_avatar.jpg', username: 'Максим Викторович', status: '2023-04-21T18:25:43-05:00'},
 ]
 
 const chats = [
