@@ -1,5 +1,5 @@
 const users = [
-    {id: '12', avatarUrl: './images/chat_avatar.jpg', username: 'Жанна Аркадьевна', status: 'В сети'},
+    {id: '12', avatarUrl: './images/janne_avatar.jpg', username: 'Жанна Аркадьевна', status: 'В сети'},
     {id: '24', avatarUrl: './images/konst_avatar.jpeg', username: 'Константин', status: 'В сети'},
     {id: '26', avatarUrl: './images/shat_avatar.jpg', username: 'Максим Викторович', status: '2023-04-21T18:25:43-05:00'},
 ]
@@ -8,7 +8,7 @@ const chats = [
     {
         id: '1',
         title: 'Дом Шаталиных',
-        avatarUrl: '/images/chat_avatar.jpg',
+        avatarUrl: './images/chat_avatar.jpeg',
         users: [{id: '12', role: 'member'}, {id: '24', role: 'member'}, {id: '26', role: 'admin'}],
         messages: [
             {id: '140', senderId: '12', messageText: 'Купи хлеба пж', datetime: '2023-04-21T18:25:43-05:00'},
