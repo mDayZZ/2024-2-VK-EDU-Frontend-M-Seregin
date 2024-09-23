@@ -1,4 +1,4 @@
-import nonUniqueElements from './nonUniqueElements';
+import nonUniqueElements from './nonUniqueElements.js';
 
 
 test('returns non unique elements', () => {

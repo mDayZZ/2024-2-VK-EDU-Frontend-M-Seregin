@@ -1,0 +1,54 @@
+html {
+  --theme-header-background: var(--color-purple-dark);
+  --theme-header-color: #fff;
+  --theme-body-background: var(--color-pink-color);
+  --theme-body-color: #000;
+  --theme-action-background: var(--color-purple-light);
+  --theme-action-color: #fff;
+}
+
+body {
+  margin: 0;
+  background-color: #fff;
+  color: #333;
+  font-size: 15px;
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: 400;
+  line-height: 20px;
+  min-height: 100dvh;
+  min-width: 100dvw;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: var(--theme-body-background);
+}
+
+main {
+  display: flex;
+  flex: 1;
+  width: 100%;
+  overflow-y: auto;
+}
+
+footer {
+  margin: 0;
+  padding: 0;
+}
+
+//input[type=submit] {
+//  visibility: collapse;
+//}
+
+form {
+  margin: 0;
+}
+
+input {
+  border: 0;
+  outline: none;
+  width: 100%;
+  padding: 14px;
+}
+
+

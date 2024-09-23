@@ -1,0 +1,10 @@
+.avatar {
+  width: 48px;
+  aspect-ratio: 1;
+  object-fit: cover;
+  object-position: center;
+
+  &--rounded {
+    border-radius: 50%;
+  }
+}

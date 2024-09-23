@@ -1,4 +1,4 @@
-import correctSentence from './correctSentence';
+import correctSentence from './correctSentence.js';
 
 test('returns false for wrong input', () => {
   expect(correctSentence(12)).toBe(false)
