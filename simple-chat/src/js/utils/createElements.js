@@ -1,5 +1,14 @@
-const createMessageBlockElement = () => {
+const createMessageBlockElement = (senderInfo, messageText, datetime) => {
+    const messageBlockElement = document.createElement('div');
+    messageBlockElement.classList.add('message__block');
+    messageBlockElement.insertAdjacentHTML("beforeend", `
+            <p class="message__username">${senderInfo.username}</p>
+        `);
 
+    messageBlockElement.insertAdjacentElement("beforeend", createTextElement(messageText));
+    messageBlockElement.insertAdjacentElement("beforeend", createDatetimeElement(datetime));
+
+    return messageBlockElement;
 }
 
 const createTextElement = (messageText) => {
@@ -17,25 +26,19 @@ const createDatetimeElement = (datetime) => {
     return datetimeElement;
 }
 
-export const createMessageElement = (senderInfo, isSelf, messageText, datetime) => {
-    const messageBlockElement = document.createElement('div');
-    messageBlockElement.classList.add('message__block');
-    messageBlockElement.insertAdjacentHTML("beforeend", `
-            <p class="message__username">${senderInfo.username}</p>
-        `);
+export const createMessageElement = ({id, senderInfo, isSelf, messageText, datetime}) => {
 
-    messageBlockElement.insertAdjacentElement("beforeend", createTextElement(messageText));
-    messageBlockElement.insertAdjacentElement("beforeend", createDatetimeElement(datetime));
-
-    const messageElement = document.createElement("div");
+    const messageElement = document.createElement("li");
+    messageElement.id = `message_${id}`;
     messageElement.classList.add('message');
     if (isSelf) {
         messageElement.classList.add('message--self');
     }
 
     messageElement.insertAdjacentHTML("beforeend", `<img src="${senderInfo.avatarUrl}" alt="sender avatar" class="message__avatar avatar avatar--rounded">`);
-    messageElement.insertAdjacentElement('beforeend', messageBlockElement)
+    messageElement.insertAdjacentElement('beforeend', createMessageBlockElement(senderInfo, messageText, datetime))
 
     return messageElement;
 }
+
 

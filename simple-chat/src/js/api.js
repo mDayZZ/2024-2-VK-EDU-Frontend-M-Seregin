@@ -9,7 +9,7 @@ const chats = [
         id: '1',
         title: 'Дом Шаталиных',
         avatarUrl: './images/chat_avatar.jpeg',
-        users: [{id: '12', role: 'member'}, {id: '24', role: 'member'}, {id: '26', role: 'admin'}],
+        members: [{id: '12', role: 'member'}, {id: '24', role: 'member'}, {id: '26', role: 'admin'}],
         messages: [
             {id: '140', senderId: '12', messageText: 'Купи хлеба пж', datetime: '2023-04-21T18:25:43-05:00'},
             {id: '141', senderId: '24', messageText: 'Дорогая моя, я дворецкий, а не доставщик', datetime: '2023-04-21T18:41:43-04:12'},
@@ -22,9 +22,29 @@ const chats = [
 
 
 export const getUserById = (id) => {
-    return JSON.stringify(users.filter(user => user.id === String(id))[0]);
+    const user = new Promise( (resolve) => {
+        setTimeout(() => {
+            const user = users.filter(user => user.id === String(id))[0];
+            if (!user) {
+                resolve(null);
+            }
+            resolve (user);
+        }, 3000)
+    })
+
+    return user;
 }
 
 export const getChatById = (id) => {
-    return JSON.stringify(chats.filter(chat => chat.id === String(id))[0]);
+    const chat = new Promise( (resolve) => {
+        setTimeout(() => {
+            const chat = chats.filter(chat => chat.id === String(id))[0];
+            if (!chat) {
+                resolve(null);
+            }
+
+            resolve(chat);
+        }, 2000)
+    })
+    return chat;
 }
