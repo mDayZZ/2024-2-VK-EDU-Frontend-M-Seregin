@@ -13,12 +13,16 @@ const chatTitle = document.getElementById('chatTitle');
 const chatAvatar = document.getElementById('chatAvatar');
 const chatStatus = document.getElementById('chatStatus');
 
+let userInfo = null;
+let chatInfo = null;
+let memberInfo = null;
+
 
 const renderMessage = ({id, senderId, messageText, datetime}) => {
-    let senderInfo = memberInfo.filter(member => member.id === senderId)[0];
-    const isSelf = senderInfo.id === userInfo.id;
+    const senderInfo = memberInfo.find(member => member.id === senderId);
+    const isSelf = senderInfo?.id === userInfo.id;
     const formattedDatetime = getDatetime(datetime);
-    return createMessageElement({senderInfo, id, isSelf, messageText, datetime: formattedDatetime});
+    return createMessageElement({senderId, senderInfo, id, isSelf, messageText, datetime: formattedDatetime});
 }
 
 const updateMessages = () => {
@@ -48,14 +52,14 @@ const sendMessage = (message) => {
 
 
 const updateChatInfo = () => {
-    if (chatInfo) {
-        chatTitle.innerText = chatInfo.title;
-        chatAvatar.src = chatInfo.avatarUrl;
-        if (chatInfo.isPublic) {
-            chatStatus.innerText = `${chatInfo.members.length} участников`;
-        }
+    if (!chatInfo) {
+        return;
     }
-
+    chatTitle.innerText = chatInfo.title;
+    chatAvatar.src = chatInfo.avatarUrl;
+    if (chatInfo.isPublic) {
+        chatStatus.innerText = `${chatInfo.members.length} участников`;
+    }
 }
 
 const handleSubmit = (event) => {
@@ -64,25 +68,30 @@ const handleSubmit = (event) => {
     input.value = '';
 }
 
-let userInfo;
-let chatInfo;
-let memberInfo;
+
 
 
 (async () => {
-    userInfo = await getUserById(24);
-    chatInfo = await getChatById(1);
+    [userInfo, chatInfo] = await Promise.all([
+        getUserById(24),
+        getChatById(1),
+    ]);
     const memberInfoPromises = chatInfo.members.map(member => getUserById(member.id));
     memberInfo = await Promise.all(memberInfoPromises);
-    if (userInfo && chatInfo) {
-        const messagesFromStorage = JSON.parse(localStorage.getItem('messages'));
-        if (messagesFromStorage) {
-            chatInfo.messages = messagesFromStorage;
-        }
-        updateChatInfo();
-        updateMessages();
-        form.addEventListener('submit', handleSubmit);
-        loader.style.display = 'none';
+    if (!userInfo && !chatInfo) {
+        return;
     }
+
+    const messagesFromStorage = JSON.parse(localStorage.getItem('messages'));
+    if (messagesFromStorage) {
+        chatInfo.messages = messagesFromStorage;
+    }
+    updateChatInfo();
+    updateMessages();
+
+    form.addEventListener('submit', handleSubmit);
+    window.addEventListener('load', () => {
+        loader.style.display = 'none';
+    })
 })();
 

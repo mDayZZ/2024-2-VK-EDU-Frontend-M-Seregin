@@ -2,6 +2,7 @@ const users = [
     {id: '12', avatarUrl: './images/janne_avatar.jpg', username: 'Жанна Аркадьевна', status: 'В сети'},
     {id: '24', avatarUrl: './images/konst_avatar.jpeg', username: 'Константин', status: 'В сети'},
     {id: '26', avatarUrl: './images/shat_avatar.jpg', username: 'Максим Викторович', status: '2023-04-21T18:25:43-05:00'},
+    {id: '31', avatarUrl: './images/jessee_avatar.jpg', username: 'Джесси Пинкман', status: '2024-04-21T18:25:43-05:00'},
 ]
 
 const chats = [
@@ -13,7 +14,12 @@ const chats = [
         messages: [
             {id: '140', senderId: '12', messageText: 'Купи хлеба пж', datetime: '2023-04-21T18:25:43-05:00'},
             {id: '141', senderId: '24', messageText: 'Дорогая моя, я дворецкий, а не доставщик', datetime: '2023-04-21T18:41:43-04:12'},
+            {id: '141', senderId: '24', messageText: 'Дорогая моя, я дворецкий, а не доставщик', datetime: '2023-04-21T18:41:43-04:12'},
             {id: '141', senderId: '26', messageText: 'Константин, в этом месяце работаете без зарплаты', datetime: '2023-04-21T20:13:10-04:12'},
+            {id: '141', senderId: '27', messageText: 'БимБамБом', datetime: '2023-04-21T20:13:10-04:12'},
+            {id: '141', senderId: '12', messageText: 'Оки', datetime: '2023-05-21T20:13:10-04:12'},
+            {id: '141', senderId: '31', messageText: 'Эйо, мистер Вайт, вы где? Не могу до вас дозвониться', datetime: '2024-02-21T22:13:10-04:12'},
+            {id: '141', senderId: '24', messageText: 'Ты чатики перепутал', datetime: '2024-02-21T22:15:43-04:12'},
         ],
         isPublic: true,
     },

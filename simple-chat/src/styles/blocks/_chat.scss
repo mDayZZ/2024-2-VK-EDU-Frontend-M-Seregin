@@ -13,7 +13,6 @@
   display: inline-flex;
   align-items: flex-end;
   gap: 12px;
-
   max-width: 80%;
 
   margin-right: auto;
@@ -40,6 +39,8 @@
   }
 
   &__block {
+    min-width: 120px;
+
     padding-block: 10px;
     padding-inline: 20px;
 
