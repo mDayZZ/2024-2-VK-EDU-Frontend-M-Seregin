@@ -1,5 +1,12 @@
 import {getUserById} from "../api";
 
+export const createElement = (tag, className, innerHTML = '') => {
+    const element = document.createElement(tag);
+    if (className) element.className = className;
+    if (innerHTML) element.innerHTML = innerHTML;
+    return element;
+};
+
 const createMessageBlockElement = () => {
     const messageBlockElement = document.createElement('div');
     messageBlockElement.classList.add('message__block');

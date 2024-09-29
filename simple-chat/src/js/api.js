@@ -30,7 +30,7 @@ export const getUserById = (id) => {
                 resolve(null);
             }
             resolve (user);
-        }, 3000)
+        }, 30)
     })
 
     return user;
@@ -45,7 +45,7 @@ export const getChatById = (id) => {
             }
 
             resolve(chat);
-        }, 2000)
+        }, 10)
     })
     return chat;
 }
