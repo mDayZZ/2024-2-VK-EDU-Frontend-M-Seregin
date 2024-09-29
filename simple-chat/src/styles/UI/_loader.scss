@@ -1,0 +1,29 @@
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+
+  background-color: black;
+  &__ring {
+    width: 50px;
+    aspect-ratio: 1;
+    border: 6px solid white;
+    border-right: 6px solid var(--theme-action-background);
+    animation: rotate-right ease-in-out infinite 0.5s;
+    border-radius: 50%;
+  }
+}
+
+@keyframes rotate-right {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}

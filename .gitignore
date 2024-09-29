@@ -1,6 +1,7 @@
 logs
 *.log
-package-lock.json
+*.css
+*.css.map
 
 node_modules/
 dist/
