@@ -1,11 +1,37 @@
 import {getUserById} from "../api";
 
-export const createElement = (tag, className, innerHTML = '') => {
+
+
+
+export const createElement = (tag, className, attributes = {}, innerHTML = '') => {
     const element = document.createElement(tag);
     if (className) element.className = className;
     if (innerHTML) element.innerHTML = innerHTML;
+    if (attributes) {
+        setAttributesToElement(element, attributes);
+    }
+
     return element;
 };
+
+export const setAttributesToElement = (element, attributes) => {
+    if (!element || !attributes) {
+        return;
+    }
+    for (let [key, value] of Object.entries(attributes)) {
+        element.setAttribute(key, value);
+    }
+}
+
+export const createMaterialButton = (iconName) => {
+    const materialButtonElement = createElement('button', 'header__actionButton iconButton', {}, `
+        <span class="material-symbols-outlined">
+            ${iconName}
+        </span>
+    `);
+
+    return materialButtonElement;
+}
 
 const createMessageBlockElement = () => {
     const messageBlockElement = document.createElement('div');
@@ -21,6 +47,7 @@ const createMessageBlockElement = () => {
 
     return [messageBlockElement, {textElement, datetimeElement}];
 }
+
 
 const createTextElement = () => {
     const textElement = document.createElement("p");

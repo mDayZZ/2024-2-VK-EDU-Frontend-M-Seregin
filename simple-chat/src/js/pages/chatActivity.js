@@ -1,23 +1,28 @@
 import {getChatById} from "../api";
-import {createChatHeader} from "../components/ChatHeader";
+import {createChatHeader} from "../components/chatHeader/";
 import {createChatContainer} from "../components/ChatContainer";
+import {createChatForm} from "../components/chatForm";
+import {createElement} from "../utils/createElements";
 
 export const createChatActivity = ({chatId, userId, ...props}) => {
     const chatActivityElement = document.createElement('div');
     chatActivityElement.className = 'activity chatActivity';
     const [chatHeader, {chatTitle, chatStatus, chatAvatar}] = createChatHeader();
-    const [chatContainer, {}] = createChatContainer();
+    const container = createElement('div', 'container');
+    const [chatContainer, {renderMessages, renderMessage}] = createChatContainer();
+    const chatFormElement = createChatForm({chatId, userId, renderMessage, container});
 
     getChatById(chatId)
         .then(chatInfo => {
             chatTitle.innerText = chatInfo.title;
             chatStatus.innerText = `${chatInfo.members.length} участника`;
             chatAvatar.src = chatInfo.avatarUrl;
+            renderMessages({userId, messages: chatInfo.messages});
+            container.scrollTop = container.scrollHeight;
         })
 
-
-
-    chatActivityElement.append(chatHeader, chatContainer);
+    container.append(chatContainer);
+    chatActivityElement.append(chatHeader, container, chatFormElement);
     return chatActivityElement;
 }
 

@@ -1,4 +1,4 @@
-import {createElement} from "../utils/createElements";
+import {createElement, createMaterialButton} from "../../utils/createElements";
 
 export const createChatHeader = () => {
     const chatHeaderElement = createElement('div', 'header chatHeader');
@@ -13,11 +13,15 @@ const createChatInfo = () => {
     const chatInfoElement = document.createElement('div');
     chatInfoElement.className = 'header__chatInfo'
 
-    chatInfoElement.insertAdjacentHTML("beforeend", actionButton);
+    const backButtonElement = createMaterialButton('arrow_back');
     const chatAvatar = createElement('img', 'avatar avatar--rounded');
     const [chatInfoBody, children] = createChatInfoBody();
 
-    chatInfoElement.append(chatAvatar, chatInfoBody)
+    backButtonElement.addEventListener('click', () => {
+        window.updateState('conversations');
+    })
+
+    chatInfoElement.append(backButtonElement, chatAvatar, chatInfoBody)
     return [chatInfoElement, {...children, chatAvatar}];
 }
 
@@ -40,8 +44,8 @@ const actionButton =
 
 const createActionContainer = () => {
     const actionContainer = createElement('div', 'header__actionContainer');
-    const searchActionButton = createElement('button', 'header__actionButton iconButton', '<span class="material-symbols-outlined">search</span>');
-    const moreActionButton = createElement('button', 'header__actionButton iconButton', '<span class="material-symbols-outlined">more_vert</span>');
+    const searchActionButton = createElement('button', 'header__actionButton iconButton', {},'<span class="material-symbols-outlined">search</span>');
+    const moreActionButton = createElement('button', 'header__actionButton iconButton', {} ,'<span class="material-symbols-outlined">more_vert</span>');
 
     actionContainer.append(searchActionButton, moreActionButton);
     return [actionContainer, {searchActionButton, moreActionButton}];
