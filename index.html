@@ -17,42 +17,6 @@
         </style>
     </head>
     <body>
-    <div class="loader">
-        <div class="loader__ring"></div>
-    </div>
-    <header>
-        <div class="header">
-            <div class="header__chatInfo">
-                <button class="header__actionButton iconButton">
-                    <span class="material-symbols-outlined">arrow_back</span>
-                </button>
-                <img src="" alt="chat avatar" id="chatAvatar" class="avatar avatar--rounded">
-                <div class="header__chatInfo-body">
-                    <p id="chatTitle" class="header__chatInfo-title"></p>
-                    <p id="chatStatus" class="header__chatInfo-status"></p>
-                </div>
-            </div>
-            <div class="header__actionContainer">
-                <button class="header__actionButton iconButton">
-                    <span class="material-symbols-outlined">search</span>
-                </button>
-                <button class="header__actionButton iconButton">
-                    <span class="material-symbols-outlined">more_vert</span>
-                </button>
-            </div>
-        </div>
-    </header>
-    <main>
-        <div class="container">
-            <ul class="chatContainer">
-            </ul>
-        </div>
-    </main>
-    <footer>
-        <form class="chatForm"  action="/">
-            <input class="chatForm__input" name="message-text" placeholder="Введите сообщение" type="text" required>
-            <button class="chatForm__button textButton" type="submit">Отправить</button>
-        </form>
-    </footer>
+        <div id="root"></div>
     <script type="text/javascript" src="bundle.js"></script></body>
 </html>
