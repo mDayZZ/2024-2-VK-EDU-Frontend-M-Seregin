@@ -1,6 +1,6 @@
 import {getChatById} from "../api";
 import {createChatHeader} from "../components/chatHeader/";
-import {createChatContainer} from "../components/ChatContainer/";
+import {createChatContainer} from "../components/chatContainer/";
 import {createChatForm} from "../components/chatForm/";
 import {createElement} from "../utils/createElements";
 
