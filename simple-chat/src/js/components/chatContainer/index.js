@@ -1,7 +1,5 @@
-import {createElement} from "../utils/createElements";
-import {getUserById} from "../api";
-import {getDatetime} from "../utils/date";
-import {createMessageElement} from "./chatMessage";
+import {createElement} from "../../utils/createElements";
+import {createMessageElement} from "../chatMessage/";
 
 export const createChatContainer = (messages = []) => {
     const chatContainer = createElement('ul', 'chatContainer');

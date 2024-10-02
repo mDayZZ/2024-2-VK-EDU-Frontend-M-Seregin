@@ -1,6 +1,6 @@
-import {createElement} from "../utils/createElements";
-import {getDatetime} from "../utils/date";
-import {getUserById} from "../api";
+import {createElement} from "../../utils/createElements";
+import {getDatetime} from "../../utils/date";
+import {getUserById} from "../../api";
 
 export const createMessageElement = ({userId, message}) => {
     const messageElement = createElement('li', 'message');

@@ -13,20 +13,33 @@ export const createChatForm = ({userId, chatId, renderMessage, container}) => {
         event.preventDefault();
         const messageId = Math.floor(Math.random() * (100000 - 1)) + 1;
         const datetime = new Date().toISOString();
-        postMessageByChatId({messageId, senderId: userId, messageText: chatInputElement.value, datetime}, chatId)
-            .then(renderMessage({userId, message: {id: messageId, senderId: userId, messageText: chatInputElement.value, datetime} }));
+        const newMessage = {id: messageId, senderId: userId, messageText: chatInputElement.value, datetime};
+
+        // Отправка сообщения на сервер
+        postMessageByChatId(newMessage, chatId)
+            .then(() => {
+                // Отображаем сообщение в UI
+                renderMessage({userId, message: newMessage});
+
+                // Обновляем чат в локальном хранилище
+                const chatsFromLocal = JSON.parse(localStorage.getItem('chats')) || [];
+                const chatIndex = chatsFromLocal.findIndex(chat => Number(chat.id) === Number(chatId));
+
+                if (chatIndex !== -1) {
+                    // Если чат найден, добавляем новое сообщение
+                    chatsFromLocal[chatIndex].messages.push(newMessage);
+                    localStorage.setItem('chats', JSON.stringify(chatsFromLocal));
+                }
+
+                requestAnimationFrame(() => {
+                    container.scrollTop = container.scrollHeight;
+                });
+            });
+
         chatInputElement.value = '';
-        container.scrollTop = container.scrollHeight
 
-        getChatsByUserId(userId).then(chats => {
-            console.log('chats', chats)
-            if (!chats) {
-                return;
-            }
 
-            localStorage.setItem('chats', JSON.stringify(chats));
-        })
-    })
+    });
 
 
     chatFormElement.append(chatInputElement, chatFormButton);

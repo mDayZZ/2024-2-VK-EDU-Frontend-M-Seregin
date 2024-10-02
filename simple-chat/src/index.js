@@ -36,6 +36,12 @@ window.updateState = (newState, params = {}) => {
     updateApp();
 }
 
+window.addEventListener('storage', (event) => {
+    if (event.key === 'chats') {
+        const updatedChats = JSON.parse(event.newValue);
+    }
+});
+
 updateApp();
 
 

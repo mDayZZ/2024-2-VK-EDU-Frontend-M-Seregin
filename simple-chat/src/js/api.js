@@ -7,7 +7,13 @@ const users = [
     {id: '33', avatarUrl: './images/fiona_galagher_avatar.jpg', username: 'Фиона Галлагер', status: 'В сети'},
     {id: '34', avatarUrl: './images/frank_galagher_avatar.jpg', username: 'Фрэнк Галлагер', status: '2024-04-21T18:25:43-05:00'},
     {id: '35', avatarUrl: './images/lip_galagher_avatar.jpg', username: 'Лип Галлагер', status: 'В сети'},
-]
+
+    // Измененные данные Breaking Bad
+    {id: '1001', avatarUrl: './images/jessee_avatar.jpg', username: 'Джесси Пинкман', status: '2024-04-21T18:25:43-05:00'},
+    {id: '1002', avatarUrl: './images/saul_photo.png', username: 'Сол Гудман', status: '2024-04-21T18:25:43-05:00'},
+    {id: '1003', avatarUrl: './images/mrwhite_photo.png', username: 'Мистер Белый', status: '2024-04-21T18:25:43-05:00'},
+    {id: '1004', avatarUrl: './images/mike_photo.png', username: 'Майк (не брать)', status: '2024-04-21T18:25:43-05:00'},
+];
 
 const chats = [
     {
@@ -31,6 +37,7 @@ const chats = [
             {id: '141', senderId: '31', messageText: 'Артур, нам нужно организовать дело с ирландцами', datetime: '2024-02-21T22:13:10-04:12'},
             {id: '142', senderId: '32', messageText: 'Томми, ты уверен, что это стоит того?', datetime: '2024-02-21T22:14:45-04:12'},
             {id: '143', senderId: '31', messageText: 'Я как томас шелби пррр', datetime: '2024-02-21T22:15:30-04:12'},
+            {id: '143', senderId: '31', messageText: 'Пригласи в чат остальных кепочек', datetime: '2024-02-21T22:15:31-04:12'},
         ],
         isPublic: true,
     },
@@ -46,7 +53,29 @@ const chats = [
         ],
         isPublic: true,
     },
-]
+
+    // Измененные данные Breaking Bad
+    {
+        id: '1005',
+        title: 'juzBusiness',
+        avatarUrl: './images/brba_chatphoto.png',
+        members: [{id: '1001', role: 'member'}, {id: '1002', role: 'member'}, {id: '1003', role: 'member'}, {id: '1004', role: 'admin'}],
+        messages: [
+            {id: '141', senderId: '1001', messageText: 'Эйо, мистер Вайт, вы где? Не могу до вас дозвониться', datetime: '2024-02-21T22:13:10-04:12'},
+            {id: '142', senderId: '1003', messageText: 'Джесси, сколько раз повторять? Я занят. Делай, как я сказал.', datetime: '2024-02-21T22:14:45-04:12'},
+            {id: '143', senderId: '1001', messageText: 'Мистер Вайт, ну это чушь. Я не робот, окей?', datetime: '2024-02-21T22:15:30-04:12'},
+            {id: '144', senderId: '1004', messageText: 'Захлопнитесь, и перестаньте спамить', datetime: '2024-02-21T22:16:00-04:12'},
+            {id: '145', senderId: '1002', messageText: 'Джесси, ты планируешь платить? Я тебе Майка нашёл', datetime: '2024-02-21T22:17:25-04:12'},
+            {id: '146', senderId: '1001', messageText: 'Какая ты жадная козлина, Сол', datetime: '2024-02-22T22:18:45-04:12'},
+            {id: '145', senderId: '1002', messageText: 'Пацан, на тебе свет клином не сошёлся. Мне семью кормить', datetime: '2024-02-21T22:19:25-04:12'},
+            {id: '144', senderId: '1004', messageText: ')))0)', datetime: '2024-02-21T22:16:00-04:12'},
+
+
+
+        ],
+        isPublic: true,
+    }
+];
 
 export const getUserById = (id) => {
     const user = new Promise((resolve) => {

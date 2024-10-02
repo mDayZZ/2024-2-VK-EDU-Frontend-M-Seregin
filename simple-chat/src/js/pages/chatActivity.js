@@ -1,6 +1,6 @@
 import {getChatById} from "../api";
 import {createChatHeader} from "../components/chatHeader/";
-import {createChatContainer} from "../components/ChatContainer";
+import {createChatContainer} from "../components/ChatContainer/";
 import {createChatForm} from "../components/chatForm/";
 import {createElement} from "../utils/createElements";
 
@@ -20,7 +20,10 @@ export const createChatActivity = ({chatId, userId, ...props}) => {
             chatStatus.innerText = `${chatInfo.members.length} участника`;
             chatAvatar.src = chatInfo.avatarUrl;
             renderMessages({userId, messages: chatInfo.messages});
-            container.scrollTop = container.scrollHeight;
+
+            requestAnimationFrame(() => {
+                container.scrollTop = container.scrollHeight;
+            });
         }
     }
     else {
