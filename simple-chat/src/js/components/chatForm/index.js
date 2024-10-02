@@ -1,5 +1,5 @@
-import {createElement} from "../utils/createElements";
-import {getChatById, postMessageByChatId} from "../api";
+import {createElement} from "../../utils/createElements";
+import {getChatById, getChatsByUserId, postMessageByChatId} from "../../api";
 
 export const createChatForm = ({userId, chatId, renderMessage, container}) => {
     const attributes = {
@@ -17,6 +17,15 @@ export const createChatForm = ({userId, chatId, renderMessage, container}) => {
             .then(renderMessage({userId, message: {id: messageId, senderId: userId, messageText: chatInputElement.value, datetime} }));
         chatInputElement.value = '';
         container.scrollTop = container.scrollHeight
+
+        getChatsByUserId(userId).then(chats => {
+            console.log('chats', chats)
+            if (!chats) {
+                return;
+            }
+
+            localStorage.setItem('chats', JSON.stringify(chats));
+        })
     })
 
 
