@@ -1,6 +1,7 @@
 import './styles/index.scss';
-import {createChatActivity} from "./js/pages/chatActivity";
-import {createConversationActivity} from "./js/pages/conversationActivity";
+import {createChatActivity} from "./js/pages/chatActivity/chatActivity";
+import {createConversationActivity} from "./js/pages/conversationActivity/conversationActivity";
+import {getChatsFromLocalStorage} from "./js/utils/storage";
 
 const root = document.getElementById('root');
 const App = document.createElement('div');
@@ -8,7 +9,6 @@ App.id = 'App';
 
 let state = 'conversations';
 let userId = 31;
-
 let chatId = null;
 
 
@@ -36,11 +36,7 @@ window.updateState = (newState, params = {}) => {
     updateApp();
 }
 
-window.addEventListener('storage', (event) => {
-    if (event.key === 'chats') {
-        const updatedChats = JSON.parse(event.newValue);
-    }
-});
+
 
 updateApp();
 

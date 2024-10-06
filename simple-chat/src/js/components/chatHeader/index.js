@@ -1,12 +1,13 @@
 import {createElement, createMaterialButton} from "../../utils/createElements";
+import './_chatHeader.scss'
 
-export const createChatHeader = () => {
-    const chatHeaderElement = createElement('div', 'header chatHeader');
-    const [chatInfoElement, chatInfoChildren] = createChatInfo();
-    const [actionContainer, actionContainerChildren] = createActionContainer();
+const createChatInfoBody = () => {
+    const chatInfoBodyElement = createElement('div');
+    const chatTitle = createElement('p', 'header__chatInfo-title');
+    const chatStatus = createElement('p', 'header__chatInfo-status');
 
-    chatHeaderElement.append(chatInfoElement, actionContainer);
-    return [chatHeaderElement, {...chatInfoChildren, ...actionContainerChildren}];
+    chatInfoBodyElement.append(chatTitle, chatStatus);
+    return {chatInfoBodyElement, chatTitle, chatStatus};
 }
 
 const createChatInfo = () => {
@@ -15,38 +16,32 @@ const createChatInfo = () => {
 
     const backButtonElement = createMaterialButton('arrow_back');
     const chatAvatar = createElement('img', 'avatar avatar--rounded');
-    const [chatInfoBody, children] = createChatInfoBody();
+    const {chatInfoBodyElement, chatTitle, chatStatus} = createChatInfoBody();
 
     backButtonElement.addEventListener('click', () => {
         window.updateState('conversations');
     })
 
-    chatInfoElement.append(backButtonElement, chatAvatar, chatInfoBody)
-    return [chatInfoElement, {...children, chatAvatar}];
+    chatInfoElement.append(backButtonElement, chatAvatar, chatInfoBodyElement);
+    return {chatInfoElement, chatTitle, chatStatus, chatAvatar};
 }
-
-const createChatInfoBody = () => {
-    const chatInfoBodyElement = createElement('div');
-    const chatTitle = createElement('p', 'header__chatInfo-title');
-    const chatStatus = createElement('p', 'header__chatInfo-status');
-
-    chatInfoBodyElement.append(chatTitle, chatStatus);
-    return [chatInfoBodyElement, {chatTitle, chatStatus}];
-}
-
-
-const actionButton =
-    `
-                <button class="header__actionButton iconButton">
-                    <span class="material-symbols-outlined">arrow_back</span>
-                </button>
-    `
 
 const createActionContainer = () => {
-    const actionContainer = createElement('div', 'header__actionContainer');
+    const actionContainerElement = createElement('div', 'header__actionContainer');
     const searchActionButton = createElement('button', 'header__actionButton iconButton', {},'<span class="material-symbols-outlined">search</span>');
     const moreActionButton = createElement('button', 'header__actionButton iconButton', {} ,'<span class="material-symbols-outlined">more_vert</span>');
 
-    actionContainer.append(searchActionButton, moreActionButton);
-    return [actionContainer, {searchActionButton, moreActionButton}];
+    actionContainerElement.append(searchActionButton, moreActionButton);
+    return {actionContainerElement, searchActionButton, moreActionButton};
 }
+
+export const createChatHeader = () => {
+    const chatHeaderElement = createElement('header', 'header chatHeader');
+    const {chatInfoElement, ...chatInfoChildren} = createChatInfo();
+    const {actionContainer, ...actionContainerChildren} = createActionContainer();
+
+    chatHeaderElement.append(chatInfoElement, actionContainer);
+    return {chatHeaderElement, ...chatInfoChildren, ...actionContainerChildren};
+}
+
+

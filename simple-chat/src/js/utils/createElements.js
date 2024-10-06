@@ -1,4 +1,4 @@
-import {getUserById} from "../api";
+import {getUserById} from "../api/userApi";
 
 
 
@@ -18,9 +18,9 @@ export const setAttributesToElement = (element, attributes) => {
     if (!element || !attributes) {
         return;
     }
-    for (let [key, value] of Object.entries(attributes)) {
+    Object.entries(attributes).forEach(([key, value]) => {
         element.setAttribute(key, value);
-    }
+    })
 }
 
 export const createMaterialButton = (iconName) => {

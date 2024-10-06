@@ -1,5 +1,6 @@
 import {createElement} from "../../utils/createElements";
 import {createMessageElement} from "../chatMessage/";
+import './_chatContainer.scss';
 
 export const createChatContainer = (messages = []) => {
     const chatContainer = createElement('ul', 'chatContainer');
@@ -14,10 +15,10 @@ export const createChatContainer = (messages = []) => {
     }
 
     const renderMessage = ({userId, message}) => {
-        const [messageElement, children] = createMessageElement({userId, message})
+        const [messageElement] = createMessageElement({userId, message})
         chatContainer.append(messageElement);
     }
 
     chatContainer.append();
-    return [chatContainer, {renderMessages, renderMessage}];
+    return {chatContainer, renderMessages, renderMessage};
 }

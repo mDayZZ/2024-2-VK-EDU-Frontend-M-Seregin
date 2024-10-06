@@ -1,4 +1,4 @@
-const users = [
+export const users = [
     {id: '12', avatarUrl: './images/janne_avatar.jpg', username: 'Жанна Аркадьевна', status: 'В сети'},
     {id: '24', avatarUrl: './images/konst_avatar.jpeg', username: 'Константин', status: 'В сети'},
     {id: '26', avatarUrl: './images/shat_avatar.jpg', username: 'Максим Викторович', status: '2023-04-21T18:25:43-05:00'},
@@ -8,14 +8,13 @@ const users = [
     {id: '34', avatarUrl: './images/frank_galagher_avatar.jpg', username: 'Фрэнк Галлагер', status: '2024-04-21T18:25:43-05:00'},
     {id: '35', avatarUrl: './images/lip_galagher_avatar.jpg', username: 'Лип Галлагер', status: 'В сети'},
 
-    // Измененные данные Breaking Bad
     {id: '1001', avatarUrl: './images/jessee_avatar.jpg', username: 'Джесси Пинкман', status: '2024-04-21T18:25:43-05:00'},
     {id: '1002', avatarUrl: './images/saul_photo.png', username: 'Сол Гудман', status: '2024-04-21T18:25:43-05:00'},
     {id: '1003', avatarUrl: './images/mrwhite_photo.png', username: 'Мистер Белый', status: '2024-04-21T18:25:43-05:00'},
     {id: '1004', avatarUrl: './images/mike_photo.png', username: 'Майк (не брать)', status: '2024-04-21T18:25:43-05:00'},
 ];
 
-const chats = [
+export const chats = [
     {
         id: '1',
         title: 'Дом Шаталиных',
@@ -54,7 +53,6 @@ const chats = [
         isPublic: true,
     },
 
-    // Измененные данные Breaking Bad
     {
         id: '1005',
         title: 'juzBusiness',
@@ -69,67 +67,7 @@ const chats = [
             {id: '146', senderId: '1001', messageText: 'Какая ты жадная козлина, Сол', datetime: '2024-02-22T22:18:45-04:12'},
             {id: '145', senderId: '1002', messageText: 'Пацан, на тебе свет клином не сошёлся. Мне семью кормить', datetime: '2024-02-21T22:19:25-04:12'},
             {id: '144', senderId: '1004', messageText: ')))0)', datetime: '2024-02-21T22:16:00-04:12'},
-
-
-
         ],
         isPublic: true,
     }
 ];
-
-export const getUserById = (id) => {
-    const user = new Promise((resolve) => {
-        setTimeout(() => {
-            const user = users.filter(user => user.id === String(id))[0];
-            if (!user) {
-                resolve(null);
-            }
-            resolve(user);
-        }, 30);
-    });
-
-    return user;
-}
-
-export const getChatById = (id) => {
-    const chat = new Promise((resolve) => {
-        setTimeout(() => {
-            const chat = chats.filter(chat => chat.id === String(id))[0];
-            if (!chat) {
-                resolve(null);
-            }
-
-            resolve(chat);
-        }, 10);
-    });
-    return chat;
-}
-
-export const getChatsByUserId = (id) => {
-    const promise = new Promise((resolve, reject) => {
-        setTimeout(() => {
-            if (!chats) {
-                reject(null);
-            }
-            resolve(chats);
-        }, 20);
-    });
-    return promise;
-}
-
-export const postMessageByChatId = ({messageId, senderId, messageText, datetime}, chatId) => {
-    const promise = new Promise((resolve, reject) => {
-        setTimeout(() => {
-            const chat = chats.find(chat => Number(chat.id) === Number(chatId))
-
-            if (!chat) {
-                reject(null);
-            }
-            const message = {id: messageId, senderId, messageText, datetime};
-            chat.messages.push(message);
-
-            resolve(chat);
-        }, 30);
-    });
-    return promise;
-}

@@ -1,50 +1,10 @@
 import {createElement} from "../../utils/createElements";
-import {getChatById, getChatsByUserId, postMessageByChatId} from "../../api";
-
-export const createChatForm = ({userId, chatId, renderMessage, container}) => {
-    const attributes = {
-        action: "/",
-    }
-    const chatFormElement = createElement('form', 'chatForm', attributes);
-    const chatInputElement = createChatInput();
-    const chatFormButton = createChatFormButton();
-
-    chatFormElement.addEventListener('submit', (event) => {
-        event.preventDefault();
-        const messageId = Math.floor(Math.random() * (100000 - 1)) + 1;
-        const datetime = new Date().toISOString();
-        const newMessage = {id: messageId, senderId: userId, messageText: chatInputElement.value, datetime};
-
-        // Отправка сообщения на сервер
-        postMessageByChatId(newMessage, chatId)
-            .then(() => {
-                // Отображаем сообщение в UI
-                renderMessage({userId, message: newMessage});
-
-                // Обновляем чат в локальном хранилище
-                const chatsFromLocal = JSON.parse(localStorage.getItem('chats')) || [];
-                const chatIndex = chatsFromLocal.findIndex(chat => Number(chat.id) === Number(chatId));
-
-                if (chatIndex !== -1) {
-                    // Если чат найден, добавляем новое сообщение
-                    chatsFromLocal[chatIndex].messages.push(newMessage);
-                    localStorage.setItem('chats', JSON.stringify(chatsFromLocal));
-                }
-
-                requestAnimationFrame(() => {
-                    container.scrollTop = container.scrollHeight;
-                });
-            });
-
-        chatInputElement.value = '';
-
-
-    });
-
-
-    chatFormElement.append(chatInputElement, chatFormButton);
-    return chatFormElement;
-}
+import {postMessageByChatId} from "../../api/chatApi";
+import { getChatsByUserId } from "../../api/userApi";
+import {getUniqueId} from "../../utils/uniqueId";
+import {getChatsFromLocalStorage, saveChatsToLocalStorage, saveMessageToChatInLocalStorage} from "../../utils/storage";
+import './_chatForm.scss';
+import {scrollElementToEnd} from "../../utils/scrollElementToEnd";
 
 const createChatInput = () => {
     const attributes = {
@@ -65,7 +25,35 @@ const createChatFormButton = () => {
     }
 
     const chatFormButton = createElement('button', 'chatForm__button textButton', attributes, 'Отправить');
-
     return chatFormButton;
+}
+
+export const createChatForm = ({userId, chatId, renderMessage, container}) => {
+    const attributes = {
+        action: "/",
+    }
+    const chatFormElement = createElement('form', 'chatForm', attributes);
+    const chatInputElement = createChatInput();
+    const chatFormButton = createChatFormButton();
+
+    chatFormElement.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const messageId = getUniqueId();
+        const datetime = new Date().toISOString();
+        const newMessage = {id: messageId, senderId: userId, messageText: chatInputElement.value, datetime};
+
+        postMessageByChatId(newMessage, chatId)
+            .then(() => {
+                renderMessage({userId, message: newMessage});
+                saveMessageToChatInLocalStorage(newMessage, chatId);
+                scrollElementToEnd(container);
+            });
+
+        chatInputElement.value = '';
+    });
+
+
+    chatFormElement.append(chatInputElement, chatFormButton);
+    return chatFormElement;
 }
 

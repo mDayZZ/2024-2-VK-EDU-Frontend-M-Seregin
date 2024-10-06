@@ -1,6 +1,7 @@
 import {createElement} from "../../utils/createElements";
 import {getDatetime} from "../../utils/date";
-import {getUserById} from "../../api";
+import * as userApi from '../../api/userApi';
+import './_chatMessage.scss';
 
 export const createMessageElement = ({userId, message}) => {
     const messageElement = createElement('li', 'message');
@@ -22,7 +23,7 @@ export const createMessageElement = ({userId, message}) => {
     messageBlockChildren.messageTextElement.innerText = messageText;
     messageBlockChildren.messageDatetimeElement.innerText = getDatetime(datetime);
 
-    getUserById(senderId)
+    userApi.getUserById(senderId)
         .then(senderData => {
             messageBlockChildren.messageUsernameElement.innerText = senderData.username;
             messageAvatar.src = senderData.avatarUrl;

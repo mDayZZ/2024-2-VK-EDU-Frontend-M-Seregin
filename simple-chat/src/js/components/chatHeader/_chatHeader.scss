@@ -1,0 +1,25 @@
+.header {
+  &__chatInfo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__chatInfo-body {
+    line-height: 1;
+  }
+
+  &__chatInfo-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  &__chatInfo-status {
+    font-size: 12px;
+    margin: 0;
+    margin-top: 5px;
+  }
+}
+

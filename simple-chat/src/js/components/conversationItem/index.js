@@ -1,9 +1,9 @@
 import "./_conversationItem.scss";
 import {createElement} from "../../utils/createElements";
-import {getUserById} from "../../api";
+import {getUserById} from "../../api/userApi";
 
 export const createConversationItem = ({chat}) => {
-    const conversationItem = createElement('li', 'conversationItem');
+    const conversationItemElement = createElement('li', 'conversationItem');
     const chatAvatar = createElement('img', 'conversationItem__chatAvatar avatar avatar--rounded');
 
     const conversationInfoContainer = createElement('div', 'conversationItem__infoContainer');
@@ -21,11 +21,11 @@ export const createConversationItem = ({chat}) => {
 
     })
 
-    conversationItem.addEventListener('click', () => {
+    conversationItemElement.addEventListener('click', () => {
         window.updateState('chat', {chatId: chat.id})
     })
 
 
-    conversationItem.append(chatAvatar, conversationInfoContainer)
-    return [conversationItem, {}]
+    conversationItemElement.append(chatAvatar, conversationInfoContainer)
+    return {conversationItemElement}
 }

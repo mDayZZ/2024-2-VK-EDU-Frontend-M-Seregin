@@ -1,0 +1,16 @@
+.chatForm {
+  display: flex;
+  //justify-content: space-between;
+  flex-wrap: nowrap;
+  width: 100%;
+  border: 1px solid rgba(25, 25, 25, 0.32);
+
+
+  &__input {
+    font-size: 14px;
+  }
+
+  &__button {
+  }
+
+}
