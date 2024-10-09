@@ -1,0 +1,28 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+
+  padding: 20px;
+
+  background-color: var(--theme-header-background);
+  color: var(--theme-header-color);
+
+  &__actionContainer {
+    display: flex;
+    flex-wrap: nowrap;
+    flex: 0;
+  }
+
+  &__actionButton {
+    color: #fff;
+  }
+
+  &__title {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0;
+    margin-right: auto;
+  }
+}

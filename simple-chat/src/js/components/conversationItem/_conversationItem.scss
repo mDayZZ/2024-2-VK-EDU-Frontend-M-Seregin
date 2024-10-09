@@ -1,0 +1,46 @@
+.conversationItem {
+
+  display: flex;
+  align-items: center;
+
+  padding: 20px;
+  gap: 20px;
+
+  background-color: var(--theme-header-background);
+  color: var(--theme-action-color);
+  transition-duration: var(--transition-duration);
+
+
+  &:hover {
+    filter: brightness(1.1);
+  }
+
+  &:active {
+    transition-duration: 0s;
+    box-shadow: 0 0 10px 0 black inset;
+  }
+
+
+  &__infoContainer {
+    display: flex;
+    flex-direction: column;
+    //gap: 20px;
+    overflow: hidden;
+  }
+
+  &__last {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  &__chatLastMessage {
+    margin-top: 0;
+    white-space: nowrap;
+  }
+
+  &__chatLastUser {
+    display: flex;
+    gap: 10px;
+  }
+}
