@@ -10,12 +10,12 @@ export const createChatContainer = (messages = []) => {
 
     const renderMessages = ({userId, messages}) => {
         messages.forEach((message) => {
-            renderMessage({userId, message});
+            renderMessage({userId, message, loaded: true});
         })
     }
 
-    const renderMessage = ({userId, message}) => {
-        const [messageElement] = createMessageElement({userId, message})
+    const renderMessage = ({userId, message, loaded = false}) => {
+        const [messageElement] = createMessageElement({userId, message, loaded})
         chatContainer.append(messageElement);
     }
 

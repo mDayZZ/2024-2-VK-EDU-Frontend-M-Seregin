@@ -3,7 +3,7 @@ import {getDatetime} from "../../utils/date";
 import * as userApi from '../../api/userApi';
 import './_chatMessage.scss';
 
-export const createMessageElement = ({userId, message}) => {
+export const createMessageElement = ({userId, message, loaded=false}) => {
     const messageElement = createElement('li', 'message');
     messageElement.classList.add('message');
     const messageAvatar = createMessageAvatar();
@@ -18,6 +18,9 @@ export const createMessageElement = ({userId, message}) => {
     messageElement.id = `message_${id}`;
     if ( Number(senderId) === Number(userId) ) {
         messageElement.classList.add('message--self');
+    }
+    if (loaded) {
+        messageElement.setAttribute('data-loaded', true);
     }
 
     messageBlockChildren.messageTextElement.innerText = messageText;

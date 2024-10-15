@@ -8,6 +8,7 @@
 
   background-color: var(--theme-header-background);
   color: var(--theme-action-color);
+
   transition-duration: var(--transition-duration);
 
 
@@ -42,5 +43,9 @@
   &__chatLastUser {
     display: flex;
     gap: 10px;
+  }
+
+  &__chatLastMessageTime {
+    color: rgba(255, 255, 255, 0.6);
   }
 }

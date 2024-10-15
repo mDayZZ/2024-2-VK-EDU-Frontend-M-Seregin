@@ -38,9 +38,9 @@ const createActionContainer = () => {
 export const createChatHeader = () => {
     const chatHeaderElement = createElement('header', 'header chatHeader');
     const {chatInfoElement, ...chatInfoChildren} = createChatInfo();
-    const {actionContainer, ...actionContainerChildren} = createActionContainer();
+    const {actionContainerElement, ...actionContainerChildren} = createActionContainer();
 
-    chatHeaderElement.append(chatInfoElement, actionContainer);
+    chatHeaderElement.append(chatInfoElement, actionContainerElement);
     return {chatHeaderElement, ...chatInfoChildren, ...actionContainerChildren};
 }
 
