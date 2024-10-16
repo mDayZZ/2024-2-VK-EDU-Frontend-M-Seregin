@@ -1,0 +1,15 @@
+export const mockedChatMembers = [
+    { chat_id: 1, user_id: 1, role: 'user' },
+    { chat_id: 1, user_id: 2, role: 'user' },
+    { chat_id: 2, user_id: 3, role: 'admin' },
+    { chat_id: 2, user_id: 4, role: 'user' },
+    { chat_id: 2, user_id: 5, role: 'user' },
+    { chat_id: 3, user_id: 7, role: 'admin' },
+    { chat_id: 3, user_id: 8, role: 'user' },
+    { chat_id: 3, user_id: 9, role: 'user' },
+    { chat_id: 4, user_id: 3, role: 'user' },
+    { chat_id: 4, user_id: 8, role: 'user' },
+    { chat_id: 5, user_id: 9, role: 'user' },
+    { chat_id: 5, user_id: 5, role: 'user' },
+    { chat_id: 3, user_id: 5, role: 'user' },
+];
