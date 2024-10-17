@@ -6,7 +6,6 @@ import {ThemeContext} from "../../../contexts/ThemeContext.jsx";
 const DefaultHeader = ({children, className, backgroundColor = ''}) => {
     const headerClasses = [classes.header, className].join(' ');
     const { theme, updateTheme } = useContext(ThemeContext);
-    console.log(theme)
     const textColor = useMemo(() => getTextColor(theme.headerBackgroundColor), [theme])
     return (
         <header className={headerClasses} style={{'background': theme.headerBackgroundColor, 'color': textColor}}>

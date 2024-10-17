@@ -8,6 +8,14 @@ const defaultTheme = {
     chatFormBackgroundColor: "#fff",
 };
 
+// const defaultTheme = {
+//     headerBackgroundColor: "#f1f1f1",
+//     mainBackgroundColor: "#ffffff",
+//     chatBackgroundColor: "#814475",
+//     chatMessageBackgroundColor: "#cf7556",
+//     chatFormBackgroundColor: "#fff",
+// };
+
 export const ThemeContext = createContext();
 
 export const ThemeProvider = ({children}) => {

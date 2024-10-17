@@ -1,10 +1,10 @@
 import React from 'react';
 import DefaultHeader from "../UI/DefaultHeader/DefaultHeader.jsx";
-import classes from "./ChatListHeader.module.scss";
+import classes from "./ConversationsHeader.module.scss";
 import IconButton from "../UI/IconButton/IconButton.jsx";
 import {ArrowBack, Menu, More} from "@mui/icons-material";
 
-const ChatListHeader = ({className, backgroundColor}) => {
+const ConversationsHeader = ({className, backgroundColor}) => {
     const headerClasses = ['chatListHeader', className].join(' ');
     return (
         <DefaultHeader className={headerClasses} backgroundColor={backgroundColor}>
@@ -14,4 +14,4 @@ const ChatListHeader = ({className, backgroundColor}) => {
     );
 };
 
-export default ChatListHeader;
+export default ConversationsHeader;

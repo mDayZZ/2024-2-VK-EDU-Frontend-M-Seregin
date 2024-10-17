@@ -25,19 +25,43 @@ export const mockedGetChatsByUserId = async (userId) => {
             throw new Error('userId must be a number');
         }
         await new Promise(resolve => setTimeout(resolve, 500));
-        const chatsId = mockedChatMembers.map(chatMember => {
-            if (chatMember.user_id === userId) {
-                return chatMember.chat_id;
-            }
-        })
+
+        // Получаем список ID чатов пользователя
+        const chatsId = mockedChatMembers
+            .filter(chatMember => chatMember.user_id === userId)
+            .map(chatMember => chatMember.chat_id);
+
+        // Фильтруем чаты по списку ID
         const filteredChats = mockedChats.filter(chat => chatsId.includes(chat.id));
-        return filteredChats;
+
+        // Находим последнее сообщение для каждого чата
+        const lastMessages = chatsId.map(chatId => {
+            const messages = mockedMessages.filter(message => message.chat_id === chatId);
+            if (messages.length > 0) {
+                const lastMessage = messages[messages.length - 1];
+                return { chat_id: chatId, last_message: lastMessage };
+            }
+            // Если сообщений нет, возвращаем null для last_message
+            return { chat_id: chatId, last_message: null };
+        });
+
+        // Объединяем чаты с последними сообщениями
+        const resultedChats = filteredChats.map(chat => {
+            const lastMessageData = lastMessages.find(message => message.chat_id === chat.id);
+            return {
+                ...chat,
+                last_message: lastMessageData ? lastMessageData.last_message?.content || null : null,
+                last_message_time: lastMessageData ? lastMessageData.last_message?.created_at || null : null
+            };
+        });
+
+        return resultedChats;
 
     } catch (error) {
         throw error;
     }
+};
 
-}
 
 export const mockedGetMessagesByChatId = async (chatId) => {
     try {

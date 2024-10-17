@@ -1,5 +1,5 @@
 import React, {useContext, useMemo} from 'react';
-import classes from "../DefaultHeader/DefaultHeader.module.scss";
+import classes from "../DefaultMain/DefaultMain.module.scss";
 import {getTextColor} from "../../../utils/getTextColor.js";
 import {ThemeContext} from "../../../contexts/ThemeContext.jsx";
 
