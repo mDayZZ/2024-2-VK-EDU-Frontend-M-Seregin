@@ -66,7 +66,7 @@ export const mockedGetChatsByUserId = async (userId) => {
 export const mockedGetMessagesByChatId = async (chatId) => {
     try {
         if (typeof chatId !== 'number') {
-            throw new Error('userId must be a number');
+            throw new Error('chatId must be a number');
         }
         await new Promise(resolve => setTimeout(resolve, 300));
         const filteredMessages = mockedMessages.filter(message => message.chat_id === chatId);
@@ -75,5 +75,32 @@ export const mockedGetMessagesByChatId = async (chatId) => {
     } catch (error) {
         throw error;
     }
+}
 
+export const mockedGetChatInfoByChatId = async (chatId) => {
+    try {
+        if (typeof chatId !== 'number') {
+            throw new Error('ChatId must be a number');
+        }
+        await new Promise(resolve => setTimeout(resolve, 200));
+        const chatInfo = mockedChats.find(chat => chat.id === chatId);
+        return chatInfo;
+
+    } catch (error) {
+        throw error;
+    }
+}
+
+
+export const mockedGetMembersByChatId = async (chatId) => {
+    try {
+        if (typeof chatId !== 'number') {
+            throw new Error('ChatId must be a number');
+        }
+        await new Promise(resolve => setTimeout(resolve, 200));
+        const chatMembers = mockedChatMembers.filter(member => member.chat_id === chatId);
+        return chatMembers;
+    } catch (error) {
+        throw error;
+    }
 }

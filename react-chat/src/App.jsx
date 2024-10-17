@@ -9,49 +9,50 @@ import ConversationsHeader from "./components/ConversationsHeader/ConversationsH
 import ConversationsPage from "./components/pages/ConversationsPage/ConversationsPage.jsx";
 import {ThemeContext} from "@emotion/react";
 import {ThemeProvider} from "./contexts/ThemeContext.jsx";
+import ChatPage from "./components/pages/ChatPage/ChatPage.jsx";
 
 function App() {
     const [userId, setUserId] = useState(5);
     const [userInfo, setUserInfo] = useState({});
-    const [currentPage, setCurrentPage] = useState('chatlist')
-    const [messages, setMessages] = useState([]);
+    const [currentPage, setCurrentPage] = useState('conversationsPage')
+    const [lastChatId, setLastChatId] = useState(null);
+
     const fetchUserInfo = async () => {
         const userInfo = await getUserById(userId);
         setUserInfo(userInfo);
     }
 
 
-    const fetchMessages = async (chatId) => {
-        const fetchedMessages = await getMessagesByChatId(chatId);
-        setMessages(fetchedMessages);
-    }
-
     useEffect(() => {
         fetchUserInfo();
     }, [userId]);
 
 
-    useEffect(() => {
-        fetchMessages(4);
-    }, [])
+    const openChatPage = (chatId) =>{
+        setLastChatId(chatId);
+        setCurrentPage('chatPage');
+    }
 
-    const renderPage = useMemo(() => {
+    const openConversationsPage = () => {
+        setCurrentPage('conversationsPage');
+    }
+
+    const renderPage = () => {
         switch (currentPage) {
-            case 'chatlist':
-                return <ConversationsPage userId={userId}/>
+            case 'conversationsPage':
+                return <ConversationsPage userId={userId} openChatPage={openChatPage}/>
+            case 'chatPage':
+                return <ChatPage userInfo={userInfo} chatId={lastChatId} openConversationsPage={openConversationsPage}/>
         }
-    }, [currentPage])
+    };
+
+
 
   return (
       <ThemeProvider>
           <div id={'app'} >
               <h1 className={'visually-hidden'}>DayZZChat</h1>
-              {renderPage}
-          {/*    <p>{userInfo.username}</p>*/}
-
-          {/*    <h1>Пикми тачёные</h1>*/}
-          {/*    {messages.map(message => <p>{message.content}</p>)}*/}
-
+              {renderPage()}
           </div>
       </ThemeProvider>
 

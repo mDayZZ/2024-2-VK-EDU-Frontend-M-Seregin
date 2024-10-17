@@ -6,15 +6,13 @@ import DefaultMain from "../../UI/DefaultMain/DefaultMain.jsx";
 import {getChatsByUserId} from "../../../services/chatService.js";
 import ConversationList from "../../ConversationList/ConversationList.jsx";
 
-const ConversationsPage = ({userId}) => {
-    const chatListPageClasses = ['page', classes.chatListPage].join(' ').trim()
-
-
+const ConversationsPage = ({userId, openChatPage}) => {
+    const conversationsPageClasses = ['page', classes.conversationsPage].join(' ').trim()
     return (
-        <div className={chatListPageClasses}>
-            <ConversationsHeader className={classes.chatListPage__header} />
+        <div className={conversationsPageClasses}>
+            <ConversationsHeader className={classes.conversationsPage__header} />
             <DefaultMain>
-                <ConversationList userId={userId}/>
+                <ConversationList userId={userId} openChatPage={openChatPage}/>
             </DefaultMain>
         </div>
     );

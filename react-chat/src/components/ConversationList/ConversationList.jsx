@@ -4,7 +4,7 @@ import classes from "./ConversationList.module.scss";
 import ConversationItem from "../ConversationItem/ConversationItem.jsx";
 import {getTextColor} from "../../utils/getTextColor.js";
 import {ThemeContext} from "../../contexts/ThemeContext.jsx";
-const ConversationList = ({userId}) => {
+const ConversationList = ({userId, openChatPage}) => {
 
     const [conversations, setConversations] = useState([]);
     const {theme} = useContext(ThemeContext);
@@ -25,7 +25,7 @@ const ConversationList = ({userId}) => {
 
     return (
         <ul className={classes.chatList} style={{color: textColor}}>
-            {conversations.map(conversation => <ConversationItem conversation={conversation} key={conversation.id} />)}
+            {conversations.map(conversation => <ConversationItem conversation={conversation} openChatPage={openChatPage} key={conversation.id} />)}
         </ul>
     );
 };

@@ -1,11 +1,11 @@
 import React from 'react';
 import classes from './ConversationItem.module.scss';
 import RoundAvatar from "../UI/RoundAvatar/RoundAvatar.jsx";
-const ConversationItem = ({conversation}) => {
+const ConversationItem = ({conversation, openChatPage}) => {
     console.log(conversation)
     return (
         <li className={classes.conversationItem}>
-            <button className={classes.conversationItem__button}>
+            <button className={classes.conversationItem__button} onClick={() => openChatPage(conversation.id)}>
                 <RoundAvatar src={conversation.chat_image_url}/>
                 <div className={classes.conversationItem__info}>
                     <p className={classes.conversationItem__name}>{conversation.name}</p>

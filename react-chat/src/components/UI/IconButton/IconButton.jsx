@@ -1,8 +1,8 @@
 import React from 'react';
 import classes from './IconButton.module.scss';
-const IconButton = ({children, color}) => {
+const IconButton = ({children, color, onClick}) => {
     return (
-        <button className={classes.iconButton} style={{'color': color}}>
+        <button className={classes.iconButton} onClick={onClick} style={{'color': color}}>
             {children}
         </button>
     );
