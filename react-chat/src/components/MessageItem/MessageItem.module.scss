@@ -1,5 +1,4 @@
-@import '../../../styles/mixins';
-
+@import "../../styles/mixins";
 .message {
   display: inline-flex;
   align-items: flex-end;
@@ -8,9 +7,9 @@
   margin-right: auto;
   animation: lefttoright 0.4s ease-in-out;
 
-  &[data-loaded]{
-   animation: none;
-}
+  //&[data-loaded] {
+  //  animation: none;
+  //}
 
   &--self {
     margin-right: 0;
@@ -21,12 +20,12 @@
     & .message__block {
       border-radius: 10px 10px 0 10px;
 
-      @include non-tablet {
+      @include respond-from('tablet') {
         border-radius: 10px 10px 10px 0;
       }
     }
 
-    @include non-tablet {
+    @include respond-from('tablet') {
       margin-right: auto;
       margin-left: 0;
       flex-direction: row;
@@ -34,8 +33,6 @@
     }
 
   }
-
-
 
   &__block {
     min-width: 120px;
@@ -53,41 +50,20 @@
       transform: translateX(20px);
     }
   }
-
   &__username {
-    color: #202020;
+    color: inherit;
     font-size: 12px;
   }
 
-  &__text {
+  &__content {
     margin-block: 4px;
   }
 
   &__datetime {
-    color: #393939;
+    color: inherit;
+    opacity: 70%;
     font-size: 12px;
     align-self: flex-end;
   }
-}
 
-@keyframes righttoleft {
-  from {
-    opacity: 100;
-    transform: translateX(20%);
-  }
-  to {
-    opacity: 100;
-    transform: translateX(0);
-  }
-}
-
-@keyframes lefttoright {
-  from {
-    opacity: 0;
-    transform: translateX(-20%);
-  }
-  to {
-    opacity: 100;
-    transform: translateX(0);
-  }
 }

@@ -68,14 +68,27 @@ export const mockedGetMessagesByChatId = async (chatId) => {
         if (typeof chatId !== 'number') {
             throw new Error('chatId must be a number');
         }
-        await new Promise(resolve => setTimeout(resolve, 300));
-        const filteredMessages = mockedMessages.filter(message => message.chat_id === chatId);
-        return filteredMessages;
+        await new Promise(resolve => setTimeout(resolve, 300)); // Симуляция задержки
+
+        // Находим все сообщения, относящиеся к чату
+        const chatMessages = mockedMessages.filter(message => message.chat_id === chatId);
+
+        // Добавляем к каждому сообщению данные о пользователе (аватарка, юзернейм)
+        const enrichedMessages = chatMessages.map(message => {
+            const sender = mockedUsers.find(user => user.id === message.sender_id);
+            return {
+                ...message,
+                sender_username: sender?.username || 'Unknown',  // Юзернейм отправителя
+                sender_profile_image_url: sender?.profile_image_url || '',  // Аватарка отправителя
+            };
+        });
+
+        return enrichedMessages;
 
     } catch (error) {
         throw error;
     }
-}
+};
 
 export const mockedGetChatInfoByChatId = async (chatId) => {
     try {

@@ -3,8 +3,8 @@ import {createContext, useState} from "react";
 const defaultTheme = {
     headerBackgroundColor: "#323235",
     mainBackgroundColor: "#3f3c40",
-    chatBackgroundColor: "#814475",
-    chatMessageBackgroundColor: "#cf7556",
+    chatBackgroundColor: "#252325",
+    chatMessageBackgroundColor: "#3a3a3a",
     chatFormBackgroundColor: "#fff",
 };
 

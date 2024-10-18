@@ -1,35 +1,44 @@
 import {useEffect, useState} from "react";
-import {getUserById} from "../services/userService.js";
 import {pluralize} from "../utils/pluralize.js";
+import {getUserById} from "../services/userService.js";
+import {getMembersByChatId} from "../services/chatService.js";
 
-export const useChatInfo = ( userInfo, chatInfo, chatMembers) => {
+const useChatInfo = (chatInfo, userId) => {
     const [chatStatus, setChatStatus] = useState('');
+    const [contactName, setContactName] = useState(null);
     const [chatTitle, setChatTitle] = useState('');
+    const [chatMembers, setChatMembers] = useState([]);
 
-    const useChatInfo = (chatInfo, initialChatMembers, userInfo) => {
-        const [chatStatus, setChatStatus] = useState('');
-        const [chatTitle, setChatTitle] = useState('');
-        const [chatMembers, setChatMembers] = useState(initialChatMembers);
+    useEffect(() => {
+        const fetchChatData = async () => {
+            // Загружаем участников чата
+            if (chatInfo.id) {
+                const fetchedChatMembers = await getMembersByChatId(chatInfo.id);
+                setChatMembers(fetchedChatMembers);
 
-        useEffect(() => {
-            const fetchChatMemberInfo = async () => {
+                // Если это групповая беседа
                 if (chatInfo.is_group) {
-                    const chatMembersValue = chatMembers.length;
+                    const chatMembersValue = fetchedChatMembers.length;
                     setChatStatus(pluralize(chatMembersValue, 'участник', 'участника', 'участников'));
-                    setChatTitle(chatInfo.name); // Название группы
+                    setContactName(null);
+                    setChatTitle(chatInfo.name); // Устанавливаем название группы
                 } else {
-                    const chatMember = chatMembers.find(member => member.id !== userInfo.id);
+                    // Если это приватный чат
+                    const chatMember = fetchedChatMembers.find(member => member.id !== userId);
                     if (chatMember) {
                         const chatMemberUserInfo = await getUserById(chatMember.user_id);
                         setChatStatus(chatMemberUserInfo?.status);
-                        setChatTitle(chatMemberUserInfo?.username); // Имя собеседника
+                        setContactName(chatMemberUserInfo?.username);
+                        setChatTitle(chatMemberUserInfo?.username); // Устанавливаем имя собеседника
                     }
                 }
-            };
+            }
+        };
 
-            fetchChatMemberInfo();
-        }, [chatInfo, chatMembers, userInfo]);
+        fetchChatData();
+    }, [chatInfo, userId]); // Выполняем при изменении chatInfo или userId
 
-        return {chatStatus, chatTitle, chatMembers, setChatMembers};
-    }
-}
+    return { chatMembers, chatStatus, contactName, chatTitle };
+};
+
+export default useChatInfo;

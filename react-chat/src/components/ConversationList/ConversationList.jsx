@@ -25,7 +25,7 @@ const ConversationList = ({userId, openChatPage}) => {
 
     return (
         <ul className={classes.chatList} style={{color: textColor}}>
-            {conversations.map(conversation => <ConversationItem conversation={conversation} openChatPage={openChatPage} key={conversation.id} />)}
+            {conversations.map(conversation => <ConversationItem userId={userId} conversation={conversation} openChatPage={openChatPage} key={conversation.id} />)}
         </ul>
     );
 };

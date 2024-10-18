@@ -6,11 +6,14 @@ import {
     getMessagesByChatId
 } from "../../../services/chatService.js";
 import ChatHeader from "../../ChatHeader/ChatHeader.jsx";
+import useChatInfo from "../../../hooks/useChatInfo.js";
+import DefaultMain from "../../UI/DefaultMain/DefaultMain.jsx";
+import MessageList from "../../MessageList/MessageList.jsx";
 
 const ChatPage = ({userInfo, chatId, openConversationsPage}) => {
     const [chatInfo, setChatInfo] = useState({});
-    const [chatMembers, setChatMembers] = useState([]);
     const [messages, setMessages] = useState([]);
+    const {chatTitle, chatMembers, chatStatus} = useChatInfo(chatInfo, userInfo.id)
 
     const fetchMessages = async (chatId) => {
         const fetchedMessages = await getMessagesByChatId(chatId);
@@ -21,10 +24,6 @@ const ChatPage = ({userInfo, chatId, openConversationsPage}) => {
         setChatInfo(fetchedChatInfo);
     }
 
-    const fetchChatMembers = async () => {
-        const fetchedChatMembers = await getMembersByChatId(chatId);
-        setChatMembers(fetchedChatMembers);
-    }
 
     useEffect(() => {
         fetchChatInfo();
@@ -33,17 +32,15 @@ const ChatPage = ({userInfo, chatId, openConversationsPage}) => {
     useEffect(() => {
         fetchMessages(chatId);
     }, [chatId])
-    useEffect(() => {
-        fetchChatMembers(chatId);
-    }, [chatId])
-
 
 
     return (
         <div className={'page'}>
-            <ChatHeader userInfo={userInfo} chatMembers={chatMembers} chatInfo={chatInfo} onArrowBack={openConversationsPage}/>
-            <h1>Хаха чатикс</h1>
-            {messages.map(message => <p>{message.content}</p>)}
+            <ChatHeader chatInfo={chatInfo} chatTitle={chatTitle} chatStatus={chatStatus} onArrowBack={openConversationsPage}/>
+            <DefaultMain>
+                <MessageList messages={messages} userInfo={userInfo}/>
+            </DefaultMain>
+
         </div>
     );
 };
