@@ -5,14 +5,18 @@
   align-items: flex-end;
   gap: 12px;
   max-width: 80%;
-
   margin-right: auto;
+  animation: lefttoright 0.4s ease-in-out;
 
+  &[data-loaded]{
+   animation: none;
+}
 
   &--self {
     margin-right: 0;
     margin-left: auto;
     flex-direction: row-reverse;
+    animation: righttoleft 0.4s ease-in-out;
 
     & .message__block {
       border-radius: 10px 10px 0 10px;
@@ -26,9 +30,10 @@
       margin-right: auto;
       margin-left: 0;
       flex-direction: row;
+      animation: lefttoright 0.4s ease-in-out;
     }
-  }
 
+  }
   &__block {
     min-width: 120px;
 
@@ -38,8 +43,12 @@
     color: black;
     background-color: var(--color-peach-color);
     border-radius: 10px 10px 10px 0;
-
     word-break: break-word;
+    transition: var(--transition-duration);
+
+    &:hover {
+      transform: translateX(20px);
+    }
   }
 
   &__username {
@@ -55,5 +64,27 @@
     color: #393939;
     font-size: 12px;
     align-self: flex-end;
+  }
+}
+
+@keyframes righttoleft {
+  from {
+    opacity: 100;
+    transform: translateX(20%);
+  }
+  to {
+    opacity: 100;
+    transform: translateX(0);
+  }
+}
+
+@keyframes lefttoright {
+  from {
+    opacity: 0;
+    transform: translateX(-20%);
+  }
+  to {
+    opacity: 100;
+    transform: translateX(0);
   }
 }
