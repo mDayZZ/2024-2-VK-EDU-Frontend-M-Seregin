@@ -1,13 +1,7 @@
 import {useEffect, useMemo, useState} from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.scss'
 import {getUserById} from "./services/userService.js";
-import {getChatsByUserId, getMessagesByChatId} from "./services/chatService.js";
-import DefaultHeader from "./components/UI/DefaultHeader/DefaultHeader.jsx";
-import ConversationsHeader from "./components/ConversationsHeader/ConversationsHeader.jsx";
 import ConversationsPage from "./components/pages/ConversationsPage/ConversationsPage.jsx";
-import {ThemeContext} from "@emotion/react";
 import {ThemeProvider} from "./contexts/ThemeContext.jsx";
 import ChatPage from "./components/pages/ChatPage/ChatPage.jsx";
 

@@ -1,6 +1,6 @@
 logs
 *.log
-*.css
+/simple-chat/*.css
 *.css.map
 
 node_modules/
