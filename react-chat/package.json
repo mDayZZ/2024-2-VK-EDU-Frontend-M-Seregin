@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "https://mDayZZ.github.io/2024-2-VK-EDU-Frontend-M-Seregin/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
