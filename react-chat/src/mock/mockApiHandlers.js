@@ -26,26 +26,21 @@ export const mockedGetChatsByUserId = async (userId) => {
         }
         await new Promise(resolve => setTimeout(resolve, 500));
 
-        // Получаем список ID чатов пользователя
         const chatsId = mockedChatMembers
             .filter(chatMember => chatMember.user_id === userId)
             .map(chatMember => chatMember.chat_id);
 
-        // Фильтруем чаты по списку ID
         const filteredChats = mockedChats.filter(chat => chatsId.includes(chat.id));
 
-        // Находим последнее сообщение для каждого чата
         const lastMessages = chatsId.map(chatId => {
             const messages = mockedMessages.filter(message => message.chat_id === chatId);
             if (messages.length > 0) {
                 const lastMessage = messages[messages.length - 1];
                 return { chat_id: chatId, last_message: lastMessage };
             }
-            // Если сообщений нет, возвращаем null для last_message
             return { chat_id: chatId, last_message: null };
         });
 
-        // Объединяем чаты с последними сообщениями
         const resultedChats = filteredChats.map(chat => {
             const lastMessageData = lastMessages.find(message => message.chat_id === chat.id);
             return {
@@ -70,16 +65,14 @@ export const mockedGetMessagesByChatId = async (chatId) => {
         }
         await new Promise(resolve => setTimeout(resolve, 300)); // Симуляция задержки
 
-        // Находим все сообщения, относящиеся к чату
         const chatMessages = mockedMessages.filter(message => message.chat_id === chatId);
 
-        // Добавляем к каждому сообщению данные о пользователе (аватарка, юзернейм)
         const enrichedMessages = chatMessages.map(message => {
             const sender = mockedUsers.find(user => user.id === message.sender_id);
             return {
                 ...message,
-                sender_username: sender?.username || 'Unknown',  // Юзернейм отправителя
-                sender_profile_image_url: sender?.profile_image_url || '',  // Аватарка отправителя
+                sender_username: sender?.username || 'Unknown',
+                sender_profile_image_url: sender?.profile_image_url || '',
             };
         });
 
@@ -116,4 +109,30 @@ export const mockedGetMembersByChatId = async (chatId) => {
     } catch (error) {
         throw error;
     }
+}
+
+export const mockedSendMessage = async (message) => {
+    try {
+        if (!message.content) {
+            throw new Error('Ошибка. Пустое сообщение');
+        }
+        await new Promise(resolve => setTimeout(resolve, 400));
+        const senderInfo = mockedUsers.find(user => message.sender_id === user.id);
+        const senderProfileImageUrl = senderInfo?.profile_image_url;
+        const senderUsername = senderInfo?.username;
+
+        const resultedMessage = {...message, sender_profile_image_url: senderProfileImageUrl, sender_username: senderUsername}
+
+        const response = {
+            success: true,
+            data: {
+                ...resultedMessage
+            }
+        }
+        return response;
+    } catch (error) {
+        throw error;
+    }
+
+
 }

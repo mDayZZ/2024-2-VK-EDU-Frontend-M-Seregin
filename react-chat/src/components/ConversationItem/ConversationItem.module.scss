@@ -29,6 +29,9 @@
 
   &__info {
     margin-right: auto;
+    max-width: 100%;
+    overflow-x: hidden;
+    white-space: nowrap;
   }
 
   &__name {

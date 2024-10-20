@@ -4,12 +4,12 @@ import {getTextColor} from "../../../utils/getTextColor.js";
 import {ThemeContext} from "../../../contexts/ThemeContext.jsx";
 
 
-const DefaultMain = ({children, className, backgroundColor = ''}) => {
+const DefaultMain = ({children, mainRef, className, backgroundColor = ''}) => {
     const mainClasses = ['main', classes.main, className].join(' ');
     const {theme} = useContext(ThemeContext);
     const textColor = useMemo(() => getTextColor(theme.mainBackgroundColor), [theme]);
     return (
-        <main className={mainClasses} style={{'background': theme.mainBackgroundColor, 'color': textColor}}>
+        <main ref={mainRef} className={mainClasses} style={{'background': theme.mainBackgroundColor, 'color': textColor}}>
             {children}
         </main>
     )

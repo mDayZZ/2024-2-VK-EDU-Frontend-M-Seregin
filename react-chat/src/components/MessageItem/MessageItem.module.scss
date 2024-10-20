@@ -5,17 +5,17 @@
   gap: 12px;
   max-width: 80%;
   margin-right: auto;
-  animation: lefttoright 0.4s ease-in-out;
+  animation: lefttoright 0.2s ease-in-out;
 
-  //&[data-loaded] {
-  //  animation: none;
-  //}
+  &[data-loaded="true"] {
+    animation: none;
+  }
 
   &--self {
     margin-right: 0;
     margin-left: auto;
     flex-direction: row-reverse;
-    animation: righttoleft 0.4s ease-in-out;
+    animation: righttoleft 0.2s ease-in-out;
 
     & .message__block {
       border-radius: 10px 10px 0 10px;
@@ -29,7 +29,7 @@
       margin-right: auto;
       margin-left: 0;
       flex-direction: row;
-      animation: lefttoright 0.4s ease-in-out;
+      animation: lefttoright 0.2s ease-in-out;
     }
 
   }
@@ -47,7 +47,7 @@
     transition: var(--transition-duration);
 
     &:hover {
-      transform: translateX(20px);
+      transform: scale(105%);
     }
   }
   &__username {
@@ -66,4 +66,27 @@
     align-self: flex-end;
   }
 
+}
+
+
+@keyframes righttoleft {
+  from {
+    opacity: 100;
+    transform: translateX(20%);
+  }
+  to {
+    opacity: 100;
+    transform: translateX(0);
+  }
+}
+
+@keyframes lefttoright {
+  from {
+    opacity: 0;
+    transform: translateX(-20%);
+  }
+  to {
+    opacity: 100;
+    transform: translateX(0);
+  }
 }

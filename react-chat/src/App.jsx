@@ -12,7 +12,7 @@ import {ThemeProvider} from "./contexts/ThemeContext.jsx";
 import ChatPage from "./components/pages/ChatPage/ChatPage.jsx";
 
 function App() {
-    const [userId, setUserId] = useState(5);
+    const [userId, setUserId] = useState(2);
     const [userInfo, setUserInfo] = useState({});
     const [currentPage, setCurrentPage] = useState('conversationsPage')
     const [lastChatId, setLastChatId] = useState(null);

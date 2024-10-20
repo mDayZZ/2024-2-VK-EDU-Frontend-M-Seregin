@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
     getChatInfoByChatId,
     getChatsByUserId,
@@ -9,11 +9,14 @@ import ChatHeader from "../../ChatHeader/ChatHeader.jsx";
 import useChatInfo from "../../../hooks/useChatInfo.js";
 import DefaultMain from "../../UI/DefaultMain/DefaultMain.jsx";
 import MessageList from "../../MessageList/MessageList.jsx";
+import MessageForm from "../../MessageForm/MessageForm.jsx";
+import messageList from "../../MessageList/MessageList.jsx";
 
 const ChatPage = ({userInfo, chatId, openConversationsPage}) => {
     const [chatInfo, setChatInfo] = useState({});
     const [messages, setMessages] = useState([]);
-    const {chatTitle, chatMembers, chatStatus} = useChatInfo(chatInfo, userInfo.id)
+    const [witnessMessages, setWitnessMessages] = useState([]);
+    const {chatTitle, chatMembers, chatStatus, contactAvatar} = useChatInfo(chatInfo, userInfo.id);
 
     const fetchMessages = async (chatId) => {
         const fetchedMessages = await getMessagesByChatId(chatId);
@@ -23,6 +26,13 @@ const ChatPage = ({userInfo, chatId, openConversationsPage}) => {
         const fetchedChatInfo = await getChatInfoByChatId(chatId);
         setChatInfo(fetchedChatInfo);
     }
+
+    const mainRef = useRef(null);
+
+
+    useEffect(() => {
+        mainRef.current.scrollTop = mainRef.current.scrollHeight;
+    }, [messages]);
 
 
     useEffect(() => {
@@ -36,11 +46,11 @@ const ChatPage = ({userInfo, chatId, openConversationsPage}) => {
 
     return (
         <div className={'page'}>
-            <ChatHeader chatInfo={chatInfo} chatTitle={chatTitle} chatStatus={chatStatus} onArrowBack={openConversationsPage}/>
-            <DefaultMain>
-                <MessageList messages={messages} userInfo={userInfo}/>
+            <ChatHeader chatInfo={chatInfo} chatTitle={chatTitle} chatStatus={chatStatus} contactAvatar={contactAvatar} onArrowBack={openConversationsPage}/>
+            <DefaultMain mainRef={mainRef}>
+                <MessageList messages={messages} witnessMessages={witnessMessages} userInfo={userInfo}/>
             </DefaultMain>
-
+            <MessageForm messages={messages} setMessages={setMessages} setWitnessMessages={setWitnessMessages} userInfo={userInfo} chatInfo={chatInfo}/>
         </div>
     );
 };
