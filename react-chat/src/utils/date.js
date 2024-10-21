@@ -7,7 +7,7 @@ export const getDatetime = (datetime) => {
 
     const date = new Date(datetime);
     const day = String(date.getDate()); // День
-    const month = date.toLocaleString('ru-RU', { month: 'short' });
+    const month = date.toLocaleString('default', { month: 'short' });
     const year = String(date.getFullYear());
     const time = date.toLocaleTimeString('ru-RU', {hour: '2-digit', minute: '2-digit'});
 

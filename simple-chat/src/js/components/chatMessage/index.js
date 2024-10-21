@@ -50,7 +50,7 @@ const createMessageBlock = () => {
 
 const createMessageAvatar = () => {
     const messageAvatar = createElement('img', 'message__avatar avatar avatar--rounded');
-    messageAvatar.src = './images/base_photo.png';
+    messageAvatar.src = './images/default_avatar.png';
 
     return messageAvatar;
 }
