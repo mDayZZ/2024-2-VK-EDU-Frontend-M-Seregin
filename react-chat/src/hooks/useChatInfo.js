@@ -12,32 +12,35 @@ const useChatInfo = (chatInfo, userId) => {
 
     useEffect(() => {
         const fetchChatData = async () => {
-            if (chatInfo.id) {
-                const fetchedChatMembers = await getMembersByChatId(chatInfo.id);
-                setChatMembers(fetchedChatMembers);
-
-                if (chatInfo.is_group) {
-                    const chatMembersValue = fetchedChatMembers.length;
-                    setChatStatus(pluralize(chatMembersValue, 'участник', 'участника', 'участников'));
-                    setContactName(null);
-                    setContactAvatar(null);
-                    setChatTitle(chatInfo.name); // Устанавливаем название группы
-                } else {
-                    // Если это приватный чат
-                    const chatMember = fetchedChatMembers.find(member => member.id !== userId);
-                    if (chatMember) {
-                        const chatMemberUserInfo = await getUserById(chatMember.user_id);
-                        setChatStatus(chatMemberUserInfo?.status);
-                        setContactName(chatMemberUserInfo?.username);
-                        setContactAvatar(chatMemberUserInfo?.profile_image_url);
-                        setChatTitle(chatMemberUserInfo?.username); // Устанавливаем имя собеседника
-                    }
-                }
+            if (!chatInfo.id) {
+                return;
             }
-        };
+            const fetchedChatMembers = await getMembersByChatId(chatInfo.id);
+            setChatMembers(fetchedChatMembers);
+
+
+            if (!chatInfo.is_group) {
+                const chatMember = fetchedChatMembers.find(member => member.id !== userId);
+                if (!chatMember) {
+                    return;
+                }
+
+                const chatMemberUserInfo = await getUserById(chatMember.user_id);
+                setChatStatus(chatMemberUserInfo?.status);
+                setContactName(chatMemberUserInfo?.username);
+                setContactAvatar(chatMemberUserInfo?.profile_image_url);
+                setChatTitle(chatMemberUserInfo?.username);
+            }
+
+            const chatMembersValue = fetchedChatMembers.length;
+            setChatStatus(pluralize(chatMembersValue, 'участник', 'участника', 'участников'));
+            setContactName(null);
+            setContactAvatar(null);
+            setChatTitle(chatInfo.name);
+        }
 
         fetchChatData();
-    }, [chatInfo, userId]); // Выполняем при изменении chatInfo или userId
+    }, [chatInfo, userId]);
 
     return { chatMembers, chatStatus, contactName, contactAvatar, chatTitle };
 };

@@ -6,19 +6,25 @@ import {ThemeProvider} from "./contexts/ThemeContext.jsx";
 import ChatPage from "./components/pages/ChatPage/ChatPage.jsx";
 
 function App() {
-    const [userId, setUserId] = useState(2);
-    const [userInfo, setUserInfo] = useState({});
-    const [currentPage, setCurrentPage] = useState('conversationsPage')
+    const [userId, setUserId] = useState(null);
+    const [userInfo, setUserInfo] = useState(null);
+    const [currentPage, setCurrentPage] = useState('conversationsPage');
     const [lastChatId, setLastChatId] = useState(null);
 
-    const fetchUserInfo = async () => {
+    const fetchUserInfo = async (userId) => {
         const userInfo = await getUserById(userId);
         setUserInfo(userInfo);
     }
 
+    useEffect(() => {
+        setUserId(2);
+    }, [])
 
     useEffect(() => {
-        fetchUserInfo();
+        if (!userId) {
+            return;
+        }
+        fetchUserInfo(userId);
     }, [userId]);
 
 

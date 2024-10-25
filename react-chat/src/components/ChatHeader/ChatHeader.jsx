@@ -6,10 +6,11 @@ import {ArrowBack} from "@mui/icons-material";
 import RoundAvatar from "../UI/RoundAvatar/RoundAvatar.jsx";
 import {pluralize} from "../../utils/pluralize.js";
 import {getUserById} from "../../services/userService.js";
+import cn from "classnames";
 const ChatHeader = ({chatInfo, chatTitle, chatStatus, contactAvatar, className, theme, onArrowBack}) => {
-    const HeaderClasses = ['chatHeader', className, classes.chatHeader].join(' ').trim();
+    const headerClasses = cn('chatHeader', className, classes.chatHeader);
     return (
-        <DefaultHeader className={HeaderClasses}>
+        <DefaultHeader className={headerClasses}>
             <IconButton onClick={onArrowBack}><ArrowBack /></IconButton>
             <RoundAvatar src={chatInfo.chat_image_url || contactAvatar} className={classes.chatHeader__chatAvatar} />
             <div className={classes.chatHeader__chatInfo}>

@@ -20,6 +20,9 @@ const ConversationList = ({userId, openChatPage}) => {
     }
 
     useEffect(() => {
+        if (!userId) {
+            return;
+        }
         fetchChats();
     }, [userId])
 

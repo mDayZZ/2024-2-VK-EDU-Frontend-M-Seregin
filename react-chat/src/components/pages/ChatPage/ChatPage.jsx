@@ -11,6 +11,7 @@ import DefaultMain from "../../UI/DefaultMain/DefaultMain.jsx";
 import MessageList from "../../MessageList/MessageList.jsx";
 import MessageForm from "../../MessageForm/MessageForm.jsx";
 import messageList from "../../MessageList/MessageList.jsx";
+import Page from "../../UI/Page/Page.jsx";
 
 const ChatPage = ({userInfo, chatId, openConversationsPage}) => {
     const [chatInfo, setChatInfo] = useState({});
@@ -45,13 +46,13 @@ const ChatPage = ({userInfo, chatId, openConversationsPage}) => {
 
 
     return (
-        <div className={'page'}>
+        <Page>
             <ChatHeader chatInfo={chatInfo} chatTitle={chatTitle} chatStatus={chatStatus} contactAvatar={contactAvatar} onArrowBack={openConversationsPage}/>
             <DefaultMain mainRef={mainRef}>
                 <MessageList messages={messages} witnessMessages={witnessMessages} userInfo={userInfo}/>
             </DefaultMain>
             <MessageForm messages={messages} setMessages={setMessages} setWitnessMessages={setWitnessMessages} userInfo={userInfo} chatInfo={chatInfo}/>
-        </div>
+        </Page>
     );
 };
 

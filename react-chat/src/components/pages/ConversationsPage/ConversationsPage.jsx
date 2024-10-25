@@ -5,16 +5,18 @@ import classes from "./ConversationsPage.module.scss";
 import DefaultMain from "../../UI/DefaultMain/DefaultMain.jsx";
 import {getChatsByUserId} from "../../../services/chatService.js";
 import ConversationList from "../../ConversationList/ConversationList.jsx";
+import cn from "classnames";
+import Page from "../../UI/Page/Page.jsx";
 
 const ConversationsPage = ({userId, openChatPage}) => {
-    const conversationsPageClasses = ['page', classes.conversationsPage].join(' ').trim()
+    const conversationsPageClasses = cn('page', classes.conversationsPage);
     return (
-        <div className={conversationsPageClasses}>
+        <Page className={conversationsPageClasses}>
             <ConversationsHeader className={classes.conversationsPage__header} />
             <DefaultMain>
                 <ConversationList userId={userId} openChatPage={openChatPage}/>
             </DefaultMain>
-        </div>
+        </Page>
     );
 };
 

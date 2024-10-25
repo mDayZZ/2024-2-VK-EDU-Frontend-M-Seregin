@@ -18,14 +18,15 @@ const MessageForm = ({setMessages, setWitnessMessages, chatInfo, userInfo}) => {
 
     const onSendMessage = async (event)=> {
         event.preventDefault();
-        if (messageInput) {
-            setMessageInput('');
-            const newMessage = await sendMessage(chatInfo.id,userInfo.id, messageInput);
-            if (newMessage) {
-                addNewMessage(newMessage);
-
-            }
+        if (!messageInput) {
+            return;
         }
+        setMessageInput('');
+        const newMessage = await sendMessage(chatInfo.id,userInfo.id, messageInput);
+        if (!newMessage) {
+            return;
+        }
+        addNewMessage(newMessage);
     }
 
     return (
