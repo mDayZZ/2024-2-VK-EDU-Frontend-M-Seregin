@@ -4,7 +4,7 @@ const LOCAL_STORAGE_KEY = 'messenger';
 const changeLastMessage = (message, chatId, userId) => {
     const loadedChats = loadChatsFromLocalStorage(userId);
     const loadedChat = loadedChats.find(chat => chat.id === chatId);
-    const changedChat = {...loadedChat, last_message: message.content, last_message_time: message.created_at};
+    const changedChat = {...loadedChat, last_message: message};
     const changedChats = loadedChats.map(chat => {
         if (chat.id === changedChat.id) {
             return changedChat;

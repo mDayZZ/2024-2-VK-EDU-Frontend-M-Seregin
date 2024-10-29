@@ -9,7 +9,6 @@ import {getUserById} from "../../services/userService.js";
 import cn from "classnames";
 const ChatHeader = ({chatInfo, className, onArrowBack}) => {
     const headerClasses = cn('chatHeader', className, classes.chatHeader);
-    console.log(chatInfo)
     return (
         <DefaultHeader className={headerClasses}>
             <IconButton onClick={onArrowBack}><ArrowBack /></IconButton>

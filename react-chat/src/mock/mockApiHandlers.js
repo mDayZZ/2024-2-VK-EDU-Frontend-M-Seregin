@@ -177,7 +177,7 @@ export const mockedSendMessage = async (message) => {
         const senderProfileImageUrl = senderInfo?.profile_image_url;
         const senderUsername = senderInfo?.username;
 
-        const resultedMessage = {...message, sender_profile_image_url: senderProfileImageUrl, sender_username: senderUsername}
+        const resultedMessage = {...message, user: senderInfo, sender_profile_image_url: senderProfileImageUrl, sender_username: senderUsername}
 
         const response = {
             success: true,

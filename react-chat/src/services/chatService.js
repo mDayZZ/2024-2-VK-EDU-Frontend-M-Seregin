@@ -25,6 +25,7 @@ export const getChatsByUserId = async (userId) => {
                     saveChatsToLocalStorage(loadedChats, userId);
                 }
             }
+            console.log(loadedChats)
             return loadedChats
         }
     } catch (error) {
