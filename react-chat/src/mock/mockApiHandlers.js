@@ -83,7 +83,7 @@ export const mockedGetChatsByUserId = async (userId) => {
         const resultChats = userChats.map(userChat => {
             if (!userChat.is_group) {
                 const partnerChatMember = getPartnerChatMember(userChat.id, userId);
-                const partnerUserInfo = getUserById(partnerChatMember.id);
+                const partnerUserInfo = getUserById(partnerChatMember.user_id);
                 userChat.name = partnerUserInfo.name || partnerUserInfo.username;
                 userChat.chat_image_url = partnerUserInfo.profile_image_url;
             }

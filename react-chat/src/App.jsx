@@ -4,6 +4,7 @@ import {getUserById} from "./services/userService.js";
 import ConversationsPage from "./components/pages/ConversationsPage/ConversationsPage.jsx";
 import {ThemeProvider} from "./contexts/ThemeContext.jsx";
 import ChatPage from "./components/pages/ChatPage/ChatPage.jsx";
+import {Route, Routes} from "react-router-dom";
 
 function App() {
     const [userId, setUserId] = useState(null);
@@ -40,9 +41,9 @@ function App() {
     const renderPage = () => {
         switch (currentPage) {
             case 'conversationsPage':
-                return <ConversationsPage userId={userId} openChatPage={openChatPage}/>
+                return <ConversationsPage />
             case 'chatPage':
-                return <ChatPage userInfo={userInfo} chatId={lastChatId} openConversationsPage={openConversationsPage}/>
+                return <ChatPage />
         }
     };
 
@@ -51,8 +52,11 @@ function App() {
   return (
       <ThemeProvider>
           <div id={'app'} >
+              <Routes>
+                  <Route path="/chats" element={<ConversationsPage userId={userId} openChatPage={openChatPage}/>} />
+                  <Route path="/chats/:id" element={<ChatPage userInfo={userInfo} openConversationsPage={openConversationsPage}/>} />
+              </Routes>
               <h1 className={'visually-hidden'}>DayZZChat</h1>
-              {renderPage()}
           </div>
       </ThemeProvider>
 

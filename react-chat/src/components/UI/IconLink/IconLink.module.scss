@@ -1,0 +1,23 @@
+.iconLink {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  aspect-ratio: 1;
+  padding: 10px;
+
+  color: inherit;
+  background-color: transparent;
+  border: none;
+  border-radius: 50%;
+
+  transition-duration: var(--transition-duration);
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+
+  &:active {
+    background-color: rgba(0, 0, 0, 0.5);
+    transition-duration: 0s;
+  }
+}

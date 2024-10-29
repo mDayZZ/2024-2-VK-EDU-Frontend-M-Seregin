@@ -12,11 +12,15 @@ import MessageList from "../../MessageList/MessageList.jsx";
 import MessageForm from "../../MessageForm/MessageForm.jsx";
 import messageList from "../../MessageList/MessageList.jsx";
 import Page from "../../UI/Page/Page.jsx";
+import {useParams} from "react-router-dom";
 
-const ChatPage = ({userInfo, chatId, openConversationsPage}) => {
+const ChatPage = ({userInfo, openConversationsPage}) => {
+    const { id } = useParams();
+    const chatId = Number(id);
     const [chatInfo, setChatInfo] = useState(null);
     const [messages, setMessages] = useState([]);
     const [witnessMessages, setWitnessMessages] = useState([]);
+    console.log(id)
 
 
     const fetchMessages = async (chatId) => {
@@ -25,7 +29,6 @@ const ChatPage = ({userInfo, chatId, openConversationsPage}) => {
     }
     const fetchChatInfo = async () => {
         const fetchedChatInfo = await getChatInfoByChatId(chatId, userInfo.id);
-        console.log('fromfetc', fetchedChatInfo)
         setChatInfo(fetchedChatInfo);
     }
 
