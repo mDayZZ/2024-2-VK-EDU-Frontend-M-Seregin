@@ -40,8 +40,8 @@
     padding-block: 10px;
     padding-inline: 20px;
 
-    color: black;
-    background-color: var(--color-peach-color);
+    color: var(--message-text-color);
+    background-color: var(--message-bg-color);
     border-radius: 10px 10px 10px 0;
     word-break: break-word;
     transition: var(--transition-duration);

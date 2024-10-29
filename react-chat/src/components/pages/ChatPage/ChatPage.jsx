@@ -14,17 +14,18 @@ import messageList from "../../MessageList/MessageList.jsx";
 import Page from "../../UI/Page/Page.jsx";
 
 const ChatPage = ({userInfo, chatId, openConversationsPage}) => {
-    const [chatInfo, setChatInfo] = useState({});
+    const [chatInfo, setChatInfo] = useState(null);
     const [messages, setMessages] = useState([]);
     const [witnessMessages, setWitnessMessages] = useState([]);
-    const {chatTitle, chatMembers, chatStatus, contactAvatar} = useChatInfo(chatInfo, userInfo.id);
+
 
     const fetchMessages = async (chatId) => {
         const fetchedMessages = await getMessagesByChatId(chatId);
         setMessages(fetchedMessages);
     }
     const fetchChatInfo = async () => {
-        const fetchedChatInfo = await getChatInfoByChatId(chatId);
+        const fetchedChatInfo = await getChatInfoByChatId(chatId, userInfo.id);
+        console.log('fromfetc', fetchedChatInfo)
         setChatInfo(fetchedChatInfo);
     }
 
@@ -47,7 +48,7 @@ const ChatPage = ({userInfo, chatId, openConversationsPage}) => {
 
     return (
         <Page>
-            <ChatHeader chatInfo={chatInfo} chatTitle={chatTitle} chatStatus={chatStatus} contactAvatar={contactAvatar} onArrowBack={openConversationsPage}/>
+            <ChatHeader chatInfo={chatInfo} onArrowBack={openConversationsPage}/>
             <DefaultMain mainRef={mainRef}>
                 <MessageList messages={messages} witnessMessages={witnessMessages} userInfo={userInfo}/>
             </DefaultMain>

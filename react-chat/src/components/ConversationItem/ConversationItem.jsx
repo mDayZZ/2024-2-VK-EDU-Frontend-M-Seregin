@@ -1,21 +1,12 @@
 import React from 'react';
 import classes from './ConversationItem.module.scss';
 import RoundAvatar from "../UI/RoundAvatar/RoundAvatar.jsx";
-import useChatInfo from "../../hooks/useChatInfo.js";
 import {getDatetime} from "../../utils/date.js";
+import UserListItem from "../UI/UserListItem/UserListItem.jsx";
 const ConversationItem = ({userId, conversation, openChatPage}) => {
-    const {chatTitle, contactAvatar} = useChatInfo(conversation, userId)
+    const conversationLastMessage = `${conversation.last_message?.user?.username}: ${conversation.last_message?.content}` || 'Сообщений пока нет';
     return (
-        <li className={classes.conversationItem}>
-            <button className={classes.conversationItem__button} onClick={() => openChatPage(conversation.id)}>
-                <RoundAvatar src={conversation.chat_image_url || contactAvatar}/>
-                <div className={classes.conversationItem__info}>
-                    <h2 className={classes.conversationItem__name}>{chatTitle}</h2>
-                    <p className={classes.conversationItem__lastMessage}>{conversation.last_message || 'Сообщений пока нет'}</p>
-                    <p className={classes.conversationItem__lastMessageTime}>{getDatetime(conversation.last_message_time)}</p>
-                </div>
-            </button>
-        </li>
+        <UserListItem avatarUrl={conversation.chat_image_url} heading={conversation.name} comment={conversationLastMessage} date={getDatetime(conversation?.last_message?.created_at)} onItemClick={() => openChatPage(conversation.id)}></UserListItem>
     );
 };
 

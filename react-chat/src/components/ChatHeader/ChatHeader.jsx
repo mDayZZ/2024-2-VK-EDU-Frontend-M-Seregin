@@ -7,15 +7,16 @@ import RoundAvatar from "../UI/RoundAvatar/RoundAvatar.jsx";
 import {pluralize} from "../../utils/pluralize.js";
 import {getUserById} from "../../services/userService.js";
 import cn from "classnames";
-const ChatHeader = ({chatInfo, chatTitle, chatStatus, contactAvatar, className, theme, onArrowBack}) => {
+const ChatHeader = ({chatInfo, className, onArrowBack}) => {
     const headerClasses = cn('chatHeader', className, classes.chatHeader);
+    console.log(chatInfo)
     return (
         <DefaultHeader className={headerClasses}>
             <IconButton onClick={onArrowBack}><ArrowBack /></IconButton>
-            <RoundAvatar src={chatInfo.chat_image_url || contactAvatar} className={classes.chatHeader__chatAvatar} />
+            <RoundAvatar src={chatInfo?.chat_image_url || null} className={classes.chatHeader__chatAvatar} />
             <div className={classes.chatHeader__chatInfo}>
-                <h2 className={classes.chatHeader__chatTitle}>{chatTitle}</h2>
-                <p className={classes.chatHeader__chatStatus}>{chatStatus}</p>
+                <h2 className={classes.chatHeader__chatTitle}>{chatInfo?.name || 'Загрузка...'}</h2>
+                <p className={classes.chatHeader__chatStatus}>{chatInfo?.status || 'Загрузка...'}</p>
             </div>
         </DefaultHeader>
     );

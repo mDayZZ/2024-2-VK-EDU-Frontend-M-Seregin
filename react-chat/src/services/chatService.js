@@ -14,10 +14,16 @@ import {
 export const getChatsByUserId = async (userId) => {
     try {
         if (import.meta.env.VITE_USE_MOCKS === 'true') {
-            let loadedChats = loadChatsFromLocalStorage(userId);
+            let loadedChats = null;
+            if (import.meta.env.VITE_USE_LOCALSTORAGE === 'true'){
+                loadedChats = loadChatsFromLocalStorage(userId);
+            }
+
             if (!loadedChats) {
                 loadedChats = await mockedGetChatsByUserId(userId);
-                saveChatsToLocalStorage(loadedChats, userId);
+                if (import.meta.env.VITE_USE_LOCALSTORAGE === 'true') {
+                    saveChatsToLocalStorage(loadedChats, userId);
+                }
             }
             return loadedChats
         }
@@ -29,10 +35,15 @@ export const getChatsByUserId = async (userId) => {
 export const getMessagesByChatId = async (chatId) => {
     try {
         if (import.meta.env.VITE_USE_MOCKS === 'true') {
-            let loadedMessages = loadMessagesFromLocalStorage(chatId);
+            let loadedMessages = null;
+            if (import.meta.env.VITE_USE_LOCALSTORAGE === 'true') {
+                loadedMessages = loadMessagesFromLocalStorage(chatId);
+            }
             if (!loadedMessages) {
                 loadedMessages = await mockedGetMessagesByChatId(chatId);
-                saveMessagesToLocalStorage(loadedMessages, chatId);
+                if (import.meta.env.VITE_USE_LOCALSTORAGE === 'true') {
+                    saveMessagesToLocalStorage(loadedMessages, chatId);
+                }
             }
 
             return loadedMessages;
@@ -42,7 +53,7 @@ export const getMessagesByChatId = async (chatId) => {
     }
 }
 
-export const getChatInfoByChatId = async (chatId) => {
+export const getChatInfoByChatId = async (chatId, userId) => {
     try {
         if (import.meta.env.VITE_USE_MOCKS === 'true') {
             const data = mockedGetChatInfoByChatId(chatId);
@@ -74,7 +85,9 @@ export const sendMessage = async (chatId, senderId, content) => {
             if (!response.success) {
                 throw new Error('Ошибка отправки сообщения');
             }
-            saveMessageToLocalStorage(response.data, chatId, senderId);
+            if (import.meta.env.VITE_USE_LOCALSTORAGE === 'true') {
+                saveMessageToLocalStorage(response.data, chatId, senderId);
+            }
             return response.data;
         }
     } catch (error) {

@@ -10,11 +10,13 @@ import Page from "../../UI/Page/Page.jsx";
 
 const ConversationsPage = ({userId, openChatPage}) => {
     const conversationsPageClasses = cn('page', classes.conversationsPage);
+    const [searchQuery, setSearchQuery] = useState('');
+
     return (
         <Page className={conversationsPageClasses}>
-            <ConversationsHeader className={classes.conversationsPage__header} />
+            <ConversationsHeader searchQuery={searchQuery} setSearchQuery={setSearchQuery} className={classes.conversationsPage__header} />
             <DefaultMain>
-                <ConversationList userId={userId} openChatPage={openChatPage}/>
+                <ConversationList userId={userId} openChatPage={openChatPage} searchQuery={searchQuery} />
             </DefaultMain>
         </Page>
     );
