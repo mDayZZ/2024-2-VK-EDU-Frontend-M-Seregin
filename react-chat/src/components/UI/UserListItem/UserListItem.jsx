@@ -10,8 +10,8 @@ const UserListItem = ({avatarUrl, heading, comment, date, linkTo}) => {
                 <RoundAvatar src={avatarUrl}/>
                 <div className={classes.userListItem__info}>
                     <h2 className={classes.userListItem__name}>{heading || '...'}</h2>
-                    <p className={classes.userListItem__lastMessage}>{comment}</p>
-                    <p className={classes.userListItem__lastMessageTime}>{date}</p>
+                    <p className={classes.userListItem__lastMessage}>{comment || ''}</p>
+                    <p className={classes.userListItem__lastMessageTime}>{date || ''}</p>
                 </div>
             </Link>
         </li>

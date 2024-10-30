@@ -8,14 +8,14 @@ import ConversationList from "../../ConversationList/ConversationList.jsx";
 import cn from "classnames";
 import Page from "../../UI/Page/Page.jsx";
 
-const ConversationsPage = ({userId, openChatPage}) => {
+const ConversationsPage = ({userInfo, openChatPage}) => {
     const conversationsPageClasses = cn('page', classes.conversationsPage);
     const [searchQuery, setSearchQuery] = useState('');
     return (
         <Page className={conversationsPageClasses}>
-            <ConversationsHeader searchQuery={searchQuery} setSearchQuery={setSearchQuery} className={classes.conversationsPage__header} />
+            <ConversationsHeader userInfo={userInfo} searchQuery={searchQuery} setSearchQuery={setSearchQuery} className={classes.conversationsPage__header} />
             <DefaultMain>
-                <ConversationList userId={userId} openChatPage={openChatPage} searchQuery={searchQuery} />
+                <ConversationList userId={userInfo.id} openChatPage={openChatPage} searchQuery={searchQuery} />
             </DefaultMain>
         </Page>
     );

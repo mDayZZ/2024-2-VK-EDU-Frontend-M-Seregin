@@ -1,9 +1,13 @@
+body {
+  font-family: SFProDisplay, sans-serif;
+}
+
 #app {
   height: 100dvh;
   width: 100dvw;
   //overflow: hidden;
 
-  font-family: SFProDisplay, sans-serif;
+
 }
 
 
@@ -24,8 +28,24 @@ h2 {
 
 p {
   font-size: 14px;
+  margin: 0;
+}
+
+ul {
+  list-style: none;
 }
 
 a {
   text-decoration: none;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--chat-bg-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--message-bg-color);
 }

@@ -13,4 +13,9 @@
       gap: 5px;
     }
   }
+  &__actionsContainer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
 }

@@ -1,8 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {
     getChatInfoByChatId,
-    getChatsByUserId,
-    getMembersByChatId,
     getMessagesByChatId
 } from "../../../services/chatService.js";
 import ChatHeader from "../../ChatHeader/ChatHeader.jsx";
@@ -13,14 +11,20 @@ import MessageForm from "../../MessageForm/MessageForm.jsx";
 import messageList from "../../MessageList/MessageList.jsx";
 import Page from "../../UI/Page/Page.jsx";
 import {useParams} from "react-router-dom";
+import Modal from "../../UI/Modal/Modal.jsx";
+import {useModal} from "../../../contexts/ModalContext.jsx";
 
 const ChatPage = ({userInfo, openConversationsPage}) => {
+
     const { id } = useParams();
     const chatId = Number(id);
     const [chatInfo, setChatInfo] = useState(null);
     const [messages, setMessages] = useState([]);
     const [witnessMessages, setWitnessMessages] = useState([]);
     console.log(id)
+
+
+
 
 
     const fetchMessages = async (chatId) => {
@@ -33,8 +37,6 @@ const ChatPage = ({userInfo, openConversationsPage}) => {
     }
 
     const mainRef = useRef(null);
-
-
     useEffect(() => {
         mainRef.current.scrollTop = mainRef.current.scrollHeight;
     }, [messages]);
@@ -51,8 +53,9 @@ const ChatPage = ({userInfo, openConversationsPage}) => {
 
     return (
         <Page>
-            <ChatHeader chatInfo={chatInfo} onArrowBack={openConversationsPage}/>
+            <ChatHeader userInfo={userInfo} chatInfo={chatInfo} onArrowBack={openConversationsPage}/>
             <DefaultMain mainRef={mainRef}>
+
                 <MessageList messages={messages} witnessMessages={witnessMessages} userInfo={userInfo}/>
             </DefaultMain>
             <MessageForm messages={messages} setMessages={setMessages} setWitnessMessages={setWitnessMessages} userInfo={userInfo} chatInfo={chatInfo}/>
