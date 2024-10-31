@@ -180,7 +180,6 @@ export const mockedGetChatsByUserId = async (userId) => {
             const chatLastMessage = chatsLastMessages.find(lastMessage => lastMessage.chat_id === userChat.id)
             return {...userChat, last_message: chatLastMessage};
         })
-        console.log(resultChats);
 
         return resultChats;
 
@@ -253,7 +252,6 @@ export const mockedGetChatInfoByChatId = async (chatId, userId) => {
         let profile_image_url = chatInfo.chat_image_url;
         const chatMembers = getMockedChatMembers(chatId);
         let status = `${pluralize(chatMembers.length, 'участник', 'участника', 'участников')}`;
-        console.log(profile_image_url)
         if (!chatInfo.is_group) {
             const partnerUserInfo = getUserById(getPartnerChatMember(chatId, userId).id);
             status = partnerUserInfo.status
@@ -271,7 +269,6 @@ export const mockedGetChatInfoByChatId = async (chatId, userId) => {
             username: username,
             status: status,
         }
-        console.log(response)
         return response;
 
     } catch (error) {
@@ -287,7 +284,6 @@ export const mockedGetMembersByChatId = async (chatId) => {
         }
         await new Promise(resolve => setTimeout(resolve, 200));
         const members = getMockedChatMembers(chatId);
-        console.log('members', members)
         return members;
 
     } catch (error) {

@@ -72,10 +72,16 @@ const UserProfile = ({userId, myInfo}) => {
                 </div>
                 <div className={classes.userProfile__otherInfo}>
                     {isMine && !isEditing && !userInfo.name && <p>Укажите имя пользователя</p>}
-                    {isEditing
-                        ? <input maxLength={60} value={editEmail} onInput={(e) => setEditEmail(e.target.value)} className={classes.userProfile__input}/>
-                        : <p><b>Email: </b>{userInfo.email || 'не указан'}</p>
-                    }
+                    <p>
+                        <b>Email: </b>
+                        <span>
+                            {isEditing
+                                ? <input maxLength={60} value={editEmail} onInput={(e) => setEditEmail(e.target.value)}
+                                         className={classes.userProfile__input}/>
+                                : userInfo.email || 'не указан'
+                            }
+                        </span>
+                    </p>
 
                 </div>
                 <div className={classes.userProfile__actions}>
