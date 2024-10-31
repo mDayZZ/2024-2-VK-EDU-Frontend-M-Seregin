@@ -23,7 +23,6 @@ const ChatProfile = ({chatInfo, userInfo}) => {
         }
     }, []);
 
-    console.log(chatMembers)
     return (
         <div className={classes.chatProfile}>
             <div className={classes.chatProfile__info}>
@@ -45,7 +44,7 @@ const ChatProfile = ({chatInfo, userInfo}) => {
                 <>
                     <h3>Участники</h3>
                     <ul className={classes.chatProfile__userList}>
-                        {chatMembers.map(chatMember => <UserListItem onClick={() => openModal(<UserProfile userId={chatMember.id} myInfo={userInfo}/>)} heading={chatMember.name || chatMember.username} comment={chatMember.status} avatarUrl={chatMember.profile_image_url}/>)}
+                        {chatMembers.map(chatMember => <UserListItem key={chatMember.id} onClick={() => openModal(<UserProfile userId={chatMember.id} myInfo={userInfo}/>)} heading={chatMember.name || chatMember.username} comment={chatMember.status} avatarUrl={chatMember.profile_image_url}/>)}
                     </ul>
                 </>
 

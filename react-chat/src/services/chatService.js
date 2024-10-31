@@ -1,10 +1,12 @@
 import {
+    mockedDeleteChatMessages,
     mockedGetChatInfoByChatId,
     mockedGetChatsByUserId, mockedGetMembersByChatId,
     mockedGetMessagesByChatId,
     mockedGetUserById, mockedSendMessage
 } from "../mock/mockApiHandlers.js";
 import {getUniqueId} from "../utils/idGenerator.js";
+import error from "eslint-plugin-react/lib/util/error.js";
 
 
 export const getChatsByUserId = async (userId) => {
@@ -73,6 +75,16 @@ export const sendMessage = async (chatId, senderId, content) => {
                 throw new Error('Ошибка отправки сообщения');
             }
             return response.data;
+        }
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const deleteChatMessages = async (chatId) => {
+    try {
+        if (import.meta.env.VITE_USE_MOCKS === 'true') {
+            const response = await mockedDeleteChatMessages(chatId);
         }
     } catch (error) {
         throw error;

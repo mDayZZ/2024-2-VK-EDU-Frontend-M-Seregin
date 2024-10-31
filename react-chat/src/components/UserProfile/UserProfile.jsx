@@ -88,14 +88,20 @@ const UserProfile = ({userId, myInfo}) => {
                     {isMine
                         ?
                         <>
-                        {isEditing
-                            ? <button className={classes.userProfile__actionButton} onClick={saveEditing}>Сохранить данные</button>
-                            : <button className={classes.userProfile__actionButton} onClick={openEditing}>Изменить данные</button>
-                        }
-                            </>
-                            :
-                            <>
-                                <button className={classes.userProfile__actionButton}>Написать сообщение</button>
+                            {isEditing
+                                ? <button className={classes.userProfile__actionButton} onClick={saveEditing}>Сохранить
+                                    данные</button>
+                                : <button className={classes.userProfile__actionButton} onClick={openEditing}>Изменить
+                                    данные</button>
+                            }
+                            <button className={classes.userProfile__actionButton}
+                                    onClick={() => {localStorage.clear(); location.reload()}}>Очистить localStorage
+                            </button>
+
+                        </>
+                        :
+                        <>
+                            <button className={classes.userProfile__actionButton}>Написать сообщение</button>
                                 <button className={classes.userProfile__actionButton}>Заглушить пользователя</button>
                                 <button className={classes.userProfile__actionButton}>Заблокировать пользователя</button>
                             </>

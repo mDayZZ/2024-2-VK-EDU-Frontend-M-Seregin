@@ -91,7 +91,9 @@ const getChatsLastMessages = (chatsId) => {
             messages = getItemFromLocalStorage('messages');
         }
         const chatMessages = messages.filter(message => message.chat_id === chatId);
-
+        if (!chatMessages.length > 0) {
+            return null;
+        }
         const lastMessage = chatMessages.reduce((lastMessage, chatMessage) => {
             if (!lastMessage || new Date(lastMessage.created_at) < new Date(chatMessage.created_at)) {
                 lastMessage = chatMessage;
@@ -102,6 +104,9 @@ const getChatsLastMessages = (chatsId) => {
     })
 
     const resultLastMessages = lastMessages.map(lastMessage => {
+        if (!lastMessage) {
+            return null;
+        }
         const userInfo = getUserById(lastMessage.sender_id);
         return {...lastMessage, user: userInfo};
     })
@@ -168,7 +173,7 @@ export const mockedGetChatsByUserId = async (userId) => {
         if (import.meta.env.VITE_USE_LOCALSTORAGE === 'true') {
             userChats = getItemFromLocalStorage('chats').filter(chat => chatsId.includes(chat.id));
         }
-        const chatsLastMessages = getChatsLastMessages(chatsId);
+
 
         const resultChats = userChats.map(userChat => {
             if (!userChat.is_group) {
@@ -177,7 +182,13 @@ export const mockedGetChatsByUserId = async (userId) => {
                 userChat.name = partnerUserInfo.name || partnerUserInfo.username;
                 userChat.chat_image_url = partnerUserInfo.profile_image_url;
             }
-            const chatLastMessage = chatsLastMessages.find(lastMessage => lastMessage.chat_id === userChat.id)
+            let chatLastMessage = null;
+            const chatsLastMessages = getChatsLastMessages(chatsId);
+            chatLastMessage = chatsLastMessages.find(lastMessage => {
+                if (!lastMessage) {
+                    return null
+                }
+                return lastMessage.chat_id === userChat.id});
             return {...userChat, last_message: chatLastMessage};
         })
 
@@ -319,6 +330,16 @@ export const mockedSendMessage = async (message) => {
     } catch (error) {
         throw error;
     }
+}
+
+export const mockedDeleteChatMessages = async (chatId) => {
+    const messages = getMessages();
+    const newMessages = messages.filter(message => message.chat_id !== chatId);
+
+    saveItemToLocalStorage('messages', newMessages);
+
+
+    return [];
 }
 
 initLocalStorage();

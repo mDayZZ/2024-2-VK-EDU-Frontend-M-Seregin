@@ -1,5 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {
+    deleteChatMessages,
     getChatInfoByChatId,
     getMessagesByChatId
 } from "../../../services/chatService.js";
@@ -22,8 +23,19 @@ const ChatPage = ({userInfo, openConversationsPage}) => {
     const [messages, setMessages] = useState([]);
     const [witnessMessages, setWitnessMessages] = useState([]);
 
+    const fetchDeleteMessages = async () => {
+        try {
+            const data = await deleteChatMessages(chatId);
+            setMessages([]);
+
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
     const onDeleteHistory = () => {
-        setMessages([]);
+        const result = fetchDeleteMessages();
+        setMessages(result);
     };
 
     const fetchMessages = async (chatId) => {
