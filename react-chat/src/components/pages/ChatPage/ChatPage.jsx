@@ -21,11 +21,10 @@ const ChatPage = ({userInfo, openConversationsPage}) => {
     const [chatInfo, setChatInfo] = useState(null);
     const [messages, setMessages] = useState([]);
     const [witnessMessages, setWitnessMessages] = useState([]);
-    console.log(id)
 
-
-
-
+    const onDeleteHistory = () => {
+        setMessages([]);
+    };
 
     const fetchMessages = async (chatId) => {
         const fetchedMessages = await getMessagesByChatId(chatId);
@@ -53,7 +52,7 @@ const ChatPage = ({userInfo, openConversationsPage}) => {
 
     return (
         <Page>
-            <ChatHeader userInfo={userInfo} chatInfo={chatInfo} onArrowBack={openConversationsPage}/>
+            <ChatHeader userInfo={userInfo} chatInfo={chatInfo} onDeleteHistory={onDeleteHistory}/>
             <DefaultMain mainRef={mainRef}>
 
                 <MessageList messages={messages} witnessMessages={witnessMessages} userInfo={userInfo}/>

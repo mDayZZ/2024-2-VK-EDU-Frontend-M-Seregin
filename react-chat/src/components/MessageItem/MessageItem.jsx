@@ -20,7 +20,7 @@ const MessageItem = ({message, isWitnessMessage, userInfo}) => {
         <li className={messageItemClasses} data-loaded={!isWitnessMessage}>
             <RoundAvatar className={classes.message__avatar} src={message.sender_profile_image_url}/>
             <div className={classes.message__block} >
-                <p className={classes.message__username}>{message.sender_username}</p>
+                <p className={classes.message__username}>{message.sender_name || message.sender_username}</p>
                 <p className={classes.message__content}>{message.content}</p>
                 <p className={classes.message__datetime}>{getDatetime(message.created_at)}</p>
             </div>

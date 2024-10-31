@@ -6,7 +6,7 @@ import {AccountCircle, ArrowBack, Menu, More} from "@mui/icons-material";
 import cn from "classnames";
 import ConversationsFinder from "../ConversationsFinder/ConversationsFinder.jsx";
 import {useModal} from "../../contexts/ModalContext.jsx";
-import ChatProfile from "../ChatProfile/ChatProfile.jsx";
+import UserProfile from "../UserProfile/UserProfile.jsx";
 
 const ConversationsHeader = ({className, userInfo, backgroundColor, searchQuery, setSearchQuery}) => {
     const headerClasses = cn('chatListHeader', className);
@@ -22,7 +22,7 @@ const ConversationsHeader = ({className, userInfo, backgroundColor, searchQuery,
             </div>
             <div className={classes.chatListHeader__actionsContainer} >
                 <ConversationsFinder searchQuery={searchQuery} setSearchQuery={setSearchQuery}></ConversationsFinder>
-                <IconButton onClick={() => openModal(<ChatProfile chatInfo={userInfo} userInfo={userInfo}/>)}><AccountCircle/></IconButton>
+                <IconButton onClick={() => openModal(<UserProfile userId={userInfo.id} myInfo={userInfo}/>)}><AccountCircle/></IconButton>
             </div>
         </DefaultHeader>
     );

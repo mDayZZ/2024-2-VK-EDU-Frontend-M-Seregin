@@ -1,0 +1,19 @@
+.dropdownButton {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 10px;
+  gap: 10px;
+
+  background-color: var(--message-bg-color);
+  color: var(--header-text-color);
+  border: none;
+
+  &:hover {
+    filter: brightness(1.2);
+  }
+
+  &:active {
+    filter: brightness(0.8);
+  }
+}

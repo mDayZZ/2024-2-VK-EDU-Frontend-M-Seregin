@@ -1,0 +1,59 @@
+.userProfile {
+  & p {
+    margin: 0;
+  }
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  &__headInfo {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    & h2 {
+      margin: 0px;
+    }
+  }
+
+  &__username {
+    font-size: 14px;
+  }
+
+  &__userList {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: auto;
+    border-radius: 10px;
+  }
+  &__actionButton {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    background-color: inherit;
+    border: none;
+    color: inherit;
+    padding: 0;
+
+    &:hover {
+      filter: brightness(0.8);
+    }
+    &:active {
+      filter: brightness(0.5);
+    }
+  }
+
+  &__input {
+    background-color: var(--input-bg-color);
+    color: var(--input-text-color);
+    border: none;
+
+    font-size: 12px;
+    padding-inline: 4px;
+
+  }
+}

@@ -4,9 +4,11 @@ import classes from './ChatProfile.module.scss';
 import RoundAvatar from "../UI/RoundAvatar/RoundAvatar.jsx";
 import CopyLink from "../UI/CopyLink/CopyLink.jsx";
 import {getMembersByChatId} from "../../services/chatService.js";
-import ConversationItem from "../ConversationItem/ConversationItem.jsx";
 import UserListItem from "../UI/UserListItem/UserListItem.jsx";
+import {useModal} from "../../contexts/ModalContext.jsx";
+import UserProfile from "../UserProfile/UserProfile.jsx";
 const ChatProfile = ({chatInfo, userInfo}) => {
+    const {openModal} = useModal();
     const isGroup = chatInfo.is_group;
     const [chatMembers, setChatMembers] = useState(null);
 
@@ -43,7 +45,7 @@ const ChatProfile = ({chatInfo, userInfo}) => {
                 <>
                     <h3>Участники</h3>
                     <ul className={classes.chatProfile__userList}>
-                        {chatMembers.map(chatMember => <UserListItem heading={chatMember.name || chatMember.username} comment={chatMember.status} avatarUrl={chatMember.profile_image_url}/>)}
+                        {chatMembers.map(chatMember => <UserListItem onClick={() => openModal(<UserProfile userId={chatMember.id} myInfo={userInfo}/>)} heading={chatMember.name || chatMember.username} comment={chatMember.status} avatarUrl={chatMember.profile_image_url}/>)}
                     </ul>
                 </>
 

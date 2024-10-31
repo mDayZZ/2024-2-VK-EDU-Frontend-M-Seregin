@@ -3,13 +3,63 @@ import {mockedChatMembers} from "./chat_members.js";
 import {mockedChats} from "./chats.js";
 import {mockedMessages} from "./messages.js";
 import {pluralize} from "../utils/pluralize.js";
+import {
+    getItemFromLocalStorage,
+    initToLocalStorage,
+    pushToLocalStorage,
+    saveItemToLocalStorage
+} from "../utils/localStorage.js";
+
+
+const initLocalStorage = () => {
+    initToLocalStorage('chats', mockedChats);
+    initToLocalStorage('messages', mockedMessages);
+    initToLocalStorage('users', mockedUsers);
+    initToLocalStorage('chatMembers', mockedChatMembers);
+}
+
+
+const getUsers = () => {
+    let users = mockedUsers;
+    if (import.meta.env.VITE_USE_LOCALSTORAGE === 'true') {
+        users = getItemFromLocalStorage('users');
+    }
+    return users;
+}
+
+const getMessages = () => {
+    let messages = mockedMessages;
+    if (import.meta.env.VITE_USE_LOCALSTORAGE === 'true') {
+        messages = getItemFromLocalStorage('messages');
+    }
+    return messages;
+}
+
+const getChatMembers = () => {
+    let chatMembers = mockedChatMembers;
+    if (import.meta.env.VITE_USE_LOCALSTORAGE === 'true') {
+        chatMembers = getItemFromLocalStorage('chatMembers');
+    }
+    return chatMembers;
+}
+
+const getChats = () => {
+    let chats = mockedChats;
+    if (import.meta.env.VITE_USE_LOCALSTORAGE === 'true') {
+        chats = getItemFromLocalStorage('chats');
+    }
+    return chats;
+}
 
 const getUserById = (userId) => {
     if (!userId) {
         throw new Error("userId is required in getUserById");
     }
-    const userInfo = mockedUsers.find(user => user.id === userId);
-    return userInfo;
+    if (import.meta.env.VITE_USE_LOCALSTORAGE === 'true') {
+        const users = getItemFromLocalStorage('users');
+        return users.find(user => user.id === userId);
+    }
+    return mockedUsers.find(user => user.id === userId);
 };
 
 
@@ -17,10 +67,16 @@ const getUserChatsId = (userId) => {
     if (!userId) {
         throw new Error('userId needed in getUserChatsId');
     }
+    if (import.meta.env.VITE_USE_LOCALSTORAGE === 'true') {
+        const chatsId = getItemFromLocalStorage('chatMembers');
+
+        return chatsId.filter(chatMember => chatMember.user_id === userId)
+            .map(chatMember => chatMember.chat_id);
+    }
+
     const chatsId = mockedChatMembers
         .filter(chatMember => chatMember.user_id === userId)
         .map(chatMember => chatMember.chat_id);
-
 
     return chatsId;
 };
@@ -30,7 +86,12 @@ const getChatsLastMessages = (chatsId) => {
         throw new Error('chatId must be an array in chatsLastMessage');
     }
     const lastMessages = chatsId.map((chatId) => {
-        const chatMessages = mockedMessages.filter(message => message.chat_id === chatId);
+        let messages = mockedMessages;
+        if (import.meta.env.VITE_USE_LOCALSTORAGE === 'true') {
+            messages = getItemFromLocalStorage('messages');
+        }
+        const chatMessages = messages.filter(message => message.chat_id === chatId);
+
         const lastMessage = chatMessages.reduce((lastMessage, chatMessage) => {
             if (!lastMessage || new Date(lastMessage.created_at) < new Date(chatMessage.created_at)) {
                 lastMessage = chatMessage;
@@ -60,11 +121,37 @@ export const mockedGetUserById = async (userId) => {
     } catch (error) {
         throw error;
     }
+}
 
+
+export const mockedChangeUserInfo = async (userInfo, userId) => {
+    try {
+        if (typeof userId !== 'number' && typeof userInfo !== 'object') {
+            throw new Error('userId must be a number');
+        }
+        await new Promise(resolve => setTimeout(resolve, 300));
+         const users = getUsers();
+         const changedUsers = users.map(user => {
+             if (user.id === userId) {
+                 return userInfo
+             }
+             return user
+         })
+        saveItemToLocalStorage('users', changedUsers);
+
+        return changedUsers;
+
+    } catch (error) {
+        throw error;
+    }
 }
 
 const getPartnerChatMember = (chatId, userId) => {
-    return mockedChatMembers
+    let chatMembers = mockedChatMembers;
+    if (import.meta.env.VITE_USE_LOCALSTORAGE === 'true') {
+        getItemFromLocalStorage('chatMembers');
+    }
+    return chatMembers
         .filter(chatMember => chatMember.chat_id === chatId)
         .find(chatMember => chatMember.user_id !== userId)
 };
@@ -77,7 +164,10 @@ export const mockedGetChatsByUserId = async (userId) => {
         await new Promise(resolve => setTimeout(resolve, 500));
 
         const chatsId = getUserChatsId(userId);
-        const userChats = mockedChats.filter(chat => chatsId.includes(chat.id));
+        let userChats = mockedChats.filter(chat => chatsId.includes(chat.id));
+        if (import.meta.env.VITE_USE_LOCALSTORAGE === 'true') {
+            userChats = getItemFromLocalStorage('chats').filter(chat => chatsId.includes(chat.id));
+        }
         const chatsLastMessages = getChatsLastMessages(chatsId);
 
         const resultChats = userChats.map(userChat => {
@@ -106,13 +196,19 @@ export const mockedGetMessagesByChatId = async (chatId) => {
             throw new Error('chatId must be a number');
         }
         await new Promise(resolve => setTimeout(resolve, 300)); // Симуляция задержки
-
-        const chatMessages = mockedMessages.filter(message => message.chat_id === chatId);
+        let messages = mockedMessages;
+        let users = mockedUsers;
+        if (import.meta.env.VITE_USE_LOCALSTORAGE === 'true') {
+            messages = getItemFromLocalStorage('messages');
+            users = getItemFromLocalStorage('users');
+        }
+        const chatMessages = messages.filter(message => message.chat_id === chatId);
 
         const enrichedMessages = chatMessages.map(message => {
-            const sender = mockedUsers.find(user => user.id === message.sender_id);
+            const sender = users.find(user => user.id === message.sender_id);
             return {
                 ...message,
+                sender_name: sender?.name || sender?.username,
                 sender_username: sender?.username || 'Unknown',
                 sender_profile_image_url: sender?.profile_image_url || '',
             };
@@ -125,9 +221,17 @@ export const mockedGetMessagesByChatId = async (chatId) => {
     }
 };
 
-const getChatMembers = (chatId) => {
-    const members = mockedChatMembers.filter(chatMember => chatMember.chat_id === chatId);
-    const membersUserInfo = members.map(member => mockedUsers.find(user => user.id === member.id));
+const getMockedChatMembers = (chatId) => {
+    let chatMembers = mockedChatMembers;
+    let users = mockedUsers;
+    if (import.meta.env.VITE_USE_LOCALSTORAGE === 'true') {
+        chatMembers = getItemFromLocalStorage('chatMembers');
+        users = getItemFromLocalStorage('users');
+    }
+
+
+    const members = chatMembers.filter(chatMember => chatMember.chat_id === chatId);
+    const membersUserInfo = members.map(member => users.find(user => user.id === member.id));
 
 
     return membersUserInfo;
@@ -137,11 +241,17 @@ export const mockedGetChatInfoByChatId = async (chatId, userId) => {
         if (typeof chatId !== 'number') {
             throw new Error('ChatId must be a number');
         }
+
+        let chats = mockedChats;
+        if (import.meta.env.VITE_USE_LOCALSTORAGE === 'true') {
+            chats = getItemFromLocalStorage('chats');
+        }
+
         await new Promise(resolve => setTimeout(resolve, 200));
-        const chatInfo = mockedChats.find(chat => chat.id === chatId);
+        const chatInfo = chats.find(chat => chat.id === chatId);
         let username = null;
         let profile_image_url = chatInfo.chat_image_url;
-        const chatMembers = getChatMembers(chatId);
+        const chatMembers = getMockedChatMembers(chatId);
         let status = `${pluralize(chatMembers.length, 'участник', 'участника', 'участников')}`;
         console.log(profile_image_url)
         if (!chatInfo.is_group) {
@@ -176,7 +286,7 @@ export const mockedGetMembersByChatId = async (chatId) => {
             throw new Error('ChatId must be a number');
         }
         await new Promise(resolve => setTimeout(resolve, 200));
-        const members = getChatMembers(chatId);
+        const members = getMockedChatMembers(chatId);
         console.log('members', members)
         return members;
 
@@ -190,13 +300,19 @@ export const mockedSendMessage = async (message) => {
         if (!message.content) {
             throw new Error('Ошибка. Пустое сообщение');
         }
+
+        let users = mockedUsers;
+        if (import.meta.env.VITE_USE_LOCALSTORAGE === 'true') {
+            users = getItemFromLocalStorage('users');
+        }
+
         await new Promise(resolve => setTimeout(resolve, 400));
-        const senderInfo = mockedUsers.find(user => message.sender_id === user.id);
+        const senderInfo = users.find(user => message.sender_id === user.id);
         const senderProfileImageUrl = senderInfo?.profile_image_url;
         const senderUsername = senderInfo?.username;
 
         const resultedMessage = {...message, user: senderInfo, sender_profile_image_url: senderProfileImageUrl, sender_username: senderUsername}
-
+        pushToLocalStorage('messages', resultedMessage);
         const response = {
             success: true,
             data: {
@@ -207,6 +323,6 @@ export const mockedSendMessage = async (message) => {
     } catch (error) {
         throw error;
     }
-
-
 }
+
+initLocalStorage();

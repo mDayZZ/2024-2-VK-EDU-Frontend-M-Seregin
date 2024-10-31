@@ -11,13 +11,13 @@ import IconLink from "../UI/IconLink/IconLink.jsx";
 import DropdownMenu from "../UI/DropDownMenu/DropdownMenu.jsx";
 import {useModal} from "../../contexts/ModalContext.jsx";
 import ChatProfile from "../ChatProfile/ChatProfile.jsx";
-const ChatHeader = ({chatInfo, userInfo, className, onArrowBack}) => {
+const ChatHeader = ({chatInfo, userInfo, className, onDeleteHistory}) => {
     const {openModal} = useModal();
     const headerClasses = cn('chatHeader', className, classes.chatHeader);
 
     const menuOptions = [
         {label: 'Профиль', onClick: () => openModal(<ChatProfile chatInfo={chatInfo} userInfo={userInfo}/>), icon: <Info />},
-        {label: 'Очистить историю', onClick: '', icon: <DeleteOutline/>},
+        {label: 'Очистить историю', onClick: onDeleteHistory, icon: <DeleteOutline/>},
     ];
 
 
