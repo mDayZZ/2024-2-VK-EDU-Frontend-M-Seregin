@@ -20,15 +20,17 @@ const ChatHeader = ({chatInfo, userInfo, className, onDeleteHistory}) => {
         {label: 'Очистить историю', onClick: onDeleteHistory, icon: <DeleteOutline/>},
     ];
 
-    const chatTitle = chatInfo?.name || '...'
-    const chatStatus = chatInfo?.status || '...'
+    const chatTitle = chatInfo?.name || '...';
+    let chatStatus = chatInfo?.status || '...';
+    const chatAvatar = chatInfo?.profile_image_url || null;
+
 
 
 
     return (
         <DefaultHeader className={headerClasses}>
             <IconLink linkTo={'/chats'}><ArrowBack /></IconLink>
-            <RoundAvatar src={chatInfo?.profile_image_url || null} className={classes.chatHeader__chatAvatar} />
+            <RoundAvatar src={chatAvatar} className={classes.chatHeader__chatAvatar} />
             <div className={classes.chatHeader__chatInfo}>
                 <h2 className={classes.chatHeader__chatTitle}>{chatTitle}</h2>
                 <p className={classes.chatHeader__chatStatus}>{chatStatus}</p>

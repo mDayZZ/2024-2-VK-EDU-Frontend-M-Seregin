@@ -4,7 +4,7 @@ import cn from "classnames";
 
 const CopyLink = ({children, className}) => {
 
-    const text = children.join('');
+    const text = String(children);
     const copyLinkClasses = cn(classes.copyLink, className)
     const handleCopy = async () => {
         try {

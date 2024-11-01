@@ -14,8 +14,10 @@ import Page from "../../UI/Page/Page.jsx";
 import {useParams} from "react-router-dom";
 import Modal from "../../UI/Modal/Modal.jsx";
 import {useModal} from "../../../contexts/ModalContext.jsx";
+import {useUserContext} from "../../../contexts/UserContext.jsx";
 
-const ChatPage = ({userInfo, openConversationsPage}) => {
+const ChatPage = ({}) => {
+    const {user: userInfo } = useUserContext();
 
     const { id } = useParams();
     const chatId = Number(id);

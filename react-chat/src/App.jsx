@@ -5,8 +5,8 @@ import ConversationsPage from "./components/pages/ConversationsPage/Conversation
 import {ThemeProvider} from "./contexts/ThemeContext.jsx";
 import ChatPage from "./components/pages/ChatPage/ChatPage.jsx";
 import {Route, Routes} from "react-router-dom";
-import ProfilePage from "./components/pages/ProfilePage/ProfilePage.jsx";
 import {ModalProvider} from "./contexts/ModalContext.jsx";
+import {UserProvider, useUserContext} from "./contexts/UserContext.jsx";
 
 function App() {
     const [userId, setUserId] = useState(null);
@@ -14,9 +14,13 @@ function App() {
     const [currentPage, setCurrentPage] = useState('conversationsPage');
     const [lastChatId, setLastChatId] = useState(null);
 
+    const {user, setUser} = useUserContext();
+
     const fetchUserInfo = async (userId) => {
+        console.log(userId)
         const userInfo = await getUserById(userId);
-        setUserInfo(userInfo);
+        console.log('ui', userInfo)
+        setUser(userInfo);
     }
 
     useEffect(() => {
@@ -49,22 +53,25 @@ function App() {
         }
     };
 
+    console.log(user)
 
 
   return (
-      <ThemeProvider>
-          <ModalProvider>
-              <div id={'app'}>
-                  <Routes>
-                      <Route path="/chats" element={userInfo ? <ConversationsPage userInfo={userInfo}/> : null}/>
-                      <Route path="/chats/:id" element={userInfo ? <ChatPage userInfo={userInfo}/> : null}/>
-                      <Route path="/profile" element={userInfo ? <ProfilePage userInfo={userInfo}/> : null}/>
-                  </Routes>
-                  <h1 className={'visually-hidden'}>DayZZChat</h1>
-              </div>
-          </ModalProvider>
-      </ThemeProvider>
+          <ThemeProvider>
+              <ModalProvider>
+                  <div id={'app'}>
+                      {
+                          user &&
+                          <Routes>
+                              <Route path="/chats" element={<ConversationsPage/>}/>
+                              <Route path="/chats/:id" element={<ChatPage/>}/>
+                          </Routes>
+                      }
 
+                      <h1 className={'visually-hidden'}>DayZZChat</h1>
+                  </div>
+              </ModalProvider>
+          </ThemeProvider>
   )
 }
 

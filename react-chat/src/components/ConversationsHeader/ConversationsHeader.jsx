@@ -13,6 +13,10 @@ const ConversationsHeader = ({className, userInfo, backgroundColor, searchQuery,
 
     const {openModal} = useModal();
 
+    const handleOpenProfile = () => {
+        openModal(<UserProfile profileInfo={userInfo} myInfo={userInfo}/>)
+    }
+
 
     return (
         <DefaultHeader className={headerClasses} backgroundColor={backgroundColor}>
@@ -22,7 +26,7 @@ const ConversationsHeader = ({className, userInfo, backgroundColor, searchQuery,
             </div>
             <div className={classes.chatListHeader__actionsContainer} >
                 <ConversationsFinder searchQuery={searchQuery} handleSearchQueryChange={handleSearchQueryChange} />
-                <IconButton onClick={() => openModal(<UserProfile userId={userInfo.id} myInfo={userInfo}/>)}><AccountCircle/></IconButton>
+                <IconButton onClick={handleOpenProfile}><AccountCircle/></IconButton>
             </div>
         </DefaultHeader>
     );

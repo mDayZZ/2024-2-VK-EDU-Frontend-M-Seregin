@@ -5,7 +5,6 @@ export const mockedUsers = [
     { id: 4, username: 'arthur.shelby', name: '', email: 'arthur@peakyblinders.com', profile_image_url: 'images/avatars/artur_shelby_avatar.jpg', status: 'online' },
     { id: 5, username: 'frank.gallagher', name: '', email: 'frank@shameless.com', profile_image_url: 'images/avatars/frank_galagher_avatar.jpg', status: 'busy' },
     { id: 6, username: 'fiona.gallagher', name: '', email: 'fiona@shameless.com', profile_image_url: 'images/avatars/fiona_galagher_avatar.jpg', status: 'online' },
-    { id: 7, username: 'jon.snow', name: '', email: 'snow@got.com', profile_image_url: 'images/avatars/jon.png', status: 'offline' },
     { id: 8, username: 'saul.goodman', name: '', email: 'sg@bb.com', profile_image_url: 'images/avatars/saul_photo.png', status: 'online' },
     { id: 9, username: 'mike.ermantraud', name: '', email: 'maikk@bb.com', profile_image_url: 'images/avatars/mike_photo.png', status: 'offline' },
     { id: 10, username: 'lip.gallagher', name: '', email: 'lip@shameless.com', profile_image_url: 'images/avatars/lip_galagher_avatar.jpg', status: 'offline' },

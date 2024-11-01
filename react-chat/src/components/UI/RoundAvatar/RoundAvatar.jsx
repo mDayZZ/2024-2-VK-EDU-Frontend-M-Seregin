@@ -6,6 +6,7 @@ const DEFAULT_AVATAR_PATH = 'images/avatars/default_avatar.png';
 
 const RoundAvatar = ({src = DEFAULT_AVATAR_PATH, className}) => {
     const avatarClasses = cn(className, classes.roundAvatar);
+
     const onLoadError = (e) => {
         e.target.onerror = null;
         e.target.src = DEFAULT_AVATAR_PATH;

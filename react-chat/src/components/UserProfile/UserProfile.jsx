@@ -8,66 +8,73 @@ import {changeUserInfo, getUserById} from "../../services/userService.js";
 import DefaultButton from "../UI/DefaultButton/DefaultButton.jsx";
 import DropdownButton from "../UI/DropdownButton/DropdownButton.jsx";
 import {Edit} from "@mui/icons-material";
-const UserProfile = ({userId, myInfo}) => {
-    const [userInfo, setUserInfo] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
+const UserProfile = ({profileInfo, myInfo}) => {
+
+    const [userInfo, setUserInfo] = useState(profileInfo);
     const [isEditing, setIsEditing] = useState(false);
 
-    const isMine = userId === myInfo.id;
+    const isMine = userInfo.id === myInfo.id;
 
-    const [editName, setEditName] = useState(null);
-    const [editEmail, setEditEmail] = useState(null);
+    const [nameState, setNameState] = useState(profileInfo?.name || '');
+    const [emailState, setEmailState] = useState(profileInfo?.email ?? '');
+
+    const profileName = nameState || profileInfo.username;
+    const profileEmail = emailState || 'не указан';
+    const profileAvatar = profileInfo?.profile_image_url;
+    const profileStatus = profileInfo.status;
+    const profileUsername = profileInfo.username;
 
     const openEditing = () => {
         setIsEditing(true);
     }
 
-    const fetchPostData = async (newUser) => {
+    const updateData = async (newUser) => {
         try {
-            changeUserInfo(newUser, userId);
+            await changeUserInfo(newUser, userInfo.id);
+            setNameState(newUser.name);
+            setEmailState(newUser.email);
         } catch (e) {
 
         }
     }
 
     const saveEditing = () => {
-        const newUserInfo = {...userInfo, name: editName, email: editEmail};
-        fetchPostData(newUserInfo);
+        const newUserInfo = {...userInfo, name: nameState, email: emailState};
+        updateData(newUserInfo);
         setUserInfo(newUserInfo);
         setIsEditing(false);
     }
 
     const fetchUserInfo = async () => {
-        setIsLoading(true);
-        const fetchedUser = await getUserById(userId);
+        const fetchedUser = await getUserById(userInfo.id);
         setUserInfo(fetchedUser);
-        setEditName(fetchedUser.name || '');
-        setEditEmail(fetchedUser.email || '');
-        setIsLoading(false);
+        setProfileName();
+        setProfileEmail(fetchedUser.email || '');
     }
 
     useEffect(() => {
-        if(!userId) {
+        if(!userInfo.id) {
             return;
         }
-        fetchUserInfo();
+        // fetchUserInfo();
     }, []);
 
+
+
     return (
-        !isLoading &&
         <div className={classes.userProfile}>
             <div className={classes.userProfile__info}>
                 <div className={classes.userProfile__headInfo}>
-                    <RoundAvatar src={userInfo.profile_image_url}/>
+                    <RoundAvatar src={profileAvatar}/>
                     <div className={classes.userProfile__headTitles}>
                         {isEditing
-                            ? <input maxLength={15} value={editName} onInput={(e) => setEditName(e.target.value)} className={classes.userProfile__input} />
-                            : <h2>{userInfo.name || userInfo.username}</h2>
+                            ? <input maxLength={15} value={nameState} onInput={(e) => setNameState(e.target.value)} className={classes.userProfile__input} />
+                            : <h2>{profileName}</h2>
                         }
 
 
-                        <p className={classes.userProfile__status}>{userInfo.status}</p>
-                        <p><CopyLink className={classes.userProfile__username}>@{userInfo.username}</CopyLink></p>
+                        <p className={classes.userProfile__status}>{profileStatus}</p>
+                        <p><CopyLink className={classes.userProfile__username}>@{profileUsername}</CopyLink></p>
                     </div>
                 </div>
                 <div className={classes.userProfile__otherInfo}>
@@ -76,9 +83,9 @@ const UserProfile = ({userId, myInfo}) => {
                         <b>Email: </b>
                         <span>
                             {isEditing
-                                ? <input maxLength={60} value={editEmail} onInput={(e) => setEditEmail(e.target.value)}
+                                ? <input maxLength={60} value={emailState} onInput={(e) => setEmailState(e.target.value)}
                                          className={classes.userProfile__input}/>
-                                : userInfo.email || 'не указан'
+                                : profileEmail
                             }
                         </span>
                     </p>

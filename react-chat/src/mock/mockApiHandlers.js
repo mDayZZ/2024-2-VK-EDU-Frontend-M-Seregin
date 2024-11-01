@@ -116,11 +116,11 @@ export const mockedGetMessagesByChatId = async (chatId) => {
         });
 };
 
-const getMockedChatMembers = (chatId) => {
+const getChatMembers = (chatId) => {
     const chatMembers = getItemFromLocalStorage('chatMembers');
     const users = getItemFromLocalStorage('users');
     return chatMembers.filter(chatMember => chatMember.chat_id === chatId)
-        .map(member => users.find(user => user.id === member.id));
+        .map(member => users.find(user => user.id === member.user_id));
 };
 
 export const mockedGetChatInfoByChatId = async (chatId, userId) => {
@@ -128,30 +128,35 @@ export const mockedGetChatInfoByChatId = async (chatId, userId) => {
     await new Promise(resolve => setTimeout(resolve, 200));
     const chats = getItemFromLocalStorage('chats');
     const chatInfo = chats.find(chat => chat.id === chatId);
-    const chatMembers = getMockedChatMembers(chatId);
+    const chatMembers = getChatMembers(chatId);
+
+
+    let chatStatus = `${pluralize(chatMembers.length, 'участник', 'участника', 'участников')}`;
 
     if (!chatInfo.is_group) {
         const partnerUserInfo = getUserById(getPartnerChatMember(chatId, userId).id);
         chatInfo.name = partnerUserInfo.name || partnerUserInfo.username;
         chatInfo.username = partnerUserInfo.username;
-        chatInfo.profile_image_url = partnerUserInfo.profile_image_url;
+        chatInfo.chat_image_url = partnerUserInfo.profile_image_url;
+        chatStatus = partnerUserInfo.status;
+
     }
 
     return {
         id: chatInfo.id,
         name: chatInfo.name,
         created_at: chatInfo.created_at,
-        profile_image_url: chatInfo.profile_image_url,
+        profile_image_url: chatInfo.chat_image_url,
         is_group: chatInfo.is_group,
         username: chatInfo.username,
-        status: `${pluralize(chatMembers.length, 'участник', 'участника', 'участников')}`,
+        status: chatStatus,
     };
 };
 
 export const mockedGetMembersByChatId = async (chatId) => {
     if (typeof chatId !== 'number') throw new Error('ChatId must be a number');
     await new Promise(resolve => setTimeout(resolve, 200));
-    return getMockedChatMembers(chatId);
+    return getChatMembers(chatId);
 };
 
 export const mockedSendMessage = async (message) => {

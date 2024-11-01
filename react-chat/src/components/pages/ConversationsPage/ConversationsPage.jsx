@@ -7,8 +7,12 @@ import {getChatsByUserId} from "../../../services/chatService.js";
 import ConversationList from "../../ConversationList/ConversationList.jsx";
 import cn from "classnames";
 import Page from "../../UI/Page/Page.jsx";
+import {useUserContext} from "../../../contexts/UserContext.jsx";
 
-const ConversationsPage = ({userInfo, openChatPage}) => {
+const ConversationsPage = ({}) => {
+    const {user : userInfo } = useUserContext();
+
+    console.log(userInfo)
     const conversationsPageClasses = cn('page', classes.conversationsPage);
     const [searchQuery, setSearchQuery] = useState('');
 
@@ -19,7 +23,7 @@ const ConversationsPage = ({userInfo, openChatPage}) => {
         <Page className={conversationsPageClasses}>
             <ConversationsHeader userInfo={userInfo} searchQuery={searchQuery} handleSearchQueryChange={handleSearchQueryChange} className={classes.conversationsPage__header} />
             <DefaultMain>
-                <ConversationList userId={userInfo.id} openChatPage={openChatPage} searchQuery={searchQuery} />
+                <ConversationList userId={userInfo.id} searchQuery={searchQuery} />
             </DefaultMain>
         </Page>
     );
