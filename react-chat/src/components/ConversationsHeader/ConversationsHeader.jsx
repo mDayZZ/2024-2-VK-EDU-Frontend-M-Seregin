@@ -8,7 +8,7 @@ import ConversationsFinder from "../ConversationsFinder/ConversationsFinder.jsx"
 import {useModal} from "../../contexts/ModalContext.jsx";
 import UserProfile from "../UserProfile/UserProfile.jsx";
 
-const ConversationsHeader = ({className, userInfo, backgroundColor, searchQuery, setSearchQuery}) => {
+const ConversationsHeader = ({className, userInfo, backgroundColor, searchQuery, handleSearchQueryChange}) => {
     const headerClasses = cn('chatListHeader', className);
 
     const {openModal} = useModal();
@@ -21,7 +21,7 @@ const ConversationsHeader = ({className, userInfo, backgroundColor, searchQuery,
                 <h2 className={classes.chatListHeader__title}>Чаты</h2>
             </div>
             <div className={classes.chatListHeader__actionsContainer} >
-                <ConversationsFinder searchQuery={searchQuery} setSearchQuery={setSearchQuery}></ConversationsFinder>
+                <ConversationsFinder searchQuery={searchQuery} handleSearchQueryChange={handleSearchQueryChange} />
                 <IconButton onClick={() => openModal(<UserProfile userId={userInfo.id} myInfo={userInfo}/>)}><AccountCircle/></IconButton>
             </div>
         </DefaultHeader>

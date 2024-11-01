@@ -1,6 +1,3 @@
-
-//////////////////////////////////////////////////
-
 export const initToLocalStorage = (key, value) => {
     const data = localStorage.getItem(key);
     if (data) {

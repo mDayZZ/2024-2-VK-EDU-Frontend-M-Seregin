@@ -20,6 +20,9 @@ const ChatHeader = ({chatInfo, userInfo, className, onDeleteHistory}) => {
         {label: 'Очистить историю', onClick: onDeleteHistory, icon: <DeleteOutline/>},
     ];
 
+    const chatTitle = chatInfo?.name || '...'
+    const chatStatus = chatInfo?.status || '...'
+
 
 
     return (
@@ -27,8 +30,8 @@ const ChatHeader = ({chatInfo, userInfo, className, onDeleteHistory}) => {
             <IconLink linkTo={'/chats'}><ArrowBack /></IconLink>
             <RoundAvatar src={chatInfo?.profile_image_url || null} className={classes.chatHeader__chatAvatar} />
             <div className={classes.chatHeader__chatInfo}>
-                <h2 className={classes.chatHeader__chatTitle}>{chatInfo?.name || 'Загрузка...'}</h2>
-                <p className={classes.chatHeader__chatStatus}>{chatInfo?.status || 'Загрузка...'}</p>
+                <h2 className={classes.chatHeader__chatTitle}>{chatTitle}</h2>
+                <p className={classes.chatHeader__chatStatus}>{chatStatus}</p>
             </div>
             <DropdownMenu icon={<MoreVert />} menuOptions={menuOptions}/>
         </DefaultHeader>
