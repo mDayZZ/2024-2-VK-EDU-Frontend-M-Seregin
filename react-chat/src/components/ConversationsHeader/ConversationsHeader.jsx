@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import DefaultHeader from "../UI/DefaultHeader/DefaultHeader.jsx";
 import classes from "./ConversationsHeader.module.scss";
 import IconButton from "../UI/IconButton/IconButton.jsx";
@@ -11,11 +11,16 @@ import UserProfile from "../UserProfile/UserProfile.jsx";
 const ConversationsHeader = ({className, userInfo, backgroundColor, searchQuery, handleSearchQueryChange}) => {
     const headerClasses = cn('chatListHeader', className);
 
-    const {openModal} = useModal();
+    const {openModal, setOnEdit} = useModal();
 
     const handleOpenProfile = () => {
-        openModal(<UserProfile profileInfo={userInfo} myInfo={userInfo}/>)
+        let onModalEditButton = null;
+        openModal(<UserProfile profileInfo={userInfo} myInfo={userInfo} setOnEdit={setOnEdit}/>)
     }
+
+
+
+
 
 
     return (

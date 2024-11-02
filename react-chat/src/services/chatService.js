@@ -1,4 +1,5 @@
 import {
+    mockedCreateChat,
     mockedDeleteChatMessages,
     mockedGetChatInfoByChatId,
     mockedGetChatsByUserId,
@@ -74,3 +75,13 @@ export const deleteChatMessages = async (chatId) => {
         throw error;
     }
 };
+
+
+export const createChat = async (chatTitle, chatMembers, userId) => {
+    try {
+        const response = await mockedCreateChat(chatTitle, chatMembers, userId);
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}

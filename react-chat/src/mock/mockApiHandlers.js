@@ -9,6 +9,7 @@ import {
     pushToLocalStorage,
     saveItemToLocalStorage
 } from "../utils/localStorage.js";
+import {getUniqueId} from "../utils/idGenerator.js";
 
 const initLocalStorage = () => {
     initToLocalStorage('chats', mockedChats);
@@ -69,7 +70,7 @@ export const mockedChangeUserInfo = async (userInfo, userId) => {
     const users = getItemFromLocalStorage('users');
     const changedUsers = users.map(user => user.id === userId ? userInfo : user);
     saveItemToLocalStorage('users', changedUsers);
-    return changedUsers;
+    return userInfo;
 };
 
 const getPartnerChatMember = (chatId, userId) => {
@@ -132,6 +133,7 @@ export const mockedGetChatInfoByChatId = async (chatId, userId) => {
 
 
     let chatStatus = `${pluralize(chatMembers.length, 'участник', 'участника', 'участников')}`;
+    let email = null;
 
     if (!chatInfo.is_group) {
         const partnerUserInfo = getUserById(getPartnerChatMember(chatId, userId).id);
@@ -139,6 +141,7 @@ export const mockedGetChatInfoByChatId = async (chatId, userId) => {
         chatInfo.username = partnerUserInfo.username;
         chatInfo.chat_image_url = partnerUserInfo.profile_image_url;
         chatStatus = partnerUserInfo.status;
+        email = partnerUserInfo.email;
 
     }
 
@@ -150,6 +153,7 @@ export const mockedGetChatInfoByChatId = async (chatId, userId) => {
         is_group: chatInfo.is_group,
         username: chatInfo.username,
         status: chatStatus,
+        email: email,
     };
 };
 
@@ -183,5 +187,59 @@ export const mockedDeleteChatMessages = async (chatId) => {
     saveItemToLocalStorage('messages', newMessages);
     return [];
 };
+
+
+export const mockedGetAllUsers = async () => {
+    await new Promise(resolve => setTimeout(resolve, 400));
+    const users = await getItemFromLocalStorage('users');
+    return users;
+}
+
+export const mockedCreateChat = async (chatTitle, chosenMembers, userId) => {
+
+    const chatId = getUniqueId();
+
+    const createChat = () => {
+
+        const chats = getItemFromLocalStorage('chats');
+        const newChat = {
+            id: chatId,
+            is_group: true,
+            created_at: new Date().toISOString(),
+            name: chatTitle,
+            chat_image_url: null,
+        }
+
+        chats.push(newChat);
+
+        saveItemToLocalStorage('chats', chats);
+    }
+
+    const addChatMembers = () => {
+        const chatMembers = getItemFromLocalStorage('chatMembers');
+        chosenMembers.forEach(memberId => {
+            const newMember = {
+                id: getUniqueId(),
+                chat_id: chatId,
+                user_id: memberId,
+                role: 'member',
+            }
+            chatMembers.push(newMember);
+        })
+        const adminMember = {
+            id: getUniqueId(),
+            chat_id: chatId,
+            user_id: userId,
+            role: 'admin',
+        }
+        chatMembers.push(adminMember);
+
+        saveItemToLocalStorage('chatMembers', chatMembers);
+    }
+
+    createChat();
+    addChatMembers();
+    return chatId;
+}
 
 initLocalStorage();

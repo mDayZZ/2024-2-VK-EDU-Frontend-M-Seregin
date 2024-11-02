@@ -8,7 +8,6 @@ const ConversationItem = ({userId, conversation, openChatPage}) => {
         if (!conversation.last_message) {
             return 'Сообщений пока нет';
         }
-        console.log(conversation.last_message)
         const name = conversation.last_message?.user?.name || conversation.last_message?.user?.username || 'Неизвестный пользователь';
         const content = conversation.last_message?.content ?? '...';
         return `${name}: ${content}`;

@@ -1,0 +1,26 @@
+.createChat {
+  display: flex;
+
+
+  &__memberList {
+    padding: 0;
+    max-height: 200px;
+    overflow: auto;
+
+  }
+
+  &__avatar {
+    width: 30px;
+  }
+
+  &__profileItem {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 5px;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+}

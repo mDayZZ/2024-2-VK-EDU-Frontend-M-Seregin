@@ -6,9 +6,13 @@ import {getTextColor} from "../../utils/getTextColor.js";
 import {ThemeContext} from "../../contexts/ThemeContext.jsx";
 import {useTheme} from "../../hooks/useTheme.js";
 import UserListItem from "../UI/UserListItem/UserListItem.jsx";
+import {useModal} from "../../contexts/ModalContext.jsx";
+import CreateChat from "../CreateChat/CreateChat.jsx";
 const ConversationList = ({userId, openChatPage, searchQuery}) => {
 
+    const {openModal, closeModal} = useModal();
     const [conversations, setConversations] = useState([]);
+
     const filteredConversations = useMemo(() => {
         return conversations.filter(conversation => {
             const searchTerms = String(searchQuery).toLowerCase().split(' ').filter(Boolean);
@@ -27,6 +31,10 @@ const ConversationList = ({userId, openChatPage, searchQuery}) => {
         setConversations(fetchedConversations);
     }
 
+    const onCreateChat = () => {
+        openModal(<CreateChat closeModal={closeModal}/>);
+    }
+
 
     useEffect(() => {
         if (!userId) {
@@ -40,8 +48,7 @@ const ConversationList = ({userId, openChatPage, searchQuery}) => {
             {filteredConversations.map(conversation => <ConversationItem userId={userId} conversation={conversation} openChatPage={openChatPage} key={conversation.id} />)}
             {searchQuery &&
                 <>
-                    <UserListItem heading={'Добавить пользователя'} comment={'Из списка контактов'} />
-                    <UserListItem heading={'Создать чат'} comment={'Для совместного диалога'} />
+                    <UserListItem heading={'Создать чат'} comment={'Для совместного общения'} onClick={onCreateChat}/>
                 </>
             }
         </ul>

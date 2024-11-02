@@ -9,13 +9,12 @@ import {useModal} from "../../contexts/ModalContext.jsx";
 import UserProfile from "../UserProfile/UserProfile.jsx";
 import {getDatetime} from "../../utils/date.js";
 const ChatProfile = ({chatInfo, userInfo}) => {
-    const {openModal} = useModal();
+    const {openModal, setOnModalEditButton} = useModal();
     const isGroup = chatInfo.is_group;
     const [chatMembers, setChatMembers] = useState(null);
 
     const fetchChatMembers = async () => {
         const fetchedMembers = await getMembersByChatId(chatInfo.id);
-        console.log(fetchedMembers);
         setChatMembers(fetchedMembers);
     }
 
@@ -31,7 +30,6 @@ const ChatProfile = ({chatInfo, userInfo}) => {
     const profileCreateDate = getDatetime(chatInfo?.created_at);
 
     const profileUserUsername = `@${chatInfo?.username}`;
-    console.log(profileUserUsername)
     const profileUserEmail = chatInfo?.email;
 
 

@@ -12,7 +12,6 @@ import {useUserContext} from "../../../contexts/UserContext.jsx";
 const ConversationsPage = ({}) => {
     const {user : userInfo } = useUserContext();
 
-    console.log(userInfo)
     const conversationsPageClasses = cn('page', classes.conversationsPage);
     const [searchQuery, setSearchQuery] = useState('');
 

@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import classes from './DropdownMenu.module.scss';
 import IconButton from "../IconButton/IconButton.jsx";
-import DefaultButton from "../DefaultButton/DefaultButton.jsx";
+import SendButton from "../SendButton/SendButton.jsx";
 import DropdownButton from "../DropdownButton/DropdownButton.jsx";
 const DropdownMenu = ({icon, menuOptions}) => {
     const [isOpen, setIsOpen] = useState(false);

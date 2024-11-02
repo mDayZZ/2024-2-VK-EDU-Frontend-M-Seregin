@@ -17,9 +17,7 @@ function App() {
     const {user, setUser} = useUserContext();
 
     const fetchUserInfo = async (userId) => {
-        console.log(userId)
         const userInfo = await getUserById(userId);
-        console.log('ui', userInfo)
         setUser(userInfo);
     }
 
@@ -53,7 +51,6 @@ function App() {
         }
     };
 
-    console.log(user)
 
 
   return (
