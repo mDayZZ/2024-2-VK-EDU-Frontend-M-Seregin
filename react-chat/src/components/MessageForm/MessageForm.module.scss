@@ -1,0 +1,18 @@
+.messageForm {
+  display: flex;
+  flex-direction: row;
+  background: none;
+
+
+  &__input {
+    flex: 1;
+    min-width: 10px;
+    padding: 10px;
+    border: none;
+    outline: none;
+
+    &:focus {
+      box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.20) inset;
+    }
+  }
+}

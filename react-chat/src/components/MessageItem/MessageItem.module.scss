@@ -1,41 +1,38 @@
-@import '../../../styles/mixins';
-
+@import "../../styles/mixins";
 .message {
   display: inline-flex;
   align-items: flex-end;
   gap: 12px;
   max-width: 80%;
   margin-right: auto;
-  animation: lefttoright 0.4s ease-in-out;
+  animation: lefttoright 0.2s ease-in-out;
 
-  &[data-loaded]{
-   animation: none;
-}
+  &[data-loaded="true"] {
+    animation: none;
+  }
 
   &--self {
     margin-right: 0;
     margin-left: auto;
     flex-direction: row-reverse;
-    animation: righttoleft 0.4s ease-in-out;
+    animation: righttoleft 0.2s ease-in-out;
 
     & .message__block {
       border-radius: 10px 10px 0 10px;
 
-      @include non-tablet {
+      @include respond-from('tablet') {
         border-radius: 10px 10px 10px 0;
       }
     }
 
-    @include non-tablet {
+    @include respond-from('tablet') {
       margin-right: auto;
       margin-left: 0;
       flex-direction: row;
-      animation: lefttoright 0.4s ease-in-out;
+      animation: lefttoright 0.2s ease-in-out;
     }
 
   }
-
-
 
   &__block {
     min-width: 120px;
@@ -43,32 +40,34 @@
     padding-block: 10px;
     padding-inline: 20px;
 
-    color: black;
-    background-color: var(--color-peach-color);
+    color: var(--message-text-color);
+    background-color: var(--message-bg-color);
     border-radius: 10px 10px 10px 0;
     word-break: break-word;
     transition: var(--transition-duration);
 
     &:hover {
-      transform: translateX(20px);
+      transform: scale(105%);
     }
   }
-
   &__username {
-    color: #202020;
+    color: inherit;
     font-size: 12px;
   }
 
-  &__text {
+  &__content {
     margin-block: 4px;
   }
 
   &__datetime {
-    color: #393939;
+    color: inherit;
+    opacity: 70%;
     font-size: 12px;
     align-self: flex-end;
   }
+
 }
+
 
 @keyframes righttoleft {
   from {

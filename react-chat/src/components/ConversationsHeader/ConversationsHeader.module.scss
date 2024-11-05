@@ -1,0 +1,16 @@
+@import '../../styles/mixins';
+.chatListHeader {
+  &__title {
+    padding: 0;
+    margin-right: auto;
+  }
+
+  &__titleContainer {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    @include respond-to('tablet') {
+      gap: 5px;
+    }
+  }
+}
