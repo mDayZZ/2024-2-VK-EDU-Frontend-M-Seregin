@@ -10,6 +10,8 @@ import Button from "../UI/Button/Button.jsx";
 import {useUserContext} from "../../contexts/UserContext.jsx";
 import {createChat} from "../../services/chatService.js";
 import {useNavigate} from "react-router-dom";
+import MemberList from "../MemberList/MemberList.jsx";
+import {routes, routes as router} from "../../utils/routes.js";
 const CreateChat = ({closeModal}) => {
     const navigate = useNavigate();
 
@@ -46,7 +48,7 @@ const CreateChat = ({closeModal}) => {
     const fetchCreateChat = async () => {
         const newChatId = await createChat(chatTitle, chosenMembers, userInfo.id);
         closeModal();
-        navigate(`/chats/${newChatId}`);
+        navigate(routes.chat(newChatId));
 
     }
 
@@ -66,33 +68,7 @@ const CreateChat = ({closeModal}) => {
                 </div>
                 <div>
                     <label htmlFor="">Участники</label>
-                    <ul className={classes.createChat__memberList}>
-
-                        {users &&
-                            users.map(user => {
-                                if (user.id === userInfo.id) {
-                                    return;
-                                }
-                                const userName = user?.name || user.username;
-                                const userAvatar = user.profile_image_url;
-
-                                return (
-                                    <li key={user.id}>
-                                        <label>
-                                            <div className={classes.createChat__profileItem}>
-                                                <input type="checkbox"
-                                                       onChange={() => handleCheckboxChange(user.id)}
-                                                       checked={chosenMembers.includes(user.id)}/>
-                                                <RoundAvatar className={classes.createChat__avatar} src={userAvatar}/>
-                                                <p>{userName}</p>
-                                            </div>
-                                        </label>
-
-                                    </li>
-                                )
-                            })
-                        }
-                    </ul>
+                    <MemberList chosenMembers={chosenMembers} userInfo={userInfo} handleCheckboxChange={handleCheckboxChange} users={users} />
 
                 </div>
                 <Button>Создать</Button>

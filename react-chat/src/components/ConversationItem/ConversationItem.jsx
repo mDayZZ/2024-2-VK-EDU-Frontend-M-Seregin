@@ -3,6 +3,7 @@ import classes from './ConversationItem.module.scss';
 import RoundAvatar from "../UI/RoundAvatar/RoundAvatar.jsx";
 import {getDatetime} from "../../utils/date.js";
 import UserListItem from "../UI/UserListItem/UserListItem.jsx";
+import {routes} from "../../utils/routes.js";
 const ConversationItem = ({userId, conversation, openChatPage}) => {
     const getLastMessage = () => {
         if (!conversation.last_message) {
@@ -15,7 +16,7 @@ const ConversationItem = ({userId, conversation, openChatPage}) => {
     let conversationLastMessage = getLastMessage();
 
     return (
-        <UserListItem avatarUrl={conversation.chat_image_url} heading={conversation.name} comment={conversationLastMessage} date={getDatetime(conversation?.last_message?.created_at)} linkTo={`/chats/${conversation.id}`}></UserListItem>
+        <UserListItem avatarUrl={conversation.chat_image_url} heading={conversation.name} comment={conversationLastMessage} date={getDatetime(conversation?.last_message?.created_at)} linkTo={routes.chat(conversation.id)}></UserListItem>
     );
 };
 

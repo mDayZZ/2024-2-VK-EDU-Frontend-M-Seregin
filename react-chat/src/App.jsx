@@ -7,6 +7,7 @@ import ChatPage from "./components/pages/ChatPage/ChatPage.jsx";
 import {Route, Routes} from "react-router-dom";
 import {ModalProvider} from "./contexts/ModalContext.jsx";
 import {UserProvider, useUserContext} from "./contexts/UserContext.jsx";
+import {routes} from "./utils/routes.js";
 
 function App() {
     const [userId, setUserId] = useState(null);
@@ -33,25 +34,6 @@ function App() {
     }, [userId]);
 
 
-    const openChatPage = (chatId) =>{
-        setLastChatId(chatId);
-        setCurrentPage('chatPage');
-    }
-
-    const openConversationsPage = () => {
-        setCurrentPage('conversationsPage');
-    }
-
-    const renderPage = () => {
-        switch (currentPage) {
-            case 'conversationsPage':
-                return <ConversationsPage />
-            case 'chatPage':
-                return <ChatPage />
-        }
-    };
-
-
 
   return (
           <ThemeProvider>
@@ -60,8 +42,8 @@ function App() {
                       {
                           user &&
                           <Routes>
-                              <Route path="/chats" element={<ConversationsPage/>}/>
-                              <Route path="/chats/:id" element={<ChatPage/>}/>
+                              <Route path={routes.chats} element={<ConversationsPage/>}/>
+                              <Route path={routes.chat(':id')} element={<ChatPage/>}/>
                           </Routes>
                       }
 
