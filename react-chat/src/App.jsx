@@ -8,41 +8,23 @@ import {Route, Routes} from "react-router-dom";
 import {ModalProvider} from "./contexts/ModalContext.jsx";
 import {UserProvider, useUserContext} from "./contexts/UserContext.jsx";
 import {routes} from "./utils/routes.js";
+import AuthPage from "./components/pages/AuthPage/AuthPage.jsx";
+import {userApi} from "./services/api/user/index.js";
+import {useAuth} from "./contexts/AuthContext.jsx";
+import PrivateRoute from "./components/PrivateRoute/PrivateRoute.jsx";
 
 function App() {
-    const [userId, setUserId] = useState(null);
-    const [userInfo, setUserInfo] = useState(null);
-    const [currentPage, setCurrentPage] = useState('conversationsPage');
-    const [lastChatId, setLastChatId] = useState(null);
-
-    const {user, setUser} = useUserContext();
-
-    const fetchUserInfo = async (userId) => {
-        const userInfo = await getUserById(userId);
-        setUser(userInfo);
-    }
-
-    useEffect(() => {
-        setUserId(2);
-    }, [])
-
-    useEffect(() => {
-        if (!userId) {
-            return;
-        }
-        fetchUserInfo(userId);
-    }, [userId]);
-
+    const {user, isAuthenticated, login, logout, isLoading} = useAuth();
 
 
   return (
           <ThemeProvider>
               <ModalProvider>
                   <div id={'app'}>
-                      {
-                          user &&
+                      {!isLoading &&
                           <Routes>
-                              <Route path={routes.chats} element={<ConversationsPage/>}/>
+                              <Route path={routes.auth} element={<AuthPage/>}/>
+                              <Route path={routes.chats} element={<PrivateRoute><ConversationsPage/></PrivateRoute>}/>
                               <Route path={routes.chat(':id')} element={<ChatPage/>}/>
                           </Routes>
                       }

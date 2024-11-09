@@ -4,10 +4,11 @@ import Form from "../UI/Form/Form.jsx";
 import Button from "../UI/Button/Button.jsx";
 import {changeUserInfo} from "../../services/userService.js";
 import {useUserContext} from "../../contexts/UserContext.jsx";
+import {useAuth} from "../../contexts/AuthContext.jsx";
 
 const MyUserProfile = ({setInfo, profileName, setProfileName, profileInfo, isEdit, toggleIsEdit}) => {
 
-    const {setUser} = useUserContext();
+    const {logout} = useAuth();
 
     const [editingName, setEditingName] = useState(profileName || '');
     const [editingEmail, setEditingEmail] = useState(profileInfo.email);
@@ -18,7 +19,7 @@ const MyUserProfile = ({setInfo, profileName, setProfileName, profileInfo, isEdi
 
 
             const response = await changeUserInfo(newUser, profileInfo.id);
-            setUser(response);
+            // setUser(response);
             setInfo(response);
             toggleIsEdit();
         } catch (e) {
@@ -60,6 +61,7 @@ const MyUserProfile = ({setInfo, profileName, setProfileName, profileInfo, isEdi
                     </Form>
                 </div>
             }
+            <Button onClick={logout}>Выйти</Button>
         </div>
     );
 };

@@ -12,10 +12,13 @@ import {createChat} from "../../services/chatService.js";
 import {useNavigate} from "react-router-dom";
 import MemberList from "../MemberList/MemberList.jsx";
 import {routes, routes as router} from "../../utils/routes.js";
+import {useAuth} from "../../contexts/AuthContext.jsx";
+import {usersApi} from "../../services/api/users/index.js";
+import FinderInput from "../UI/FinderInput/FinderInput.jsx";
 const CreateChat = ({closeModal}) => {
     const navigate = useNavigate();
 
-    const {user: userInfo} = useUserContext();
+    const {user: userInfo} = useAuth();
 
     const [users, setUsers] = useState(null);
 
@@ -23,16 +26,23 @@ const CreateChat = ({closeModal}) => {
 
     const [chosenMembers, setChosenMembers] = useState([]);
 
-    const fetchUsers = async () => {
-        const response = await getUsers();
-        setUsers(response);
+    const [usersQuery, setUsersQuery] = useState('');
+
+    const fetchUsers = async (usersQuery) => {
+        const params = {
+            search: String(usersQuery),
+        }
+        const {count, next, previous, results} = await usersApi.get(params);
+        console.log(count, next, previous)
+        setUsers(results);
     }
 
 
 
-    useEffect(() => {
-        fetchUsers();
-    }, []);
+
+    useEffect( () => {
+        fetchUsers(usersQuery)
+    }, [usersQuery, ])
 
 
     const handleCheckboxChange = (userId) => {
@@ -46,7 +56,7 @@ const CreateChat = ({closeModal}) => {
     };
 
     const fetchCreateChat = async () => {
-        const newChatId = await createChat(chatTitle, chosenMembers, userInfo.id);
+        const createdChat = await createChat(chatTitle, chosenMembers, userInfo.id);
         closeModal();
         navigate(routes.chat(newChatId));
 
@@ -54,6 +64,9 @@ const CreateChat = ({closeModal}) => {
 
     const onSubmit = (e) => {
         e.preventDefault();
+        const newChat = {
+
+        }
         fetchCreateChat();
     }
 
@@ -68,6 +81,7 @@ const CreateChat = ({closeModal}) => {
                 </div>
                 <div>
                     <label htmlFor="">Участники</label>
+                    <FinderInput value={usersQuery} onInput={(e) => setUsersQuery(e.target.value)} />
                     <MemberList chosenMembers={chosenMembers} userInfo={userInfo} handleCheckboxChange={handleCheckboxChange} users={users} />
 
                 </div>

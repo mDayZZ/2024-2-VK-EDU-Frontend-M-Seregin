@@ -8,9 +8,10 @@ import ConversationList from "../../ConversationList/ConversationList.jsx";
 import cn from "classnames";
 import Page from "../../UI/Page/Page.jsx";
 import {useUserContext} from "../../../contexts/UserContext.jsx";
+import {useAuth} from "../../../contexts/AuthContext.jsx";
 
 const ConversationsPage = ({}) => {
-    const {user : userInfo } = useUserContext();
+    const {user : userInfo } = useAuth();
 
     const conversationsPageClasses = cn('page', classes.conversationsPage);
     const [searchQuery, setSearchQuery] = useState('');

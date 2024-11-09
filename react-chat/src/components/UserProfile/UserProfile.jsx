@@ -131,17 +131,19 @@ import classes from "./UserProfile.module.scss";
 import RoundAvatar from "../UI/RoundAvatar/RoundAvatar.jsx";
 import CopyLink from "../UI/CopyLink/CopyLink.jsx";
 import MyUserProfile from "../MyUserProfile/MyUserProfile.jsx";
+import {useAuth} from "../../contexts/AuthContext.jsx";
 
 const UserProfile = ({profileInfo, setOnEdit}) => {
-    const {user: userInfo} = useUserContext();
+    const {user: userInfo} = useAuth();
 
     const isSelf = userInfo.id === profileInfo.id;
 
     const [info, setInfo] = useState(profileInfo);
-    const [profileName, setProfileName] = useState(profileInfo?.name);
+    const [profileFirstName, setProfileFirstName] = useState(profileInfo?.first_name);
+    const [profileLastName, setProfileLastName] = useState(profileInfo?.last_name);
 
-    let profileEmail = info.email || 'не указан';
-    let profileAvatar = info?.profile_image_url;
+    let bio = info.bio || 'не указан';
+    let profileAvatar = info?.avatar;
     let profileStatus = info.status;
     let profileUsername = `@${info.username}`;
 
@@ -151,17 +153,17 @@ const UserProfile = ({profileInfo, setOnEdit}) => {
 
     useEffect(() => {
 
-        profileEmail = info.email || 'не указан';
+        bio = info.bio || 'не указан';
         profileAvatar = info?.profile_image_url;
         profileStatus = info.status;
         profileUsername = `@${info.username}`;
     }, [info])
 
     useEffect(() => {
-        if (!profileName) {
-            setProfileName(info?.username);
+        if (!profileFirstName) {
+            setProfileFirstName(info?.username);
         }
-    }, [profileName]);
+    }, [profileFirstName]);
 
 
 
@@ -180,19 +182,18 @@ const UserProfile = ({profileInfo, setOnEdit}) => {
                 <div className={classes.userProfile__headInfo}>
                     <RoundAvatar src={profileAvatar}/>
                     <div className={classes.userProfile__headTitles}>
-                        <h2>{profileName}</h2>
+                        <h2>{profileFirstName}</h2>
                         <p className={classes.userProfile__status}>{profileStatus}</p>
                         <p><CopyLink className={classes.userProfile__username}>{profileUsername}</CopyLink></p>
                     </div>
                 </div>
 
-                {isSelf && <MyUserProfile setInfo={setInfo} profileName={profileName} setProfileName={setProfileName} profileInfo={profileInfo} isEdit={isEdit} toggleIsEdit={toggleIsEdit}/>
+                {isSelf && <MyUserProfile setInfo={setInfo} profileName={profileFirstName} setProfileName={setProfileFirstName} profileInfo={profileInfo} isEdit={isEdit} toggleIsEdit={toggleIsEdit}/>
                 }
 
                 {!isEdit &&
-                    <p>Email: {profileEmail}</p>
+                    <p>bio: {bio}</p>
                 }
-
             </div>
         </div>
 
