@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useReducer, useRef, useState} from 'react';
-import DefaultButton from "../UI/DefaultButton/DefaultButton.jsx";
+import SendButton from "../UI/SendButton/SendButton.jsx";
 import classes from "./MessageForm.module.scss";
 import {ThemeContext} from "../../contexts/ThemeContext.jsx";
 import {getTextColor} from "../../utils/getTextColor.js";
@@ -40,7 +40,7 @@ const MessageForm = ({setMessages, setWitnessMessages, chatInfo, userInfo}) => {
     return (
         <form className={classes.messageForm} onSubmit={onSendMessage}>
             <input ref={inputRef} required={true} value={messageInput} onInput={(event) => setMessageInput(event.target.value)} className={classes.messageForm__input} style={{ backgroundColor: backgroundColor, color: textColor }}/>
-            <DefaultButton>Отправить</DefaultButton>
+            <SendButton>Отправить</SendButton>
         </form>
     );
 };

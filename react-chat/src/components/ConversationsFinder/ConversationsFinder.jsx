@@ -1,13 +1,12 @@
 import React, {useState} from 'react';
 import FinderInput from "../UI/FinderInput/FinderInput.jsx";
-import classes from "./ConversationsFinder.module.scss";
 
-const ConversationsFinder = ({searchQuery, setSearchQuery}) => {
-
+const ConversationsFinder = ({searchQuery, handleSearchQueryChange}) => {
+    const onSearchInput = (event) => handleSearchQueryChange(event.target.value);
 
 
     return (
-        <FinderInput className={classes.conversationsFinder} value={searchQuery} onInput={(event) => setSearchQuery(event.target.value)}/>
+        <FinderInput value={searchQuery} onInput={onSearchInput}/>
     );
 };
 

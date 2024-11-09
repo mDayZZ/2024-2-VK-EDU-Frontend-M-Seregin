@@ -1,17 +1,19 @@
 import React, {useContext} from 'react';
-import classes from './DefaultButton.module.scss';
+import classes from './SendButton.module.scss';
 import {ThemeContext} from "../../../contexts/ThemeContext.jsx";
 import {getTextColor} from "../../../utils/getTextColor.js";
-const DefaultButton = ({children, color, onClick}) => {
+import cn from "classnames";
+const SendButton = ({children, className, color, onClick}) => {
     const {theme} = useContext(ThemeContext);
     const backgroundColor = theme.ButtonBackgroundColor;
     const textColor = getTextColor(backgroundColor);
+    const buttonClasses = cn(className, classes.defaultButton)
 
     return (
-        <button className={classes.defaultButton} onClick={onClick} style={{backgroundColor: backgroundColor, 'color': textColor}}>
+        <button className={buttonClasses} onClick={onClick} style={{backgroundColor: backgroundColor, 'color': textColor}}>
             {children}
         </button>
     );
 };
 
-export default DefaultButton;
+export default SendButton;

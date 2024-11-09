@@ -1,13 +1,21 @@
 .chatHeader {
+  overflow: auto;
 
   &__chatAvatar {
   }
 
   &__chatInfo {
     margin-right: auto;
+    gap: 2px;
+    overflow: auto;
   }
 
   &__chatTitle {
     padding: 0;
+    white-space: nowrap;
+  }
+
+  &__chatStatus {
+
   }
 }

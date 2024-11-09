@@ -7,16 +7,22 @@ import {getChatsByUserId} from "../../../services/chatService.js";
 import ConversationList from "../../ConversationList/ConversationList.jsx";
 import cn from "classnames";
 import Page from "../../UI/Page/Page.jsx";
+import {useUserContext} from "../../../contexts/UserContext.jsx";
 
-const ConversationsPage = ({userId, openChatPage}) => {
+const ConversationsPage = ({}) => {
+    const {user : userInfo } = useUserContext();
+
     const conversationsPageClasses = cn('page', classes.conversationsPage);
     const [searchQuery, setSearchQuery] = useState('');
 
+    const handleSearchQueryChange = (newQuery) => {
+        setSearchQuery(newQuery)
+    }
     return (
         <Page className={conversationsPageClasses}>
-            <ConversationsHeader searchQuery={searchQuery} setSearchQuery={setSearchQuery} className={classes.conversationsPage__header} />
+            <ConversationsHeader userInfo={userInfo} searchQuery={searchQuery} handleSearchQueryChange={handleSearchQueryChange} className={classes.conversationsPage__header} />
             <DefaultMain>
-                <ConversationList userId={userId} openChatPage={openChatPage} searchQuery={searchQuery} />
+                <ConversationList userId={userInfo.id} searchQuery={searchQuery} />
             </DefaultMain>
         </Page>
     );

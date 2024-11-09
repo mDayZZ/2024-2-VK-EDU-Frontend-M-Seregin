@@ -6,13 +6,17 @@ import {getTextColor} from "../../utils/getTextColor.js";
 import {ThemeContext} from "../../contexts/ThemeContext.jsx";
 import {useTheme} from "../../hooks/useTheme.js";
 import UserListItem from "../UI/UserListItem/UserListItem.jsx";
+import {useModal} from "../../contexts/ModalContext.jsx";
+import CreateChat from "../CreateChat/CreateChat.jsx";
 const ConversationList = ({userId, openChatPage, searchQuery}) => {
 
+    const {openModal, closeModal} = useModal();
     const [conversations, setConversations] = useState([]);
+
     const filteredConversations = useMemo(() => {
         return conversations.filter(conversation => {
-            const searchTerms = searchQuery.toLowerCase().split(' ').filter(Boolean);
-            const conversationName = conversation.name.toLowerCase().trim();
+            const searchTerms = String(searchQuery).toLowerCase().split(' ').filter(Boolean);
+            const conversationName = String(conversation.name).toLowerCase().trim();
             const result = searchTerms.every(term => conversationName.includes(term));
             return result;
         })
@@ -27,6 +31,10 @@ const ConversationList = ({userId, openChatPage, searchQuery}) => {
         setConversations(fetchedConversations);
     }
 
+    const onCreateChat = () => {
+        openModal(<CreateChat closeModal={closeModal}/>);
+    }
+
 
     useEffect(() => {
         if (!userId) {
@@ -38,13 +46,10 @@ const ConversationList = ({userId, openChatPage, searchQuery}) => {
     return (
         <ul className={classes.chatList} style={{color: textColor}}>
             {filteredConversations.map(conversation => <ConversationItem userId={userId} conversation={conversation} openChatPage={openChatPage} key={conversation.id} />)}
-            {searchQuery
-                ?
+            {searchQuery &&
                 <>
-                    <UserListItem heading={'Добавить пользователя'} comment={'Из списка контактов'}></UserListItem>
-                    <UserListItem heading={'Создать чат'} comment={'Для совместного диалога'}></UserListItem>
+                    <UserListItem heading={'Создать чат'} comment={'Для совместного общения'} onClick={onCreateChat}/>
                 </>
-                : <></>
             }
         </ul>
     );
