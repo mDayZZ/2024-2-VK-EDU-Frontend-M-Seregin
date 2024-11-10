@@ -4,8 +4,11 @@ import classes from "./MessageForm.module.scss";
 import {ThemeContext} from "../../contexts/ThemeContext.jsx";
 import {getTextColor} from "../../utils/getTextColor.js";
 import {sendMessage} from "../../services/chatService.js";
-const MessageForm = ({setMessages, setWitnessMessages, chatInfo, userInfo}) => {
+import {messagesApi} from "../../services/api/messages/index.js";
+import {useAuth} from "../../contexts/AuthContext.jsx";
+const MessageForm = ({setMessages, setWitnessMessages, chatInfo}) => {
     const {theme} = useContext(ThemeContext);
+    const {user} = useAuth();
     const backgroundColor = theme.inputBackgroundColor;
     const textColor = getTextColor(backgroundColor);
     const [messageInput, setMessageInput] = useState('');
@@ -13,9 +16,9 @@ const MessageForm = ({setMessages, setWitnessMessages, chatInfo, userInfo}) => {
     const inputRef = useRef(null);
 
     const addNewMessage = (newMessage) => {
-        const newMessageList = (prevMessages) => [...prevMessages, newMessage];
+        const newMessageList = (prevMessages) => [newMessage, ...prevMessages];
         setMessages(newMessageList);
-        setWitnessMessages(prevWitnessMessage => [...prevWitnessMessage, newMessage]);
+        setWitnessMessages(prevWitnessMessage => [newMessage, ...prevWitnessMessage]);
     }
 
     const onSendMessage = async (event)=> {
@@ -24,11 +27,21 @@ const MessageForm = ({setMessages, setWitnessMessages, chatInfo, userInfo}) => {
             return;
         }
         setMessageInput('');
-        const newMessage = await sendMessage(chatInfo.id,userInfo.id, messageInput);
-        if (!newMessage) {
+
+        const message = {
+            chat: chatInfo.id,
+            text: messageInput,
+            // voice: null,
+            // files: null,
+        }
+        console.log(message)
+
+        const fetchedMessage = await messagesApi.sendMessage(message);
+        console.log(fetchedMessage);
+        if (!fetchedMessage) {
             return;
         }
-        addNewMessage(newMessage);
+        addNewMessage({...fetchedMessage, sender: user});
     }
 
     useEffect(() => {

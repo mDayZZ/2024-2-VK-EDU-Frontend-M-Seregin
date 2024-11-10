@@ -15,12 +15,14 @@ import {useParams} from "react-router-dom";
 import Modal from "../../UI/Modal/Modal.jsx";
 import {useModal} from "../../../contexts/ModalContext.jsx";
 import {useUserContext} from "../../../contexts/UserContext.jsx";
+import {useAuth} from "../../../contexts/AuthContext.jsx";
+import {chatApi} from "../../../services/api/chat/index.js";
+import {messagesApi} from "../../../services/api/messages/index.js";
 
 const ChatPage = ({}) => {
-    const {user: userInfo } = useUserContext();
+    const {user: userInfo } = useAuth();
 
-    const { id } = useParams();
-    const chatId = Number(id);
+    const { chatId } = useParams();
     const [chatInfo, setChatInfo] = useState(null);
     const [messages, setMessages] = useState([]);
     const [witnessMessages, setWitnessMessages] = useState([]);
@@ -41,11 +43,14 @@ const ChatPage = ({}) => {
     };
 
     const fetchMessages = async (chatId) => {
-        const fetchedMessages = await getMessagesByChatId(chatId);
-        setMessages(fetchedMessages);
+
+        const {count, next, previous, results} = await messagesApi.getMessages(chatId);
+        console.log(results);
+        setMessages(results);
     }
     const fetchChatInfo = async () => {
-        const fetchedChatInfo = await getChatInfoByChatId(chatId, userInfo.id);
+        const fetchedChatInfo = await chatApi.getChatInfo(chatId);
+        console.log(fetchedChatInfo);
         setChatInfo(fetchedChatInfo);
     }
 
@@ -55,13 +60,11 @@ const ChatPage = ({}) => {
     }, [messages]);
 
 
-    useEffect(() => {
-        fetchChatInfo();
-    }, [chatId]);
 
     useEffect(() => {
+        fetchChatInfo();
         fetchMessages(chatId);
-    }, [chatId])
+    }, [])
 
 
     return (

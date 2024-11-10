@@ -6,8 +6,6 @@ import {routes} from "../../utils/routes.js";
 const PrivateRoute = ({children}) => {
     const {isAuthenticated} = useAuth();
 
-    console.log(isAuthenticated);
-
     return isAuthenticated ? children : <Navigate to={routes.auth} />;
 };
 

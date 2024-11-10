@@ -9,6 +9,7 @@ import cn from "classnames";
 import Page from "../../UI/Page/Page.jsx";
 import {useUserContext} from "../../../contexts/UserContext.jsx";
 import {useAuth} from "../../../contexts/AuthContext.jsx";
+import {centrifugoApi} from "../../../services/api/centrifugo/index.js";
 
 const ConversationsPage = ({}) => {
     const {user : userInfo } = useAuth();
@@ -19,6 +20,8 @@ const ConversationsPage = ({}) => {
     const handleSearchQueryChange = (newQuery) => {
         setSearchQuery(newQuery)
     }
+
+
     return (
         <Page className={conversationsPageClasses}>
             <ConversationsHeader userInfo={userInfo} searchQuery={searchQuery} handleSearchQueryChange={handleSearchQueryChange} className={classes.conversationsPage__header} />

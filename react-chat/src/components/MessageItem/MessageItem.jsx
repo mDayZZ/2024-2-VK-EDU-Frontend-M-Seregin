@@ -6,13 +6,15 @@ import {ThemeContext} from "../../contexts/ThemeContext.jsx";
 import {getDatetime} from "../../utils/date.js";
 import {useTheme} from "../../hooks/useTheme.js";
 import cn from "classnames";
+import {getUserVisibleName} from "../../utils/getUserVisibleName.js";
 const MessageItem = ({message, isWitnessMessage, userInfo}) => {
     const { backgroundColor, textColor } = useTheme('chatMessageBackgroundColor');
 
-    const isSelf = userInfo.id === message.sender_id;
-    const senderName = message.sender_name || message.sender_username;
-    const content = message.content ?? '';
+    const isSelf = userInfo.id === message?.sender.id;
+    const senderName = getUserVisibleName(message.sender);
+    const text = message.text ?? '';
     const date = getDatetime(message.created_at)
+    const avatar = message?.sender.avatar;
 
     const messageItemClasses = cn(classes.message, isSelf ? classes['message--self'] : '')
     useEffect(() => {
@@ -22,10 +24,10 @@ const MessageItem = ({message, isWitnessMessage, userInfo}) => {
 
     return (
         <li className={messageItemClasses} data-loaded={!isWitnessMessage}>
-            <RoundAvatar className={classes.message__avatar} src={message.sender_profile_image_url}/>
+            <RoundAvatar className={classes.message__avatar} src={avatar}/>
             <div className={classes.message__block} >
                 <p className={classes.message__username}>{senderName}</p>
-                <p className={classes.message__content}>{content}</p>
+                <p className={classes.message__content}>{text}</p>
                 <p className={classes.message__datetime}>{date}</p>
             </div>
         </li>

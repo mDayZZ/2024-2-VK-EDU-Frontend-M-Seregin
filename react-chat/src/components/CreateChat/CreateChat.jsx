@@ -15,6 +15,7 @@ import {routes, routes as router} from "../../utils/routes.js";
 import {useAuth} from "../../contexts/AuthContext.jsx";
 import {usersApi} from "../../services/api/users/index.js";
 import FinderInput from "../UI/FinderInput/FinderInput.jsx";
+import {chatsApi} from "../../services/api/chats/index.js";
 const CreateChat = ({closeModal}) => {
     const navigate = useNavigate();
 
@@ -55,19 +56,22 @@ const CreateChat = ({closeModal}) => {
         });
     };
 
-    const fetchCreateChat = async () => {
-        const createdChat = await createChat(chatTitle, chosenMembers, userInfo.id);
+    const fetchCreateChat = async (newChat) => {
+        const createdChat = await chatsApi.createChat(newChat);
         closeModal();
-        navigate(routes.chat(newChatId));
+        // navigate(routes.chat(createdChat.id));
 
     }
 
     const onSubmit = (e) => {
         e.preventDefault();
         const newChat = {
-
+            title: chatTitle,
+            is_private: false,
+            avatar: null,
+            members: [...chosenMembers, userInfo.id],
         }
-        fetchCreateChat();
+        fetchCreateChat(newChat);
     }
 
 

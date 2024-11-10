@@ -17,7 +17,7 @@ const ConversationList = ({userId, openChatPage, searchQuery}) => {
     const filteredConversations = useMemo(() => {
         return conversations.filter(conversation => {
             const searchTerms = String(searchQuery).toLowerCase().split(' ').filter(Boolean);
-            const conversationName = String(conversation.name).toLowerCase().trim();
+            const conversationName = String(conversation.title).toLowerCase().trim();
             const result = searchTerms.every(term => conversationName.includes(term));
             return result;
         })

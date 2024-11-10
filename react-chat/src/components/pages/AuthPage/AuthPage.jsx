@@ -104,7 +104,7 @@ const AuthPage = () => {
                 <Form onSubmit={onRegisterFormSubmit}>
                     <Input placeholder='Имя пользователя' name='username' value={formData.username}
                            onInput={handleInputChange} required={true}/>
-                    <Input placeholder='Пароль' name='password' value={formData.password} onInput={handleInputChange}
+                    <Input type='password' placeholder='Пароль' name='password' value={formData.password} onInput={handleInputChange}
                            required={true}/>
                     <Input placeholder='Имя' name='first_name' value={formData.first_name} onInput={handleInputChange}
                            required={true}/>
@@ -118,7 +118,7 @@ const AuthPage = () => {
                 <Form onSubmit={onAuthFormSubmit}>
                     <Input placeholder='Имя пользователя' value={formData.username} onInput={handleInputChange}
                            name='username'/>
-                    <Input placeholder='Пароль' value={formData.password} onInput={handleInputChange} name='password'/>
+                    <Input placeholder='Пароль' type='password' value={formData.password} onInput={handleInputChange} name='password'/>
                     <Button >Войти</Button>
                 </Form>
             }
