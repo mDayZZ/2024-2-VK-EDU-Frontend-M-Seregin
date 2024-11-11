@@ -34,15 +34,19 @@ const ConversationList = ({userId, openChatPage, searchQuery}) => {
         }
         messageChat.last_message = message;
 
-        setConversations((prevState) =>
-            prevState.map(conversation => {
-                if (conversation.id !== messageChat.id) {
-                    return conversation
-                }
-                return messageChat;
-            })
-        )
+        setConversations((prevState) => {
+            const filteredConversations = prevState.filter(conversation => conversation.id !== messageChat.id);
+            const newConversations = [messageChat, ...filteredConversations];
+            return newConversations
+        });
         audioService.play('messageReceived');
+            // prevState.map(conversation => {
+            //     if (conversation.id !== messageChat.id) {
+            //         return conversation
+            //     }
+            //     return messageChat;
+            // })
+
     }, [conversations])
 
 
