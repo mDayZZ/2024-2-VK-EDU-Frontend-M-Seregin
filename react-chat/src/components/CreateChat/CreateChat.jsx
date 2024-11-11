@@ -34,7 +34,6 @@ const CreateChat = ({closeModal}) => {
             search: String(usersQuery),
         }
         const {count, next, previous, results} = await usersApi.get(params);
-        console.log(count, next, previous)
         setUsers(results);
     }
 

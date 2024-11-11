@@ -6,6 +6,7 @@ import {getTextColor} from "../../utils/getTextColor.js";
 import {sendMessage} from "../../services/chatService.js";
 import {messagesApi} from "../../services/api/messages/index.js";
 import {useAuth} from "../../contexts/AuthContext.jsx";
+import audioService from "../../services/audioService.js";
 const MessageForm = ({setMessages, setWitnessMessages, chatInfo}) => {
     const {theme} = useContext(ThemeContext);
     const {user} = useAuth();
@@ -16,6 +17,7 @@ const MessageForm = ({setMessages, setWitnessMessages, chatInfo}) => {
     const inputRef = useRef(null);
 
     const addNewMessage = (newMessage) => {
+        audioService.play('messageSent');
         const newMessageList = (prevMessages) => [newMessage, ...prevMessages];
         setMessages(newMessageList);
         setWitnessMessages(prevWitnessMessage => [newMessage, ...prevWitnessMessage]);
@@ -34,10 +36,8 @@ const MessageForm = ({setMessages, setWitnessMessages, chatInfo}) => {
             // voice: null,
             // files: null,
         }
-        console.log(message)
 
         const fetchedMessage = await messagesApi.sendMessage(message);
-        console.log(fetchedMessage);
         if (!fetchedMessage) {
             return;
         }

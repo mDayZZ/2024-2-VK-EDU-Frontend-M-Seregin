@@ -1,6 +1,7 @@
 import TokenService from "./tokenService.js";
 import {routes} from "../utils/routes.js";
 
+const API_URL = import.meta.env.VITE_API_URL;
 
 class ApiService {
     constructor(baseURL) {
@@ -35,6 +36,7 @@ class ApiService {
         const response = await fetch(`${this.baseURL}${url}`, {...options, headers });
 
         if (response.status === 401) {
+            console.log('401 я база ответьте')
             const accessToken = await TokenService.refreshAccessToken(this);
             if (accessToken) {
                 return this.request(url, options);
@@ -57,7 +59,14 @@ class ApiService {
 
     async get(url, params, options = {}) {
         const queryString = new URLSearchParams(params).toString();
-        const resultUrl = `${url}?${queryString}`;
+        let resultUrl
+        if (queryString) {
+            resultUrl = `${url}?${queryString}`;
+        }
+        else {
+            resultUrl = `${url}`;
+        }
+
         return this.request(resultUrl, {method: 'GET', ...options});
     }
 
@@ -71,4 +80,4 @@ class ApiService {
 
 }
 
-export default new ApiService('/api');
+export default new ApiService( API_URL || '/api');

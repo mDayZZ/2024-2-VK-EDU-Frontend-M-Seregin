@@ -36,7 +36,6 @@ export const CentrifugoProvider = ({ children }) => {
         });
 
         newSubscription.on('publication', (ctx) => {
-            console.log('Бу, испугался? НЕ бойся ', ctx.data);
         });
 
         newSubscription.subscribe();
@@ -44,7 +43,6 @@ export const CentrifugoProvider = ({ children }) => {
 
         setCentrifugo(centrifugeInstance);
         setSubscription(newSubscription);
-        console.log('коннекты были')
     };
 
     useEffect(() => {

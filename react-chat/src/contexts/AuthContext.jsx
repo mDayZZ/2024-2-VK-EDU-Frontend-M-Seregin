@@ -16,7 +16,6 @@ export const AuthProvider = ({ children }) => {
         try {
             const userData = await userApi.current.get();
             setUser(userData);
-            console.log('фетчанули и положили', userData)
         } catch (error) {
             handleLogout();
         }

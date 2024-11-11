@@ -6,7 +6,6 @@ import {pluralize} from "../../utils/pluralize.js";
 import {getUserVisibleName} from "../../utils/getUserVisibleName.js";
 
 const ConversationItem = ({userId, conversation, openChatPage}) => {
-    console.log(conversation)
 
     const getLastMessage = () => {
 

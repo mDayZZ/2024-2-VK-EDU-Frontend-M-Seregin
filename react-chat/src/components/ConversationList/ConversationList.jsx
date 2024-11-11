@@ -9,6 +9,8 @@ import UserListItem from "../UI/UserListItem/UserListItem.jsx";
 import {useModal} from "../../contexts/ModalContext.jsx";
 import CreateChat from "../CreateChat/CreateChat.jsx";
 import {chatsApi} from "../../services/api/chats/index.js";
+import {useOnReceivedMessage} from "../../hooks/useOnRecievedMessage.js";
+import audioService from "../../services/audioService.js";
 const ConversationList = ({userId, openChatPage, searchQuery}) => {
 
     const {openModal, closeModal} = useModal();
@@ -22,6 +24,26 @@ const ConversationList = ({userId, openChatPage, searchQuery}) => {
             return result;
         })
     }, [searchQuery, conversations])
+
+    useOnReceivedMessage((message) => {
+        const messageChat = conversations.find(conversation => {
+            return conversation.id === message.chat
+        });
+        if (!messageChat) {
+            return;
+        }
+        messageChat.last_message = message;
+
+        setConversations((prevState) =>
+            prevState.map(conversation => {
+                if (conversation.id !== messageChat.id) {
+                    return conversation
+                }
+                return messageChat;
+            })
+        )
+        audioService.play('messageReceived');
+    }, [conversations])
 
 
     const { backgroundColor, textColor } = useTheme('mainBackgroundColor');
@@ -43,6 +65,8 @@ const ConversationList = ({userId, openChatPage, searchQuery}) => {
         }
         fetchConversations();
     }, [userId])
+
+
 
     return (
         <ul className={classes.chatList} style={{color: textColor}}>
