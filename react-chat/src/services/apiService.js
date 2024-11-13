@@ -74,6 +74,10 @@ class ApiService {
         return this.request(url, {method: 'POST', body: JSON.stringify(body), ...options});
     }
 
+    async patch(url, body, options = {}) {
+        return this.request(url, {method: 'PATCH', body: JSON.stringify(body), ...options});
+    }
+
     async logout() {
         TokenService.clearTokens();
     }

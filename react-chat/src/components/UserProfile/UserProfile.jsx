@@ -132,39 +132,69 @@ import RoundAvatar from "../UI/RoundAvatar/RoundAvatar.jsx";
 import CopyLink from "../UI/CopyLink/CopyLink.jsx";
 import MyUserProfile from "../MyUserProfile/MyUserProfile.jsx";
 import {useAuth} from "../../contexts/AuthContext.jsx";
+import {getUserVisibleName} from "../../utils/getUserVisibleName.js";
 
 const UserProfile = ({profileInfo, setOnEdit}) => {
     const {user: userInfo} = useAuth();
 
-    const isSelf = userInfo.id === profileInfo.id;
+    // const isSelf = userInfo.id === profileInfo.id;
+    //
+    // const [info, setInfo] = useState(profileInfo);
+    // const [profileFirstName, setProfileFirstName] = useState(info.first_name);
+    // const [profileLastName, setProfileLastName] = useState(info.last_name);
+    //
+    //
+    // const [visibleName, setVisibleName] = useState(getUserVisibleName(profileInfo));
+    // let bio = info.bio || 'не указан';
+    // let profileAvatar = info?.avatar;
+    // let profileStatus = info.status;
+    // let profileUsername = `@${info.username}`;
+    //
+    //
+    // const [isEdit, setIsEdit] = useState(false);
+    // const toggleIsEdit = () => setIsEdit(prevState => !prevState);
+    //
+    // useEffect(() => {
+    //     bio = info.bio || 'не указан';
+    //     profileAvatar = info?.profile_image_url;
+    //     profileUsername = `@${info.username}`;
+    // }, [info])
+    //
+    // useEffect(() => {
+    //     if (!visibleName) {
+    //         setVisibleName(info?.username);
+    //     }
+    // }, [visibleName]);
 
-    const [info, setInfo] = useState(profileInfo);
-    const [profileFirstName, setProfileFirstName] = useState(profileInfo?.first_name);
-    const [profileLastName, setProfileLastName] = useState(profileInfo?.last_name);
 
-    let bio = info.bio || 'не указан';
-    let profileAvatar = info?.avatar;
-    let profileStatus = info.status;
-    let profileUsername = `@${info.username}`;
+    //
+    // useEffect(() => {
+    //     if (setOnEdit) {
+    //         setOnEdit(() => () => {
+    //             toggleIsEdit();
+    //         });
+    //     }
+    // }, [isEdit, setOnEdit]);
 
-
+    const isProfileMine = userInfo.id === profileInfo.id;
     const [isEdit, setIsEdit] = useState(false);
     const toggleIsEdit = () => setIsEdit(prevState => !prevState);
 
-    useEffect(() => {
+    const [info, setInfo] = useState(profileInfo);
 
-        bio = info.bio || 'не указан';
-        profileAvatar = info?.profile_image_url;
-        profileStatus = info.status;
-        profileUsername = `@${info.username}`;
-    }, [info])
+    const [visibleAvatar, setVisibleAvatar] = useState(profileInfo.avatar);
+    const [visibleTitle, setVisibleTitle] = useState(getUserVisibleName(profileInfo));
+    const [visibleUsername, setVisibleUsername] = useState(`@${profileInfo.username}`);
+    const [visibleBio, setVisibleBio] = useState(profileInfo.bio);
 
-    useEffect(() => {
-        if (!profileFirstName) {
-            setProfileFirstName(info?.username);
-        }
-    }, [profileFirstName]);
+    const visibleStatus = '';
 
+    const updateVisibleStates = () => {
+        setVisibleAvatar(info.avatar);
+        setVisibleTitle(getUserVisibleName(info));
+        setVisibleUsername(`@${info.username}`);
+        setVisibleBio(info.bio);
+    }
 
 
     useEffect(() => {
@@ -176,23 +206,38 @@ const UserProfile = ({profileInfo, setOnEdit}) => {
     }, [isEdit, setOnEdit]);
 
 
+    useEffect( () => {
+        if (!visibleTitle) {
+            setVisibleTitle(profileInfo?.username);
+        }
+    }, [visibleTitle])
+
+    useEffect(() => {
+       setVisibleTitle(getUserVisibleName(info));
+       updateVisibleStates();
+    }, [isEdit])
+
+
+
+
     return (
         <div className={classes.userProfile}>
             <div className={classes.userProfile__info}>
                 <div className={classes.userProfile__headInfo}>
-                    <RoundAvatar src={profileAvatar}/>
+                    <RoundAvatar src={visibleAvatar}/>
                     <div className={classes.userProfile__headTitles}>
-                        <h2>{profileFirstName}</h2>
-                        <p className={classes.userProfile__status}>{profileStatus}</p>
-                        <p><CopyLink className={classes.userProfile__username}>{profileUsername}</CopyLink></p>
+                        <h2>{visibleTitle}</h2>
+                        <p className={classes.userProfile__status}>{visibleStatus}</p>
+                        <p><CopyLink className={classes.userProfile__username}>{visibleUsername}</CopyLink></p>
                     </div>
                 </div>
 
-                {isSelf && <MyUserProfile setInfo={setInfo} profileName={profileFirstName} setProfileName={setProfileFirstName} profileInfo={profileInfo} isEdit={isEdit} toggleIsEdit={toggleIsEdit}/>
+                {isProfileMine &&
+                    <MyUserProfile info={info} setInfo={setInfo} visibleTitle={visibleTitle} setVisibleTitle={setVisibleTitle} profileInfo={profileInfo} isEdit={isEdit} toggleIsEdit={toggleIsEdit}/>
                 }
 
                 {!isEdit &&
-                    <p>bio: {bio}</p>
+                    <p>bio: {visibleBio}</p>
                 }
             </div>
         </div>
