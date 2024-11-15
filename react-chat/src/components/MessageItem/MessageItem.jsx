@@ -15,6 +15,7 @@ const MessageItem = forwardRef(({message, isWitnessMessage, userInfo}, ref) => {
     const text = message.text ?? '';
     const date = getDatetime(message.created_at)
     const avatar = message?.sender.avatar;
+    const voiceMessage = message.voice;
 
     const messageItemClasses = cn(classes.message, isSelf ? classes['message--self'] : '')
     useEffect(() => {
@@ -26,8 +27,12 @@ const MessageItem = forwardRef(({message, isWitnessMessage, userInfo}, ref) => {
         <li className={messageItemClasses} data-loaded={!isWitnessMessage} ref={ref}>
             <RoundAvatar className={classes.message__avatar} src={avatar}/>
             <div className={classes.message__block} >
+
                 <p className={classes.message__username}>{senderName}</p>
-                <p className={classes.message__content}>{text}</p>
+                {voiceMessage
+                    ? <audio src={voiceMessage} controls/>
+                    : <p className={classes.message__content}>{text}</p>
+                }
                 <p className={classes.message__datetime}>{date}</p>
             </div>
         </li>

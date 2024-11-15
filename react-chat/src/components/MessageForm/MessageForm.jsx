@@ -16,8 +16,7 @@ const MessageForm = ({messages, setMessages, setWitnessMessages, chatInfo, mainR
     const [messageInput, setMessageInput] = useState('');
     const [isSent, setIsSent] = useState(false);
 
-    const [log, setLog] = useState('ббу');
-    const {isVoiceMode, voiceFile, voiceStatus, onVoiceRecording, onVoiceStopRecord} = useVoiceMode({messageInput, setLog});
+    const {isVoiceMode, voiceFile, voiceStatus, onVoiceRecording, onVoiceStopRecord, onVoiceSent    } = useVoiceMode({messageInput});
     const inputRef = useRef(null);
 
     const addNewMessage = (newMessage) => {
@@ -31,25 +30,32 @@ const MessageForm = ({messages, setMessages, setWitnessMessages, chatInfo, mainR
     const onSendMessage = async (event)=> {
         event.preventDefault();
 
-        if (!messageInput || voiceFile) {
+        console.log('sem')
+
+        if (!messageInput && !voiceFile) {
             return;
         }
 
+        const messageFormData = new FormData();
 
-        setMessageInput('');
+        messageFormData.append('chat', chatInfo.id);
 
-        const message = {
-            chat: chatInfo.id,
-            text: voiceFile ? null : messageInput,
-            voice: voiceFile,
-            // files: null,
+        if (voiceFile) {
+            messageFormData.append('voice', voiceFile);
+        } else {
+            messageFormData.append('text', messageInput);
         }
 
-        const fetchedMessage = await messagesApi.sendMessage(message);
-        if (!fetchedMessage) {
-            return;
+
+        try {
+            setMessageInput('');
+            const fetchedMessage = await messagesApi.sendMessage(messageFormData);
+            onVoiceSent();
+            addNewMessage({...fetchedMessage, sender: user});
+        } catch (e) {
+            console.error('error sending message', e);
         }
-        addNewMessage({...fetchedMessage, sender: user});
+
     }
 
     useEffect(() => {
@@ -74,7 +80,6 @@ const MessageForm = ({messages, setMessages, setWitnessMessages, chatInfo, mainR
 
     return (
         <form className={classes.messageForm} onSubmit={onSendMessage}>
-            <p>{log}</p>
             {voiceStatus === 'pending' &&
                 <input ref={inputRef} required={true} value={messageInput}
                        onInput={(event) => setMessageInput(event.target.value)} className={classes.messageForm__input}/>

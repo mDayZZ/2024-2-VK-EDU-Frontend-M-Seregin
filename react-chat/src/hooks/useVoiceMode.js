@@ -1,6 +1,6 @@
 import {useEffect, useRef, useState} from "react";
 
-export const useVoiceMode = ({messageInput, setLog }) => {
+export const useVoiceMode = ({messageInput}) => {
     const [isVoiceMode, setIsVoiceMode] = useState(true);
     const [voiceStatus, setVoiceStatus] = useState('pending');
     const [voiceFile, setVoiceFile] = useState(null);
@@ -28,7 +28,6 @@ export const useVoiceMode = ({messageInput, setLog }) => {
 
         } catch (e) {
             console.error('error recording voice message', e);
-            setLog(e.message);
             setVoiceStatus('pending');
         }
 
@@ -36,15 +35,23 @@ export const useVoiceMode = ({messageInput, setLog }) => {
         console.log('пошла запись запись пошла')
     }
 
-    const onVoiceStopRecord = () => {
+    const onVoiceStopRecord = (e) => {
+        e.preventDefault();
         if (mediaRecorder.current) {
             mediaRecorder.current.stop();
             if (mediaStream.current) {
                 mediaStream.current.getTracks().forEach(track => track.stop())
             }
-            setVoiceStatus('recorded')
+            setVoiceStatus('recorded');
             console.log('записан, ждёт отправки')
         }
+    }
+
+    const onVoiceSent = () => {
+
+        setVoiceFile(null);
+        setIsVoiceMode(false);
+        setVoiceStatus('pending');
     }
 
 
@@ -59,5 +66,5 @@ export const useVoiceMode = ({messageInput, setLog }) => {
     }, [messageInput]);
 
 
-    return {isVoiceMode, voiceFile, voiceStatus, onVoiceStopRecord, onVoiceRecording};
+    return {isVoiceMode, voiceFile, voiceStatus, onVoiceStopRecord, onVoiceRecording, onVoiceSent};
 }
