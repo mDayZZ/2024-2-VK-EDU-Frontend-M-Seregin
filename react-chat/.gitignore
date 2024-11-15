@@ -1,4 +1,4 @@
-
+/certs/
 ### Ansible files ###
 *.retry
 
