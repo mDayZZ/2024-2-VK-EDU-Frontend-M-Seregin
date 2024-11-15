@@ -37,7 +37,6 @@ const ChatPage = ({}) => {
     const [lastMessageRef] = useLoadMoreMessages({messages, setMessages, chatId, isNextPage, setIsNextPage, mainRef});
 
 
-
     const fetchDeleteMessages = async () => {
         try {
             const data = await deleteChatMessages(chatId);

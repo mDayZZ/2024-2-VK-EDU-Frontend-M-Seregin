@@ -16,7 +16,8 @@ const MessageForm = ({messages, setMessages, setWitnessMessages, chatInfo, mainR
     const [messageInput, setMessageInput] = useState('');
     const [isSent, setIsSent] = useState(false);
 
-    const {isVoiceMode, voiceFile, voiceStatus, onVoiceRecording, onVoiceStopRecord} = useVoiceMode({messageInput});
+    const [log, setLog] = useState('ббу');
+    const {isVoiceMode, voiceFile, voiceStatus, onVoiceRecording, onVoiceStopRecord} = useVoiceMode({messageInput, setLog});
     const inputRef = useRef(null);
 
     const addNewMessage = (newMessage) => {
@@ -73,11 +74,19 @@ const MessageForm = ({messages, setMessages, setWitnessMessages, chatInfo, mainR
 
     return (
         <form className={classes.messageForm} onSubmit={onSendMessage}>
+            <p>{log}</p>
             {voiceStatus === 'pending' &&
                 <input ref={inputRef} required={true} value={messageInput}
                        onInput={(event) => setMessageInput(event.target.value)} className={classes.messageForm__input}/>
             }
-            <SendButton messageInput={messageInput} isVoiceMode={isVoiceMode} voiceStatus={voiceStatus} onVoiceRecording={onVoiceRecording} onVoiceStopRecord={onVoiceStopRecord}/>
+
+            {(isVoiceMode === true && voiceStatus === 'recorded' && voiceFile) &&
+                <audio controls>
+                    <source src={URL.createObjectURL(voiceFile)}/>
+                </audio>
+            }
+            <SendButton messageInput={messageInput} isVoiceMode={isVoiceMode} voiceStatus={voiceStatus}
+                        onVoiceRecording={onVoiceRecording} onVoiceStopRecord={onVoiceStopRecord}/>
         </form>
     );
 };

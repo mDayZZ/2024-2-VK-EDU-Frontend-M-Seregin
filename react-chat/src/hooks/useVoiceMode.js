@@ -1,16 +1,17 @@
 import {useEffect, useRef, useState} from "react";
 
-export const useVoiceMode = ({messageInput, }) => {
+export const useVoiceMode = ({messageInput, setLog }) => {
     const [isVoiceMode, setIsVoiceMode] = useState(true);
     const [voiceStatus, setVoiceStatus] = useState('pending');
     const [voiceFile, setVoiceFile] = useState(null);
     const audioChunks = useRef([]);
     const mediaRecorder = useRef(null);
-
+    const mediaStream = useRef(null);
     const onVoiceRecording = async () => {
         setVoiceStatus('recording')
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaStream.current = stream;
             mediaRecorder.current = new MediaRecorder(stream);
             mediaRecorder.current.ondataavailable = (event) => {
                 audioChunks.current.push(event.data);
@@ -27,6 +28,7 @@ export const useVoiceMode = ({messageInput, }) => {
 
         } catch (e) {
             console.error('error recording voice message', e);
+            setLog(e.message);
             setVoiceStatus('pending');
         }
 
@@ -37,6 +39,9 @@ export const useVoiceMode = ({messageInput, }) => {
     const onVoiceStopRecord = () => {
         if (mediaRecorder.current) {
             mediaRecorder.current.stop();
+            if (mediaStream.current) {
+                mediaStream.current.getTracks().forEach(track => track.stop())
+            }
             setVoiceStatus('recorded')
             console.log('записан, ждёт отправки')
         }
