@@ -7,12 +7,13 @@ import {sendMessage} from "../../services/chatService.js";
 import {messagesApi} from "../../services/api/messages/index.js";
 import {useAuth} from "../../contexts/AuthContext.jsx";
 import audioService from "../../services/audioService.js";
-const MessageForm = ({setMessages, setWitnessMessages, chatInfo}) => {
+const MessageForm = ({messages, setMessages, setWitnessMessages, chatInfo, mainRef}) => {
     const {theme} = useContext(ThemeContext);
     const {user} = useAuth();
     const backgroundColor = theme.inputBackgroundColor;
     const textColor = getTextColor(backgroundColor);
     const [messageInput, setMessageInput] = useState('');
+    const [isSent, setIsSent] = useState(false);
 
     const inputRef = useRef(null);
 
@@ -21,6 +22,7 @@ const MessageForm = ({setMessages, setWitnessMessages, chatInfo}) => {
         const newMessageList = (prevMessages) => [newMessage, ...prevMessages];
         setMessages(newMessageList);
         setWitnessMessages(prevWitnessMessage => [newMessage, ...prevWitnessMessage]);
+        setIsSent(true);
     }
 
     const onSendMessage = async (event)=> {
@@ -49,6 +51,13 @@ const MessageForm = ({setMessages, setWitnessMessages, chatInfo}) => {
             inputRef.current.focus();
         }
     }, []);
+
+    useEffect(() => {
+        if (isSent) {
+            mainRef.current.scrollTop = mainRef.current.scrollHeight+500;
+            setIsSent(false);
+        }
+    }, [isSent])
 
     return (
         <form className={classes.messageForm} onSubmit={onSendMessage}>

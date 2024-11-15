@@ -22,6 +22,7 @@ import {useCentrifugo} from "../../../contexts/CentrifugoContext.jsx";
 import {useOnReceivedMessage} from "../../../hooks/useOnRecievedMessage.js";
 import audioService from "../../../services/audioService.js";
 import apiService from "../../../services/apiService.js";
+import {useLoadMoreMessages} from "../../../hooks/useLoadMoreMessages.js";
 
 const ChatPage = ({}) => {
     const {user: userInfo } = useAuth();
@@ -31,6 +32,9 @@ const ChatPage = ({}) => {
     const [messages, setMessages] = useState([]);
     const [witnessMessages, setWitnessMessages] = useState([]);
     const [isMessageLoading, setIsMessageLoading] = useState(true);
+    const [isNextPage, setIsNextPage] = useState(false);
+    const mainRef = useRef(null);
+    const [lastMessageRef] = useLoadMoreMessages({messages, setMessages, chatId, isNextPage, setIsNextPage, mainRef});
 
 
 
@@ -54,6 +58,7 @@ const ChatPage = ({}) => {
 
         const {count, next, previous, results} = await messagesApi.getMessages(chatId);
         setMessages(results);
+        setIsNextPage(!!next);
         setIsMessageLoading(false)
     }
 
@@ -63,39 +68,24 @@ const ChatPage = ({}) => {
         setChatInfo(fetchedChatInfo);
     }
 
-    const mainRef = useRef(null);
-    useEffect(() => {
-        mainRef.current.scrollTop = mainRef.current.scrollHeight;
-    }, [messages]);
-
-    const scrollHandler = (e) => {
-        const scrollHeight = e.target.scrollHeight;
-        const scrollTop = e.target.scrollTop;
-        const innerHeight = window.innerHeight;
-        // console.log('scrollHeight', scrollHeight);
-        // console.log('scrollTop', scrollTop);
-        // console.log('innerHeight', innerHeight);
-    }
 
     useEffect(() => {
-        const mainElement = mainRef.current;
-        if (mainElement) {
-            addEventListener('scroll', scrollHandler);
+        if (messages.length === 0) {
+            mainRef.current.style.scrollBehavior = 'auto';
         }
 
-        return (() => {
-            mainElement.removeEventListener('scroll', scrollHandler);
-        })
-    }, [isMessageLoading])
+        if (messages.length > 10) {
+            return;
+        }
+        mainRef.current.scrollTop = mainRef.current.scrollHeight;
 
-
+    }, [messages]);
 
     useEffect(() => {
         fetchChatInfo();
         fetchMessages(chatId);
-
-
     }, [])
+
 
 
 
@@ -116,9 +106,9 @@ const ChatPage = ({}) => {
         <Page>
             <ChatHeader userInfo={userInfo} chatInfo={chatInfo} onDeleteHistory={onDeleteHistory}/>
             <DefaultMain mainRef={mainRef}>
-                <MessageList messages={messages} witnessMessages={witnessMessages} userInfo={userInfo}/>
+                <MessageList lastMessageRef={lastMessageRef} messages={messages} witnessMessages={witnessMessages} userInfo={userInfo}/>
             </DefaultMain>
-            <MessageForm messages={messages} setMessages={setMessages} setWitnessMessages={setWitnessMessages} userInfo={userInfo} chatInfo={chatInfo}/>
+            <MessageForm messages={messages} setMessages={setMessages} setWitnessMessages={setWitnessMessages} userInfo={userInfo} chatInfo={chatInfo} mainRef={mainRef}/>
         </Page>
     );
 };

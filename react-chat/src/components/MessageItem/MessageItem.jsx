@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import React, {forwardRef, useContext, useEffect} from 'react';
 import classes from './MessageItem.module.scss';
 import RoundAvatar from "../UI/RoundAvatar/RoundAvatar.jsx";
 import {getTextColor} from "../../utils/getTextColor.js";
@@ -7,7 +7,7 @@ import {getDatetime} from "../../utils/date.js";
 import {useTheme} from "../../hooks/useTheme.js";
 import cn from "classnames";
 import {getUserVisibleName} from "../../utils/getUserVisibleName.js";
-const MessageItem = ({message, isWitnessMessage, userInfo}) => {
+const MessageItem = forwardRef(({message, isWitnessMessage, userInfo}, ref) => {
     const { backgroundColor, textColor } = useTheme('chatMessageBackgroundColor');
 
     const isSelf = userInfo.id === message?.sender.id;
@@ -23,7 +23,7 @@ const MessageItem = ({message, isWitnessMessage, userInfo}) => {
     }, [backgroundColor, textColor]);
 
     return (
-        <li className={messageItemClasses} data-loaded={!isWitnessMessage}>
+        <li className={messageItemClasses} data-loaded={!isWitnessMessage} ref={ref}>
             <RoundAvatar className={classes.message__avatar} src={avatar}/>
             <div className={classes.message__block} >
                 <p className={classes.message__username}>{senderName}</p>
@@ -32,6 +32,6 @@ const MessageItem = ({message, isWitnessMessage, userInfo}) => {
             </div>
         </li>
     );
-};
+});
 
 export default MessageItem;
