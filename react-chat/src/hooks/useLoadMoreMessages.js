@@ -4,6 +4,7 @@ import {messagesApi} from "../services/api/messages/index.js";
 export const useLoadMoreMessages = ({messages, setMessages, chatId, isNextPage, setIsNextPage, mainRef}) => {
     const [currentPage, setCurrentPage] = useState(1);
     const lastMessageRef = useRef(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     const loadMoreMessages = async () => {
         if (!isNextPage) {
@@ -17,11 +18,11 @@ export const useLoadMoreMessages = ({messages, setMessages, chatId, isNextPage, 
         if (!response.next) {
             setIsNextPage(false);
         }
+        setIsLoading(false);
     }
 
     useLayoutEffect(() => {
         const targetElement = lastMessageRef.current;
-        console.log(targetElement);
         if (!targetElement) {
             return;
         }
@@ -31,10 +32,15 @@ export const useLoadMoreMessages = ({messages, setMessages, chatId, isNextPage, 
         };
 
         const observer = new IntersectionObserver((entries) => {
-            console.log('все ентрис: ', entries);
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    loadMoreMessages();
+                    setIsLoading(true);
+                    // loadMoreMessages();
+                    console.log(mainRef.current.scrollTop)
+                    if (mainRef.current.scrollTop === 0) {
+                        mainRef.current.scrollTop = 900;
+                    }
+
                 }
             });
         }, options);
@@ -47,6 +53,12 @@ export const useLoadMoreMessages = ({messages, setMessages, chatId, isNextPage, 
             }
         }
     }, [messages]);
+
+    useEffect(() => {
+        if (isLoading) {
+            loadMoreMessages();
+        }
+    }, [isLoading]);
 
     return [lastMessageRef];
 }
