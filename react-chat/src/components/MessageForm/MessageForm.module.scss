@@ -1,7 +1,13 @@
 .messageForm {
   display: flex;
   flex-direction: row;
-  background: none;
+  justify-content: space-between;
+  background-color: var(--input-bg-color);
+  color: var(--input-text-color);
+
+  &:focus-within {
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.90) inset;
+  }
 
 
   &__input {
@@ -10,9 +16,7 @@
     padding: 10px;
     border: none;
     outline: none;
-
-    &:focus {
-      box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.20) inset;
-    }
+    background-color: transparent;
+    color: var(--input-text-color);
   }
 }

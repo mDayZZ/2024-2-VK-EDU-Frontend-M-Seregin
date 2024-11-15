@@ -32,7 +32,7 @@ class TokenService {
 
     static async refreshAccessToken(apiService) {
         const refreshToken = this.getRefreshToken();
-        if (!refreshToken || this.isTokenExpired(refreshToken)) {
+        if (!refreshToken) {
             this.clearTokens();
             return null;
         }
