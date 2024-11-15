@@ -36,7 +36,6 @@ export const useLoadMoreMessages = ({messages, setMessages, chatId, isNextPage, 
                 if (entry.isIntersecting) {
                     setIsLoading(true);
                     // loadMoreMessages();
-                    console.log(mainRef.current.scrollTop)
                     if (mainRef.current.scrollTop === 0) {
                         mainRef.current.scrollTop = 900;
                     }

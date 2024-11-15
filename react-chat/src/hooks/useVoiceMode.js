@@ -32,7 +32,6 @@ export const useVoiceMode = ({messageInput}) => {
         }
 
 
-        console.log('пошла запись запись пошла')
     }
 
     const onVoiceStopRecord = (e) => {
@@ -43,7 +42,6 @@ export const useVoiceMode = ({messageInput}) => {
                 mediaStream.current.getTracks().forEach(track => track.stop())
             }
             setVoiceStatus('recorded');
-            console.log('записан, ждёт отправки')
         }
     }
 
@@ -57,7 +55,6 @@ export const useVoiceMode = ({messageInput}) => {
 
 
     useEffect(() => {
-        console.log(messageInput)
         if (!messageInput) {
             setIsVoiceMode(true);
             return;
