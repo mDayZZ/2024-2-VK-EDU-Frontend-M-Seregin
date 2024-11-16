@@ -2,13 +2,13 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
   background-color: var(--input-bg-color);
   color: var(--input-text-color);
 
   &:focus-within {
     box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.90) inset;
   }
-
 
   &__input {
     flex: 1;
@@ -18,5 +18,13 @@
     outline: none;
     background-color: transparent;
     color: var(--input-text-color);
+  }
+
+  &__attachButton {
+    margin-left: 10px;
+  }
+
+  &__fileInput {
+    display: none;
   }
 }

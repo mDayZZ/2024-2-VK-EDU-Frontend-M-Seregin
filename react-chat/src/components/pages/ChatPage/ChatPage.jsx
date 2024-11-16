@@ -23,6 +23,7 @@ import {useOnReceivedMessage} from "../../../hooks/useOnRecievedMessage.js";
 import audioService from "../../../services/audioService.js";
 import apiService from "../../../services/apiService.js";
 import {useLoadMoreMessages} from "../../../hooks/useLoadMoreMessages.js";
+import {useDragAndDropFiles} from "../../../hooks/useDragAndDropFiles.js";
 
 const ChatPage = ({}) => {
     const {user: userInfo } = useAuth();
@@ -35,6 +36,10 @@ const ChatPage = ({}) => {
     const [isNextPage, setIsNextPage] = useState(false);
     const mainRef = useRef(null);
     const [lastMessageRef] = useLoadMoreMessages({messages, setMessages, chatId, isNextPage, setIsNextPage, mainRef});
+
+
+    useDragAndDropFiles();
+
 
 
     const fetchDeleteMessages = async () => {

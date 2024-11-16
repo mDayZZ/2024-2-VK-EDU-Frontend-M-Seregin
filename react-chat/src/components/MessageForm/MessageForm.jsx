@@ -8,6 +8,12 @@ import {messagesApi} from "../../services/api/messages/index.js";
 import {useAuth} from "../../contexts/AuthContext.jsx";
 import audioService from "../../services/audioService.js";
 import {useVoiceMode} from "../../hooks/useVoiceMode.js";
+import {useInputFocusOnStart} from "../../hooks/useInputFocusOnStart.js";
+import {useAttachFiles} from "../../hooks/useAttachFiles.js";
+import IconLink from "../UI/IconLink/IconLink.jsx";
+import IconButton from "../UI/IconButton/IconButton.jsx";
+import {AttachFile, InsertDriveFile, LocationOn} from "@mui/icons-material";
+import DropdownMenu from "../UI/DropDownMenu/DropdownMenu.jsx";
 const MessageForm = ({messages, setMessages, setWitnessMessages, chatInfo, mainRef}) => {
     const {theme} = useContext(ThemeContext);
     const {user} = useAuth();
@@ -15,9 +21,17 @@ const MessageForm = ({messages, setMessages, setWitnessMessages, chatInfo, mainR
     const textColor = getTextColor(backgroundColor);
     const [messageInput, setMessageInput] = useState('');
     const [isSent, setIsSent] = useState(false);
+    const menuOptions = [
+        {icon: <InsertDriveFile fontSize='small' />, label: 'Прикрепить файлы', onClick: () => {console.log('files')}},
+        {icon: <LocationOn fontSize='small' />, label: 'Геопозиция', onClick: () => {console.log('geo')}},
 
+    ]
+
+
+    const {inputRef} = useInputFocusOnStart();
     const {isVoiceMode, voiceFile, voiceStatus, onVoiceRecording, onVoiceStopRecord, onVoiceSent    } = useVoiceMode({messageInput});
-    const inputRef = useRef(null);
+    const {attachedFiles, } = useAttachFiles();
+
 
     const addNewMessage = (newMessage) => {
         audioService.play('messageSent');
@@ -58,11 +72,7 @@ const MessageForm = ({messages, setMessages, setWitnessMessages, chatInfo, mainR
 
     }
 
-    useEffect(() => {
-        if (inputRef.current) {
-            inputRef.current.focus();
-        }
-    }, []);
+
 
     useEffect(() => {
         if (isSent) {
@@ -81,8 +91,14 @@ const MessageForm = ({messages, setMessages, setWitnessMessages, chatInfo, mainR
     return (
         <form className={classes.messageForm} onSubmit={onSendMessage}>
             {voiceStatus === 'pending' &&
+                <>
+                    <DropdownMenu className={classes.messageForm__attachButton} icon={ <AttachFile fontSize='small' />} menuOptions={menuOptions} />
+                    <input className={classes.messageForm__fileInput} type="file" multiple/>
+
                 <input ref={inputRef} required={true} value={messageInput}
-                       onInput={(event) => setMessageInput(event.target.value)} className={classes.messageForm__input}/>
+                onInput={(event) => setMessageInput(event.target.value)} className={classes.messageForm__input}/>
+
+                </>
             }
 
             {(isVoiceMode === true && voiceStatus === 'recorded' && voiceFile) &&

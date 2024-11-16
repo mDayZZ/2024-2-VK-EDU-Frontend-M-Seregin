@@ -2,7 +2,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  aspect-ratio: 1;
+  //height: 100%;
+  aspect-ratio: 1 !important;
   padding: 10px;
 
   color: inherit;
