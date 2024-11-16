@@ -48,7 +48,7 @@ export const useVoiceMode = ({messageInput}) => {
     const onVoiceSent = () => {
 
         setVoiceFile(null);
-        setIsVoiceMode(false);
+        setIsVoiceMode(true);
         setVoiceStatus('pending');
     }
 
