@@ -1,7 +1,25 @@
-import {useState} from "react";
+import {useRef, useState} from "react";
 
 export const useAttachFiles = () => {
     const [attachedFiles, setAttachedFiles] = useState([]);
+    const fileInputRef = useRef(null);
 
-    return {attachedFiles};
+
+    const onFileInputChange = (e) => {
+        const files = e.target.files;
+        const filesArray = Array.from(files);
+        setAttachedFiles(prev => [...prev, ...filesArray]);
+    }
+
+    const onDeleteAttachedFile = (index) => {
+        setAttachedFiles(prev => prev.filter((file, fileIndex) => fileIndex !== index));
+    }
+
+    const onFilesSent = () => {
+        setAttachedFiles([]);
+    }
+
+
+
+    return {attachedFiles, fileInputRef, onFileInputChange, onDeleteAttachedFile, onFilesSent};
 }

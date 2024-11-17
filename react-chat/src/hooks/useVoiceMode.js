@@ -1,6 +1,6 @@
 import {useEffect, useRef, useState} from "react";
 
-export const useVoiceMode = ({messageInput}) => {
+export const useVoiceMode = ({messageInput, attachedFiles}) => {
     const [isVoiceMode, setIsVoiceMode] = useState(true);
     const [voiceStatus, setVoiceStatus] = useState('pending');
     const [voiceFile, setVoiceFile] = useState(null);
@@ -55,12 +55,12 @@ export const useVoiceMode = ({messageInput}) => {
 
 
     useEffect(() => {
-        if (!messageInput) {
+        if (!messageInput && attachedFiles.length === 0) {
             setIsVoiceMode(true);
             return;
         }
         setIsVoiceMode(false);
-    }, [messageInput]);
+    }, [messageInput, attachedFiles]);
 
 
     return {isVoiceMode, voiceFile, voiceStatus, onVoiceStopRecord, onVoiceRecording, onVoiceSent};
