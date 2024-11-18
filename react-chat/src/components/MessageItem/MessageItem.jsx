@@ -10,6 +10,7 @@ import {getUserVisibleName} from "../../utils/getUserVisibleName.js";
 import {getFileTypeByUrl} from "../../utils/fileInfo.js";
 import MessageImageList from "../MessageImageList/MessageImageList.jsx";
 import MessageFileList from "../MessageFileList/MessageFileList.jsx";
+import ParseLinks from "../UI/ParseLinks.jsx";
 const MessageItem = forwardRef(({message, isWitnessMessage, userInfo}, ref) => {
     const { backgroundColor, textColor } = useTheme('chatMessageBackgroundColor');
 
@@ -41,8 +42,6 @@ const MessageItem = forwardRef(({message, isWitnessMessage, userInfo}, ref) => {
         return [filteredFiles, images];
     }, [files])
 
-    console.log('images:', images, "files:", filteredFiles)
-
     const messageItemClasses = cn(classes.message, isSelf ? classes['message--self'] : '')
     useEffect(() => {
         document.documentElement.style.setProperty('--message-bg-color', backgroundColor);
@@ -66,7 +65,7 @@ const MessageItem = forwardRef(({message, isWitnessMessage, userInfo}, ref) => {
                     {files.length >0 &&
                         <MessageFileList files={filteredFiles} />
                     }
-                    <p className={classes.message__text}>{text}</p>
+                    <p className={classes.message__text}><ParseLinks text={text}/></p>
                     <p className={classes.message__datetime}>{date}</p>
                 </div>
 

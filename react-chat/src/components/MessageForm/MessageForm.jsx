@@ -24,14 +24,44 @@ const MessageForm = ({messages, setMessages, setWitnessMessages, chatInfo, mainR
     const [isSent, setIsSent] = useState(false);
     const menuOptions = [
         {icon: <InsertDriveFile fontSize='small' />, label: 'Прикрепить файлы', onClick: () => {fileInputRef.current.click()}},
-        // {icon: <LocationOn fontSize='small' />, label: 'Геопозиция', onClick: () => {console.log('geo')},
-
+        {icon: <LocationOn fontSize='small' />, label: 'Геопозиция', onClick: () => {sendGeolocation()}},
     ]
 
 
     const {inputRef} = useInputFocusOnStart();
     const {attachedFiles, fileInputRef, onFileInputChange, onDeleteAttachedFile, onFilesSent} = useAttachFiles();
     const {isVoiceMode, voiceFile, voiceStatus, onVoiceRecording, onVoiceStopRecord, onVoiceSent    } = useVoiceMode({messageInput, attachedFiles});
+
+    const sendGeolocation = () => {
+        const sendMessage = async (geoLink)=> {
+
+            const messageFormData = new FormData();
+
+            messageFormData.append('chat', chatInfo.id);
+            messageFormData.append('text', geoLink);
+
+            try {
+                setMessageInput('');
+                const fetchedMessage = await messagesApi.sendMessage(messageFormData);
+                addNewMessage({...fetchedMessage, sender: user});
+            } catch (e) {
+                console.error('error sending message', e);
+            }
+
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const latitude = position.coords.latitude;
+                const longitude = position.coords.longitude;
+                const link = `https://www.openstreetmap.org/#map=18/${latitude}/${longitude}`;
+                sendMessage(link);
+            },
+            (error) => {
+                console.error('Error getting location:', error);
+            }
+        );
+    }
 
 
     const addNewMessage = (newMessage) => {
