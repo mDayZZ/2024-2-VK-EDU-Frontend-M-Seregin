@@ -52,7 +52,6 @@ const MessageItem = forwardRef(({message, isWitnessMessage, userInfo}, ref) => {
         <li className={messageItemClasses} data-loaded={!isWitnessMessage} ref={ref}>
             <RoundAvatar className={classes.message__avatar} src={avatar}/>
             <div className={classes.message__block}>
-
                 <p className={classes.message__username}>{senderName}</p>
 
                 <div className={classes.message__content}>
@@ -62,13 +61,12 @@ const MessageItem = forwardRef(({message, isWitnessMessage, userInfo}, ref) => {
                     {images.length > 0 &&
                         <MessageImageList images={images}/>
                     }
-                    {files.length >0 &&
+                    {files.length > 0 &&
                         <MessageFileList files={filteredFiles} />
                     }
                     <p className={classes.message__text}><ParseLinks text={text}/></p>
                     <p className={classes.message__datetime}>{date}</p>
                 </div>
-
             </div>
         </li>
     );
