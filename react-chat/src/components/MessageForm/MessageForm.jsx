@@ -59,7 +59,7 @@ const MessageForm = ({messages, setMessages, setWitnessMessages, chatInfo, mainR
             messageFormData.append('voice', voiceFile);
         } else {
             messageFormData.append('text', messageInput);
-            messageFormData.append('files', attachedFiles);
+            attachedFiles.forEach(file => messageFormData.append('files', file))
             console.log(attachedFiles)
         }
 
