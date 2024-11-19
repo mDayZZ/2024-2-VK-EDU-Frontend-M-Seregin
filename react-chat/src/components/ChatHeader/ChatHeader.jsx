@@ -1,27 +1,35 @@
-import React, {useContext, useEffect, useMemo, useState} from 'react';
+import React from 'react';
 import DefaultHeader from "../UI/DefaultHeader/DefaultHeader.jsx";
 import classes from "./ChatHeader.module.scss";
-import IconButton from "../UI/IconButton/IconButton.jsx";
-import {ArrowBack, DeleteOutline, Info, More, MoreVert} from "@mui/icons-material";
+import {ArrowBack, DeleteOutline, Info, MoreVert} from "@mui/icons-material";
 import RoundAvatar from "../UI/RoundAvatar/RoundAvatar.jsx";
 import {pluralize} from "../../utils/pluralize.js";
-import {getUserById} from "../../services/userService.js";
 import cn from "classnames";
 import IconLink from "../UI/IconLink/IconLink.jsx";
 import DropdownMenu from "../UI/DropDownMenu/DropdownMenu.jsx";
 import {useModal} from "../../contexts/ModalContext.jsx";
 import ChatProfile from "../ChatProfile/ChatProfile.jsx";
+
 const ChatHeader = ({chatInfo, userInfo, className, onDeleteHistory}) => {
     const {openModal} = useModal();
     const headerClasses = cn('chatHeader', className, classes.chatHeader);
 
     const menuOptions = [
-        {label: 'Профиль', onClick: () => openModal(<ChatProfile chatInfo={chatInfo} userInfo={userInfo}/>), icon: <Info />},
+        {label: 'Профиль', onClick: () => openModal(<ChatProfile chatInfo={chatInfo} />), icon: <Info />},
         {label: 'Очистить историю', onClick: onDeleteHistory, icon: <DeleteOutline/>},
     ];
+    const isPrivate = chatInfo?.is_private;
 
-    const chatTitle = chatInfo?.name || '...';
-    let chatStatus = chatInfo?.status || '...';
+    const getChatStatus = () => {
+        if (!isPrivate) {
+            const membersCount = chatInfo?.members.length;
+            return pluralize(membersCount, 'участник', 'участника', 'участников');
+        }
+    }
+
+
+    const chatTitle = chatInfo?.title ?? '...';
+    let chatStatus = getChatStatus() ?? '...';
     const chatAvatar = chatInfo?.profile_image_url || null;
 
 

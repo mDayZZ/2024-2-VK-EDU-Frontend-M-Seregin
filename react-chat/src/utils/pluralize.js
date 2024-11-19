@@ -1,4 +1,7 @@
 export const pluralize = (number, one, few, many) => {
+    if (!number) {
+        return null;
+    }
     const pluralRules = new Intl.PluralRules('ru-RU');
     const category = pluralRules.select(number);
 

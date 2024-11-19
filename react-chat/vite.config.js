@@ -5,4 +5,14 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   base: "/2024-2-VK-EDU-Frontend-M-Seregin/",
   plugins: [react()],
+  server: {
+    port: 5173,
+    proxy: {
+      '/api': {
+        target: `https://vkedu-fullstack-div2.ru`,
+        changeOrigin: true,
+        secure: false,
+      }
+    }
+  }
 })

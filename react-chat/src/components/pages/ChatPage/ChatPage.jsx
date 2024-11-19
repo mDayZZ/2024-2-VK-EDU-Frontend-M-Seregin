@@ -15,15 +15,28 @@ import {useParams} from "react-router-dom";
 import Modal from "../../UI/Modal/Modal.jsx";
 import {useModal} from "../../../contexts/ModalContext.jsx";
 import {useUserContext} from "../../../contexts/UserContext.jsx";
+import {useAuth} from "../../../contexts/AuthContext.jsx";
+import {chatApi} from "../../../services/api/chat/index.js";
+import {messagesApi} from "../../../services/api/messages/index.js";
+import {useCentrifugo} from "../../../contexts/CentrifugoContext.jsx";
+import {useOnReceivedMessage} from "../../../hooks/useOnRecievedMessage.js";
+import audioService from "../../../services/audioService.js";
+import apiService from "../../../services/apiService.js";
+import {useLoadMoreMessages} from "../../../hooks/useLoadMoreMessages.js";
 
 const ChatPage = ({}) => {
-    const {user: userInfo } = useUserContext();
+    const {user: userInfo } = useAuth();
 
-    const { id } = useParams();
-    const chatId = Number(id);
+    const { chatId } = useParams();
     const [chatInfo, setChatInfo] = useState(null);
     const [messages, setMessages] = useState([]);
     const [witnessMessages, setWitnessMessages] = useState([]);
+    const [isMessageLoading, setIsMessageLoading] = useState(true);
+    const [isNextPage, setIsNextPage] = useState(false);
+    const mainRef = useRef(null);
+    const [lastMessageRef] = useLoadMoreMessages({messages, setMessages, chatId, isNextPage, setIsNextPage, mainRef});
+
+
 
     const fetchDeleteMessages = async () => {
         try {
@@ -41,37 +54,61 @@ const ChatPage = ({}) => {
     };
 
     const fetchMessages = async (chatId) => {
-        const fetchedMessages = await getMessagesByChatId(chatId);
-        setMessages(fetchedMessages);
+        setIsMessageLoading(true)
+
+        const {count, next, previous, results} = await messagesApi.getMessages(chatId);
+        setMessages(results);
+        setIsNextPage(!!next);
+        setIsMessageLoading(false)
     }
+
+
     const fetchChatInfo = async () => {
-        const fetchedChatInfo = await getChatInfoByChatId(chatId, userInfo.id);
+        const fetchedChatInfo = await chatApi.getChatInfo(chatId);
         setChatInfo(fetchedChatInfo);
     }
 
-    const mainRef = useRef(null);
-    useEffect(() => {
-        mainRef.current.scrollTop = mainRef.current.scrollHeight;
-    }, [messages]);
 
+    useEffect(() => {
+        if (messages.length === 0) {
+            mainRef.current.style.scrollBehavior = 'auto';
+        }
+
+        if (messages.length > 10) {
+            return;
+        }
+        mainRef.current.scrollTop = mainRef.current.scrollHeight;
+
+    }, [messages]);
 
     useEffect(() => {
         fetchChatInfo();
-    }, [chatId]);
-
-    useEffect(() => {
         fetchMessages(chatId);
-    }, [chatId])
+    }, [])
+
+
+
+
+    useOnReceivedMessage((message) => {
+        if (!message.chat === chatId) {
+            return;
+        }
+        if (message.sender.id === userInfo.id) {
+            return;
+        }
+        setMessages((prevState) => ([message, ...prevState]))
+        audioService.play('messageReceived');
+    })
+
 
 
     return (
         <Page>
             <ChatHeader userInfo={userInfo} chatInfo={chatInfo} onDeleteHistory={onDeleteHistory}/>
             <DefaultMain mainRef={mainRef}>
-
-                <MessageList messages={messages} witnessMessages={witnessMessages} userInfo={userInfo}/>
+                <MessageList lastMessageRef={lastMessageRef} messages={messages} witnessMessages={witnessMessages} userInfo={userInfo}/>
             </DefaultMain>
-            <MessageForm messages={messages} setMessages={setMessages} setWitnessMessages={setWitnessMessages} userInfo={userInfo} chatInfo={chatInfo}/>
+            <MessageForm messages={messages} setMessages={setMessages} setWitnessMessages={setWitnessMessages} userInfo={userInfo} chatInfo={chatInfo} mainRef={mainRef}/>
         </Page>
     );
 };

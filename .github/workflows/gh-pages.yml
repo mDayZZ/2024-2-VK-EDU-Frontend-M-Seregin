@@ -16,8 +16,7 @@ jobs:
         working-directory: ./react-chat
         run: npm run build
         env:
-          VITE_USE_MOCKS: true
-          VITE_USE_LOCALSTORAGE: true
+          VITE_API_URL: 'https://vkedu-fullstack-div2.ru/api'
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:

@@ -7,7 +7,7 @@
 ## 1. Получение чатов пользователя
 
 ### Метод
-`GET /api/chats/`
+`GET /apiService/chats/`
 `mockedGetChatsByUserId`
 
 
@@ -31,7 +31,7 @@
 ## 2. Получение участников чата
 
 ### Метод
-`GET /api/chats/{chatId}/members`
+`GET /apiService/chats/{chatId}/members`
 
 ### Описание
 Получает массив участников указанного чата, объекты те же, что отдаются в userInfo.
@@ -52,7 +52,7 @@
 ## 3. Получение сообщений в чате
 
 ### Метод
-`GET /api/chats/{chatId}/messages`
+`GET /apiService/chats/{chatId}/messages`
 
 ### Описание
 Получает список сообщений в указанном чате.
@@ -76,7 +76,7 @@
 ## 4. Отправка сообщения
 
 ### Метод
-`POST /api/chats/{chatId}/messages`
+`POST /apiService/chats/{chatId}/messages`
 
 ### Описание
 Отправляет новое сообщение в указанный чат.
@@ -105,7 +105,7 @@
 ## 5. Информация о чате
 
 ### Метод
-`POST /api/chats/{chatId}`
+`POST /apiService/chats/{chatId}`
 
 ### Описание
 Отправляет информацию о чате.

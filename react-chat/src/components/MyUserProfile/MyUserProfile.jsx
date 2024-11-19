@@ -4,42 +4,43 @@ import Form from "../UI/Form/Form.jsx";
 import Button from "../UI/Button/Button.jsx";
 import {changeUserInfo} from "../../services/userService.js";
 import {useUserContext} from "../../contexts/UserContext.jsx";
+import {useAuth} from "../../contexts/AuthContext.jsx";
+import {userApi} from "../../services/api/user/index.js";
 
-const MyUserProfile = ({setInfo, profileName, setProfileName, profileInfo, isEdit, toggleIsEdit}) => {
+const MyUserProfile = ({info, setInfo, setVisibleTitle, profileInfo, isEdit, toggleIsEdit}) => {
 
-    const {setUser} = useUserContext();
+    const {logout} = useAuth();
 
-    const [editingName, setEditingName] = useState(profileName || '');
-    const [editingEmail, setEditingEmail] = useState(profileInfo.email);
-
-
-    const updateData = async (newUser) => {
-        try {
-
-
-            const response = await changeUserInfo(newUser, profileInfo.id);
-            setUser(response);
-            setInfo(response);
-            toggleIsEdit();
-        } catch (e) {
-            console.error(e)
-            setProfileName(profileInfo?.name)
-        }
-    }
-
+    const [editingName, setEditingName] = useState(info.first_name || '');
+    const [editingLastName, setEditingLastName] = useState(info.last_name || '');
+    const [editingBio, setEditingBio] = useState(info.bio || '');
 
     useEffect(() => {
-        setProfileName(editingName);
-    }, [editingName]);
+        setVisibleTitle(`${editingName} ${editingLastName}`.trim());
+    }, [editingName, editingLastName]);
 
 
+    const onSubmit = async (e) => {
+    e.preventDefault();
 
-    const onSubmit = (e) => {
-        e.preventDefault();
-        const newUserInfo = {...profileInfo, name: editingName, email: editingEmail};
-        updateData(newUserInfo);
+    const newProfile = {
+        first_name: editingName.trim(),
+        last_name: editingLastName.trim(),
+        bio: editingBio.trim(),
+    }
+
+    try {
+        const response = await userApi.changeInfo(info.id, newProfile);
+        console.log('response', response);
+        setInfo(response);
+
+    } catch (e) {
+        console.error(e);
+    } finally {
+        toggleIsEdit();
+    }
+
     };
-
 
     return (
         <div>
@@ -48,18 +49,25 @@ const MyUserProfile = ({setInfo, profileName, setProfileName, profileInfo, isEdi
                     <Form onSubmit={onSubmit}>
                         <div>
                             <label htmlFor="name">Имя</label>
-                            <Input maxLength={15} name={'name'} value={editingName} onInput={(e) => setEditingName(e.target.value)} type="text"/>
+                            <Input maxLength={15} name='name' value={editingName}
+                                   onInput={(e) => setEditingName(e.target.value)} type="text"/>
                         </div>
                         <div>
-                            <label htmlFor="email">Email</label>
-                            <Input name={'email'} value={editingEmail} onInput={(e) => setEditingEmail(e.target.value)} type="text"/>
+                            <label htmlFor="lastName">Фамилия</label>
+                            <Input name='lastName' value={editingLastName}
+                                   onInput={(e) => setEditingLastName(e.target.value)} type="text"/>
                         </div>
-
+                        <div>
+                            <label htmlFor="bio">Био</label>
+                            <Input name='bio' value={editingBio}
+                                   onInput={(e) => setEditingBio(e.target.value)} type="text"/>
+                        </div>
 
                         <Button type={'submit'}>Изменить</Button>
                     </Form>
                 </div>
             }
+            <Button onClick={logout}>Выйти</Button>
         </div>
     );
 };

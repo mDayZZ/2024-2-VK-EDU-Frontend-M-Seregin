@@ -1,22 +1,38 @@
 import React from 'react';
-import classes from './ConversationItem.module.scss';
-import RoundAvatar from "../UI/RoundAvatar/RoundAvatar.jsx";
 import {getDatetime} from "../../utils/date.js";
 import UserListItem from "../UI/UserListItem/UserListItem.jsx";
 import {routes} from "../../utils/routes.js";
+import {pluralize} from "../../utils/pluralize.js";
+import {getUserVisibleName} from "../../utils/getUserVisibleName.js";
+
 const ConversationItem = ({userId, conversation, openChatPage}) => {
+
     const getLastMessage = () => {
-        if (!conversation.last_message) {
+
+        const getContent = () => {
+            const text = conversation.last_message?.text.trim() || '';
+            const filesCount = conversation.last_message?.files.length;
+
+            if (filesCount > 0) {
+                const filesInfo = pluralize(filesCount, 'файл', 'файла', 'файлов');
+                return `[${filesInfo}] ${text}`.trim();
+            }
+
+            return `${text}`.trim();
+        }
+
+        if (!conversation.last_message.sender?.username) {
             return 'Сообщений пока нет';
         }
-        const name = conversation.last_message?.user?.name || conversation.last_message?.user?.username || 'Неизвестный пользователь';
-        const content = conversation.last_message?.content ?? '...';
-        return `${name}: ${content}`;
+
+        const visibleName = getUserVisibleName(conversation.last_message.sender);
+        const content = getContent();
+        return `${visibleName}: ${content}`;
     }
     let conversationLastMessage = getLastMessage();
 
     return (
-        <UserListItem avatarUrl={conversation.chat_image_url} heading={conversation.name} comment={conversationLastMessage} date={getDatetime(conversation?.last_message?.created_at)} linkTo={routes.chat(conversation.id)}></UserListItem>
+        <UserListItem avatarUrl={conversation?.avatar} heading={conversation?.title} comment={conversationLastMessage} date={getDatetime(conversation?.last_message?.created_at)} linkTo={routes.chat(conversation.id)}></UserListItem>
     );
 };
 

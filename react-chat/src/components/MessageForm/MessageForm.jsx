@@ -4,18 +4,25 @@ import classes from "./MessageForm.module.scss";
 import {ThemeContext} from "../../contexts/ThemeContext.jsx";
 import {getTextColor} from "../../utils/getTextColor.js";
 import {sendMessage} from "../../services/chatService.js";
-const MessageForm = ({setMessages, setWitnessMessages, chatInfo, userInfo}) => {
+import {messagesApi} from "../../services/api/messages/index.js";
+import {useAuth} from "../../contexts/AuthContext.jsx";
+import audioService from "../../services/audioService.js";
+const MessageForm = ({messages, setMessages, setWitnessMessages, chatInfo, mainRef}) => {
     const {theme} = useContext(ThemeContext);
+    const {user} = useAuth();
     const backgroundColor = theme.inputBackgroundColor;
     const textColor = getTextColor(backgroundColor);
     const [messageInput, setMessageInput] = useState('');
+    const [isSent, setIsSent] = useState(false);
 
     const inputRef = useRef(null);
 
     const addNewMessage = (newMessage) => {
-        const newMessageList = (prevMessages) => [...prevMessages, newMessage];
+        audioService.play('messageSent');
+        const newMessageList = (prevMessages) => [newMessage, ...prevMessages];
         setMessages(newMessageList);
-        setWitnessMessages(prevWitnessMessage => [...prevWitnessMessage, newMessage]);
+        setWitnessMessages(prevWitnessMessage => [newMessage, ...prevWitnessMessage]);
+        setIsSent(true);
     }
 
     const onSendMessage = async (event)=> {
@@ -24,11 +31,19 @@ const MessageForm = ({setMessages, setWitnessMessages, chatInfo, userInfo}) => {
             return;
         }
         setMessageInput('');
-        const newMessage = await sendMessage(chatInfo.id,userInfo.id, messageInput);
-        if (!newMessage) {
+
+        const message = {
+            chat: chatInfo.id,
+            text: messageInput,
+            // voice: null,
+            // files: null,
+        }
+
+        const fetchedMessage = await messagesApi.sendMessage(message);
+        if (!fetchedMessage) {
             return;
         }
-        addNewMessage(newMessage);
+        addNewMessage({...fetchedMessage, sender: user});
     }
 
     useEffect(() => {
@@ -36,6 +51,13 @@ const MessageForm = ({setMessages, setWitnessMessages, chatInfo, userInfo}) => {
             inputRef.current.focus();
         }
     }, []);
+
+    useEffect(() => {
+        if (isSent) {
+            mainRef.current.scrollTop = mainRef.current.scrollHeight+500;
+            setIsSent(false);
+        }
+    }, [isSent])
 
     return (
         <form className={classes.messageForm} onSubmit={onSendMessage}>

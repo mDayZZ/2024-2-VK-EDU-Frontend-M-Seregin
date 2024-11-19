@@ -12,10 +12,14 @@ import {createChat} from "../../services/chatService.js";
 import {useNavigate} from "react-router-dom";
 import MemberList from "../MemberList/MemberList.jsx";
 import {routes, routes as router} from "../../utils/routes.js";
+import {useAuth} from "../../contexts/AuthContext.jsx";
+import {usersApi} from "../../services/api/users/index.js";
+import FinderInput from "../UI/FinderInput/FinderInput.jsx";
+import {chatsApi} from "../../services/api/chats/index.js";
 const CreateChat = ({closeModal}) => {
     const navigate = useNavigate();
 
-    const {user: userInfo} = useUserContext();
+    const {user: userInfo} = useAuth();
 
     const [users, setUsers] = useState(null);
 
@@ -23,16 +27,22 @@ const CreateChat = ({closeModal}) => {
 
     const [chosenMembers, setChosenMembers] = useState([]);
 
-    const fetchUsers = async () => {
-        const response = await getUsers();
-        setUsers(response);
+    const [usersQuery, setUsersQuery] = useState('');
+
+    const fetchUsers = async (usersQuery) => {
+        const params = {
+            search: String(usersQuery),
+        }
+        const {count, next, previous, results} = await usersApi.get(params);
+        setUsers(results);
     }
 
 
 
-    useEffect(() => {
-        fetchUsers();
-    }, []);
+
+    useEffect( () => {
+        fetchUsers(usersQuery)
+    }, [usersQuery, ])
 
 
     const handleCheckboxChange = (userId) => {
@@ -45,16 +55,22 @@ const CreateChat = ({closeModal}) => {
         });
     };
 
-    const fetchCreateChat = async () => {
-        const newChatId = await createChat(chatTitle, chosenMembers, userInfo.id);
+    const fetchCreateChat = async (newChat) => {
+        const createdChat = await chatsApi.createChat(newChat);
         closeModal();
-        navigate(routes.chat(newChatId));
+        // navigate(routes.chat(createdChat.id));
 
     }
 
     const onSubmit = (e) => {
         e.preventDefault();
-        fetchCreateChat();
+        const newChat = {
+            title: chatTitle,
+            is_private: false,
+            avatar: null,
+            members: [...chosenMembers, userInfo.id],
+        }
+        fetchCreateChat(newChat);
     }
 
 
@@ -68,6 +84,7 @@ const CreateChat = ({closeModal}) => {
                 </div>
                 <div>
                     <label htmlFor="">Участники</label>
+                    <FinderInput value={usersQuery} onInput={(e) => setUsersQuery(e.target.value)} />
                     <MemberList chosenMembers={chosenMembers} userInfo={userInfo} handleCheckboxChange={handleCheckboxChange} users={users} />
 
                 </div>
