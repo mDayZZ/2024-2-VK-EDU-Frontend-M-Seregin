@@ -10,7 +10,7 @@ import {getUserVisibleName} from "../../utils/getUserVisibleName.js";
 import {getFileTypeByUrl} from "../../utils/fileInfo.js";
 import MessageImageList from "../MessageImageList/MessageImageList.jsx";
 import MessageFileList from "../MessageFileList/MessageFileList.jsx";
-import ParseLinks from "../UI/ParseLinks.jsx";
+import ParseLinks from "../UI/ParseLinks/ParseLinks.jsx";
 const MessageItem = forwardRef(({message, isWitnessMessage, userInfo}, ref) => {
     const { backgroundColor, textColor } = useTheme('chatMessageBackgroundColor');
 

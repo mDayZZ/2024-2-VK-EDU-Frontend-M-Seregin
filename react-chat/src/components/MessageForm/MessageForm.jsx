@@ -15,7 +15,7 @@ import IconButton from "../UI/IconButton/IconButton.jsx";
 import {AttachFile, InsertDriveFile, LocationOn} from "@mui/icons-material";
 import DropdownMenu from "../UI/DropDownMenu/DropdownMenu.jsx";
 import AttachedFileList from "../AttachedFileList/AttachedFileList.jsx";
-const MessageForm = ({messages, setMessages, setWitnessMessages, chatInfo, mainRef}) => {
+const MessageForm = ({messages, setMessages, setWitnessMessages, chatInfo, mainRef, droppedFiles}) => {
     const {theme} = useContext(ThemeContext);
     const {user} = useAuth();
     const backgroundColor = theme.inputBackgroundColor;
@@ -29,7 +29,7 @@ const MessageForm = ({messages, setMessages, setWitnessMessages, chatInfo, mainR
 
 
     const {inputRef} = useInputFocusOnStart();
-    const {attachedFiles, fileInputRef, onFileInputChange, onDeleteAttachedFile, onFilesSent} = useAttachFiles();
+    const {attachedFiles, fileInputRef, onFileInputChange, onDeleteAttachedFile, onFilesSent} = useAttachFiles({droppedFiles});
     const {isVoiceMode, voiceFile, voiceStatus, onVoiceRecording, onVoiceStopRecord, onVoiceSent    } = useVoiceMode({messageInput, attachedFiles});
 
     const sendGeolocation = () => {
@@ -75,8 +75,6 @@ const MessageForm = ({messages, setMessages, setWitnessMessages, chatInfo, mainR
     const onSendMessage = async (event)=> {
         event.preventDefault();
 
-        console.log('sem')
-
         if (!messageInput && !voiceFile && !attachedFiles) {
             return;
         }
@@ -90,7 +88,6 @@ const MessageForm = ({messages, setMessages, setWitnessMessages, chatInfo, mainR
         } else {
             messageFormData.append('text', messageInput);
             attachedFiles.forEach(file => messageFormData.append('files', file))
-            console.log(attachedFiles)
         }
 
 

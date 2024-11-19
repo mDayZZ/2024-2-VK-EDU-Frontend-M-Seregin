@@ -1,6 +1,6 @@
-import {useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 
-export const useAttachFiles = () => {
+export const useAttachFiles = ({droppedFiles}) => {
     const [attachedFiles, setAttachedFiles] = useState([]);
     const fileInputRef = useRef(null);
 
@@ -21,6 +21,14 @@ export const useAttachFiles = () => {
     const onFilesSent = () => {
         setAttachedFiles([]);
     }
+
+    const onFilesDropped = () => {
+        setAttachedFiles(prev => [...prev, ...droppedFiles]);
+    }
+
+    useEffect(() => {
+        onFilesDropped();
+    }, [droppedFiles]);
 
 
 

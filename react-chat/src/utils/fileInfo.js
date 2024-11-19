@@ -31,7 +31,6 @@ export const getFileName = (fileUrl) => {
         return null;
     }
 
-    console.log(fileUrl)
     const separatedUrl = fileUrl.split('/');
 
     return separatedUrl[separatedUrl.length - 1];

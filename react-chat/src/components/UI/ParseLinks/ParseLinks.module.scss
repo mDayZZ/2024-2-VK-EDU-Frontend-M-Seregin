@@ -1,0 +1,12 @@
+.parseLink {
+  filter: brightness(0.8);
+  background: none;
+  border: none;
+  color: var(--header-text-color);
+  padding: 0;
+  margin: 0;
+  &:hover {
+    color: #9484bd;
+    cursor: pointer;
+  }
+}

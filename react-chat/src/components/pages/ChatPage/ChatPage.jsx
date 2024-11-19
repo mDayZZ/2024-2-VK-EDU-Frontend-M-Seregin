@@ -24,6 +24,7 @@ import audioService from "../../../services/audioService.js";
 import apiService from "../../../services/apiService.js";
 import {useLoadMoreMessages} from "../../../hooks/useLoadMoreMessages.js";
 import {useDragAndDropFiles} from "../../../hooks/useDragAndDropFiles.js";
+import DragZone from "../../UI/DragZone/DragZone.jsx";
 
 const ChatPage = ({}) => {
     const {user: userInfo } = useAuth();
@@ -38,7 +39,7 @@ const ChatPage = ({}) => {
     const [lastMessageRef] = useLoadMoreMessages({messages, setMessages, chatId, isNextPage, setIsNextPage, mainRef});
 
 
-    useDragAndDropFiles();
+    const {droppedFiles, isDragging, onDragEnter, onDragLeave, onDragOver, onDrop} = useDragAndDropFiles();
 
 
 
@@ -107,12 +108,13 @@ const ChatPage = ({}) => {
 
 
     return (
-        <Page>
+        <Page onDragEnter={onDragEnter} onDragLeave={onDragLeave} onDragOver={onDragOver} onDrop={onDrop}>
             <ChatHeader userInfo={userInfo} chatInfo={chatInfo} onDeleteHistory={onDeleteHistory}/>
             <DefaultMain mainRef={mainRef}>
+                {isDragging && <DragZone />}
                 <MessageList lastMessageRef={lastMessageRef} messages={messages} witnessMessages={witnessMessages} userInfo={userInfo}/>
             </DefaultMain>
-            <MessageForm messages={messages} setMessages={setMessages} setWitnessMessages={setWitnessMessages} userInfo={userInfo} chatInfo={chatInfo} mainRef={mainRef}/>
+            <MessageForm messages={messages} setMessages={setMessages} setWitnessMessages={setWitnessMessages} userInfo={userInfo} chatInfo={chatInfo} mainRef={mainRef} droppedFiles={droppedFiles}/>
         </Page>
     );
 };
