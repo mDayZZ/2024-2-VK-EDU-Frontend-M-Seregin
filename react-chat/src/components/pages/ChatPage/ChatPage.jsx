@@ -95,12 +95,14 @@ const ChatPage = ({}) => {
 
 
     useOnReceivedMessage((message) => {
-        if (!message.chat === chatId) {
+        if (message.chat !== chatId) {
+            audioService.play('notification');
             return;
         }
         if (message.sender.id === userInfo.id) {
             return;
         }
+
         setMessages((prevState) => ([message, ...prevState]))
         audioService.play('messageReceived');
     })
