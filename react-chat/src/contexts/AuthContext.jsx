@@ -1,6 +1,6 @@
 import {createContext, useContext, useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import TokenService from "../services/tokenService.js";
+import {tokenService as TokenService} from "../services/tokenService.js";
 import {userApi} from "../services/api/user/index.js";
 import {authApi} from "../services/api/auth/index.js";
 import {routes} from "../utils/routes.js";
@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const checkAuth = async () => {
             const accessToken = TokenService.getAccessToken();
-            if (accessToken && !TokenService.isTokenExpired(accessToken)) {
+            if (accessToken) {
                 await fetchUserData();
             } else {
                 handleLogout();

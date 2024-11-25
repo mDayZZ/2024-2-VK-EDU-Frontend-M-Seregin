@@ -5,14 +5,15 @@ import {HashRouter} from "react-router-dom";
 import {UserProvider} from "./contexts/UserContext.jsx";
 import {AuthProvider} from "./contexts/AuthContext.jsx";
 import {CentrifugoProvider} from "./contexts/CentrifugoContext.jsx";
+import {Provider} from "react-redux";
+import {store} from "./store/store.js";
 
 createRoot(document.getElementById('root')).render(
-    <HashRouter>
-        <AuthProvider>
+    <Provider store={store}>
+        <HashRouter>
             <CentrifugoProvider>
                 <App />
             </CentrifugoProvider>
-        </AuthProvider>
-
-    </HashRouter>
+        </HashRouter>
+    </Provider>
 )

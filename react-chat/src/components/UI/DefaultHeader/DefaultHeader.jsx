@@ -3,6 +3,7 @@ import classes from './DefaultHeader.module.scss';
 import {getTextColor} from "../../../utils/getTextColor.js";
 import {ThemeContext} from "../../../contexts/ThemeContext.jsx";
 import {useTheme} from "../../../hooks/useTheme.js";
+import Logo from "../Logo/Logo.jsx";
 
 const DefaultHeader = ({children, className}) => {
     const headerClasses = [classes.header, className].join(' ');

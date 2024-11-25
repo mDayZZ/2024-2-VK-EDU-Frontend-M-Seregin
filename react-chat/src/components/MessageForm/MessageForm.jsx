@@ -15,9 +15,13 @@ import IconButton from "../UI/IconButton/IconButton.jsx";
 import {AttachFile, InsertDriveFile, LocationOn} from "@mui/icons-material";
 import DropdownMenu from "../UI/DropDownMenu/DropdownMenu.jsx";
 import AttachedFileList from "../AttachedFileList/AttachedFileList.jsx";
+import {authSelector} from "../../store/auth/authSelectors.js";
+import {useSelector} from "react-redux";
+import {useFetch} from "../../hooks/useFetch.js";
+import {messageService} from "../../services/api/messageService.js";
 const MessageForm = ({messages, setMessages, setWitnessMessages, chatInfo, mainRef, droppedFiles}) => {
     const {theme} = useContext(ThemeContext);
-    const {user} = useAuth();
+    const {user} = useSelector(authSelector);
     const backgroundColor = theme.inputBackgroundColor;
     const textColor = getTextColor(backgroundColor);
     const [messageInput, setMessageInput] = useState('');
@@ -32,6 +36,14 @@ const MessageForm = ({messages, setMessages, setWitnessMessages, chatInfo, mainR
     const {attachedFiles, fileInputRef, onFileInputChange, onDeleteAttachedFile, onFilesSent} = useAttachFiles({droppedFiles});
     const {isVoiceMode, voiceFile, voiceStatus, onVoiceRecording, onVoiceStopRecord, onVoiceSent    } = useVoiceMode({messageInput, attachedFiles});
 
+    const [fetchSendMessage, isMessageLoading, error] = useFetch(async(messageForm) => {
+        setMessageInput('');
+        const fetchedMessage = await messageService.sendMessage(messageForm);
+        onVoiceSent();
+        onFilesSent();
+        addNewMessage({...fetchedMessage, sender: user});
+    })
+
     const sendGeolocation = () => {
         const sendMessage = async (geoLink)=> {
 
@@ -41,9 +53,7 @@ const MessageForm = ({messages, setMessages, setWitnessMessages, chatInfo, mainR
             messageFormData.append('text', geoLink);
 
             try {
-                setMessageInput('');
-                const fetchedMessage = await messagesApi.sendMessage(messageFormData);
-                addNewMessage({...fetchedMessage, sender: user});
+                await fetchSendMessage(messageFormData);
             } catch (e) {
                 console.error('error sending message', e);
             }
@@ -92,11 +102,7 @@ const MessageForm = ({messages, setMessages, setWitnessMessages, chatInfo, mainR
 
 
         try {
-            setMessageInput('');
-            const fetchedMessage = await messagesApi.sendMessage(messageFormData);
-            onVoiceSent();
-            onFilesSent();
-            addNewMessage({...fetchedMessage, sender: user});
+            await fetchSendMessage(messageFormData);
         } catch (e) {
             console.error('error sending message', e);
         }

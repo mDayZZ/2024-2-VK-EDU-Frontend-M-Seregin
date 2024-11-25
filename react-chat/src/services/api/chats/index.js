@@ -1,6 +1,6 @@
-import apiService from "../../apiService.js";
+import {axiosInstance} from "../axiosInstance.js";
 
 export const chatsApi = {
-    get: () => apiService.get('/chats'),
-    createChat: (chat) => apiService.post('/chats/', chat)
+    get: async () => { await axiosInstance.get('/chats')},
+    createChat: async (chat) => axiosInstance.post('/chats/', chat),
 }

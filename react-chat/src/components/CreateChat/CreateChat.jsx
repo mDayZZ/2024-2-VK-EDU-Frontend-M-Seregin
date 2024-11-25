@@ -1,25 +1,24 @@
 import React, {useEffect, useState} from 'react';
 import Form from "../UI/Form/Form.jsx";
 import Input from "../UI/Input/Input.jsx";
-import {getUsers} from "../../services/userService.js";
-import UserListItem from "../UI/UserListItem/UserListItem.jsx";
-import RoundAvatar from "../UI/RoundAvatar/RoundAvatar.jsx";
-
-import classes from "./CreateChat.module.scss";
 import Button from "../UI/Button/Button.jsx";
-import {useUserContext} from "../../contexts/UserContext.jsx";
-import {createChat} from "../../services/chatService.js";
 import {useNavigate} from "react-router-dom";
 import MemberList from "../MemberList/MemberList.jsx";
-import {routes, routes as router} from "../../utils/routes.js";
-import {useAuth} from "../../contexts/AuthContext.jsx";
 import {usersApi} from "../../services/api/users/index.js";
 import FinderInput from "../UI/FinderInput/FinderInput.jsx";
 import {chatsApi} from "../../services/api/chats/index.js";
+import {useSelector} from "react-redux";
+import {authSelector} from "../../store/auth/authSelectors.js";
+import {useFetch} from "../../hooks/useFetch.js";
+import {userService} from "../../services/api/userService.js";
+import {routes} from "../../utils/routes.js";
+import useDebounce from "../../hooks/useDebounce.js";
+import {chatService} from "../../services/api/chatService.js";
+
 const CreateChat = ({closeModal}) => {
     const navigate = useNavigate();
 
-    const {user: userInfo} = useAuth();
+    const {user: userInfo} = useSelector(authSelector);
 
     const [users, setUsers] = useState(null);
 
@@ -28,21 +27,26 @@ const CreateChat = ({closeModal}) => {
     const [chosenMembers, setChosenMembers] = useState([]);
 
     const [usersQuery, setUsersQuery] = useState('');
+    const debouncedUsersQuery = useDebounce(usersQuery, 500);
 
-    const fetchUsers = async (usersQuery) => {
+    const [fetchUsers, isUsersLoading, usersError] = useFetch(async (usersQuery) => {
         const params = {
             search: String(usersQuery),
         }
-        const {count, next, previous, results} = await usersApi.get(params);
+        const {count, next, previous, results} = await userService.getUsers(params);
         setUsers(results);
-    }
+    })
 
-
-
+    const [fetchCreateChat, isChatLoading, chatError] = useFetch(async (newChat) => {
+        const createdChat = await chatService.createChat(newChat);
+        closeModal();
+        console.log(createdChat, 'createdChat');
+        navigate(routes.chat(createdChat.id));
+    })
 
     useEffect( () => {
         fetchUsers(usersQuery)
-    }, [usersQuery, ])
+    }, [debouncedUsersQuery, ])
 
 
     const handleCheckboxChange = (userId) => {
@@ -55,12 +59,7 @@ const CreateChat = ({closeModal}) => {
         });
     };
 
-    const fetchCreateChat = async (newChat) => {
-        const createdChat = await chatsApi.createChat(newChat);
-        closeModal();
-        // navigate(routes.chat(createdChat.id));
 
-    }
 
     const onSubmit = (e) => {
         e.preventDefault();

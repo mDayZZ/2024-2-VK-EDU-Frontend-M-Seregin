@@ -1,0 +1,11 @@
+.textButton {
+  outline: none;
+  border: none;
+  background: none;
+  color: var(--header-text-color);
+  cursor: pointer;
+
+  &:hover {
+    color: #b0a1d5;
+  }
+}

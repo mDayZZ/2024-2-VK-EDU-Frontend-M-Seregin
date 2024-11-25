@@ -1,12 +1,14 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { useAuth } from "./AuthContext.jsx";
 import { Centrifuge } from "centrifuge";
-import { centrifugoApi } from "../services/api/centrifugo/index.js";
+import {useSelector} from "react-redux";
+import {authSelector} from "../store/auth/authSelectors.js";
+import {centrifugoService} from "../services/api/centrifugoService.js";
 
 const CentrifugoContext = createContext(null);
 
 export const CentrifugoProvider = ({ children }) => {
-    const { isAuthenticated, user } = useAuth();
+    const {isAuthorized, user, loading, error} = useSelector(authSelector);
+
     const [centrifugo, setCentrifugo] = useState(null);
     const [subscription, setSubscription] = useState(null);
 
@@ -14,7 +16,7 @@ export const CentrifugoProvider = ({ children }) => {
         const centrifugeInstance = new Centrifuge('wss://vkedu-fullstack-div2.ru/connection/websocket/', {
             getToken: async (ctx) => {
                 try {
-                    const response = await centrifugoApi.getCentrifugoToken(ctx);
+                    const response = await centrifugoService.getCentrifugoToken(ctx);
                     return response.token;
                 } catch (error) {
                     console.error('Ошибка получения токена для подключения:', error);
@@ -26,7 +28,7 @@ export const CentrifugoProvider = ({ children }) => {
         const newSubscription = centrifugeInstance.newSubscription(user.id, {
             getToken: async (ctx) => {
                 try {
-                    const response = await centrifugoApi.getSubscribeToken(ctx);
+                    const response = await centrifugoService.getSubscribeToken(ctx);
                     return response.token;
                 } catch (error) {
                     console.error('Ошибка получения токена для подписки:', error);
@@ -46,7 +48,7 @@ export const CentrifugoProvider = ({ children }) => {
     };
 
     useEffect(() => {
-        if (isAuthenticated && user) {
+        if (isAuthorized && user) {
             centrifugoConnection();
         }
 
@@ -57,7 +59,7 @@ export const CentrifugoProvider = ({ children }) => {
                 setSubscription(null); // очищаем состояние
             }
         };
-    }, [isAuthenticated, user]);
+    }, [isAuthorized, user]);
 
     return (
         <CentrifugoContext.Provider value={{ subscription, centrifugo }}>

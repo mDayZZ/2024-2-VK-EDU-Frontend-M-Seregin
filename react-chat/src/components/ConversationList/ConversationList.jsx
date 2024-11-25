@@ -11,10 +11,19 @@ import CreateChat from "../CreateChat/CreateChat.jsx";
 import {chatsApi} from "../../services/api/chats/index.js";
 import {useOnReceivedMessage} from "../../hooks/useOnRecievedMessage.js";
 import audioService from "../../services/audioService.js";
+import {useFetch} from "../../hooks/useFetch.js";
+import {chatService} from "../../services/api/chatService.js";
+import Loader from "../UI/Loader/Loader.jsx";
 const ConversationList = ({userId, openChatPage, searchQuery}) => {
-
+    const {backgroundColor, textColor} = useTheme('mainBackgroundColor');
     const {openModal, closeModal} = useModal();
     const [conversations, setConversations] = useState([]);
+
+    const [fetchConversations, isLoading, error] = useFetch(async () => {
+        const {count, next, previous, results} = await chatService.getChats();
+
+        setConversations(results);
+    })
 
     const filteredConversations = useMemo(() => {
         return conversations.filter(conversation => {
@@ -24,6 +33,7 @@ const ConversationList = ({userId, openChatPage, searchQuery}) => {
             return result;
         })
     }, [searchQuery, conversations])
+
 
     useOnReceivedMessage((message) => {
         const messageChat = conversations.find(conversation => {
@@ -43,14 +53,6 @@ const ConversationList = ({userId, openChatPage, searchQuery}) => {
     }, [conversations])
 
 
-    const { backgroundColor, textColor } = useTheme('mainBackgroundColor');
-
-
-    const fetchConversations = async () => {
-        const {count, next, previous, results} = await chatsApi.get();
-        setConversations(results);
-    }
-
     const onCreateChat = () => {
         openModal(<CreateChat closeModal={closeModal}/>);
     }
@@ -64,17 +66,23 @@ const ConversationList = ({userId, openChatPage, searchQuery}) => {
     }, [userId])
 
 
-
     return (
-        <ul className={classes.chatList} style={{color: textColor}}>
-            {filteredConversations.map(conversation => <ConversationItem userId={userId} conversation={conversation} openChatPage={openChatPage} key={conversation.id} />)}
-            {(searchQuery || filteredConversations.length === 0) &&
-                <>
-                    <UserListItem heading={'Создать чат'} comment={'Для совместного общения'} onClick={onCreateChat}/>
-                </>
-            }
-        </ul>
+            <ul className={classes.chatList} style={{color: textColor}}>
+                {!isLoading
+                    ? <>{filteredConversations.map(conversation => <ConversationItem userId={userId} conversation={conversation}
+                                                                                     openChatPage={openChatPage}
+                                                                                     key={conversation.id}/>)}
+                        {(searchQuery || filteredConversations.length === 0) &&
+                            <>
+                                <UserListItem heading={'Создать чат'} comment={'Для совместного общения'}
+                                              onClick={onCreateChat}/>
+                            </>
+                        }</>
+
+                    : <Loader/>
+                }
+            </ul>
     );
-};
+}
 
 export default ConversationList;

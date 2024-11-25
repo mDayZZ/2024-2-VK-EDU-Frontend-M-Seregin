@@ -1,7 +1,7 @@
 import {createContext, useContext, useState} from "react";
 
 const defaultTheme = {
-    headerBackgroundColor: "#323235",
+    headerBackgroundColor: "#2e2e30",
     mainBackgroundColor: "#3f3c40",
     chatBackgroundColor: "#252325",
     chatMessageBackgroundColor: "#3a3a3a",

@@ -25,9 +25,14 @@ import apiService from "../../../services/apiService.js";
 import {useLoadMoreMessages} from "../../../hooks/useLoadMoreMessages.js";
 import {useDragAndDropFiles} from "../../../hooks/useDragAndDropFiles.js";
 import DragZone from "../../UI/DragZone/DragZone.jsx";
+import {useSelector} from "react-redux";
+import {authSelector} from "../../../store/auth/authSelectors.js";
+import {useFetch} from "../../../hooks/useFetch.js";
+import {chatService} from "../../../services/api/chatService.js";
+import {messageService} from "../../../services/api/messageService.js";
 
 const ChatPage = ({}) => {
-    const {user: userInfo } = useAuth();
+    const {user: userInfo } = useSelector(authSelector);
 
     const { chatId } = useParams();
     const [chatInfo, setChatInfo] = useState(null);
@@ -38,9 +43,20 @@ const ChatPage = ({}) => {
     const mainRef = useRef(null);
     const [lastMessageRef] = useLoadMoreMessages({messages, setMessages, chatId, isNextPage, setIsNextPage, mainRef});
 
+    const [fetchMessages, isMessagesLoading, messagesError] = useFetch(async () => {
+        setIsMessageLoading(true)
+        const {count, next, previous, results} = await messageService.getMessages({chatId});
+        setMessages(results);
+        setIsNextPage(!!next);
+        setIsMessageLoading(false)
+    });
+
+    const [fetchChatInfo, isChatInfoLoading, chatInfoError] = useFetch(async () => {
+        const fetchedChatInfo = await chatService.getChatInfo(chatId);
+        setChatInfo(fetchedChatInfo);
+    });
 
     const {droppedFiles, isDragging, onDragEnter, onDragLeave, onDragOver, onDrop} = useDragAndDropFiles();
-
 
 
     const fetchDeleteMessages = async () => {
@@ -57,22 +73,6 @@ const ChatPage = ({}) => {
         const result = fetchDeleteMessages();
         setMessages(result);
     };
-
-    const fetchMessages = async (chatId) => {
-        setIsMessageLoading(true)
-
-        const {count, next, previous, results} = await messagesApi.getMessages(chatId);
-        setMessages(results);
-        setIsNextPage(!!next);
-        setIsMessageLoading(false)
-    }
-
-
-    const fetchChatInfo = async () => {
-        const fetchedChatInfo = await chatApi.getChatInfo(chatId);
-        setChatInfo(fetchedChatInfo);
-    }
-
 
     useEffect(() => {
         if (messages.length === 0) {
