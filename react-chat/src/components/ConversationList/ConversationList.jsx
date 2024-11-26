@@ -45,8 +45,12 @@ const ConversationList = ({userId, openChatPage, searchQuery}) => {
             const newConversations = [messageChat, ...filteredConversations];
             return newConversations
         });
-        audioService.play('messageReceived');
-        await notificationApiService.notify(message);
+
+        if (message.sender.id !== userId) {
+            audioService.play('messageReceived');
+            await notificationApiService.notify(message);
+            return;
+        }
     }, [conversations])
 
 
