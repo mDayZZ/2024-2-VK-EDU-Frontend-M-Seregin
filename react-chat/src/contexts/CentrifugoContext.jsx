@@ -53,8 +53,8 @@ export const CentrifugoProvider = ({ children }) => {
         return () => {
             if (centrifugo) {
                 centrifugo.disconnect();
-                setCentrifugo(null);  // очищаем состояние
-                setSubscription(null); // очищаем состояние
+                setCentrifugo(null);
+                setSubscription(null);
             }
         };
     }, [isAuthenticated, user]);

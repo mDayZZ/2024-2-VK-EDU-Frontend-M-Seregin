@@ -14,7 +14,7 @@ export const getShortFilename = (fileName, MAX_NAME_LENGTH = 10) => {
         const firstName = name.slice(0, Math.floor(MAX_NAME_LENGTH / 2) - extension.length);
         const secondName = name.slice(name.length - Math.floor(MAX_NAME_LENGTH / 2), name.length);
         const newFileName = `${firstName}...${secondName}.${extension}`;
-        return newFileName
+        return newFileName;
     }
     return fileName
 }

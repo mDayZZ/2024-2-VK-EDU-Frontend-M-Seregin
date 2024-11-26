@@ -25,6 +25,7 @@ import apiService from "../../../services/apiService.js";
 import {useLoadMoreMessages} from "../../../hooks/useLoadMoreMessages.js";
 import {useDragAndDropFiles} from "../../../hooks/useDragAndDropFiles.js";
 import DragZone from "../../UI/DragZone/DragZone.jsx";
+import {notificationApiService} from "../../../services/notificationApiService.js";
 
 const ChatPage = ({}) => {
     const {user: userInfo } = useAuth();
@@ -39,7 +40,9 @@ const ChatPage = ({}) => {
     const [lastMessageRef] = useLoadMoreMessages({messages, setMessages, chatId, isNextPage, setIsNextPage, mainRef});
 
 
-    const {droppedFiles, isDragging, onDragEnter, onDragLeave, onDragOver, onDrop} = useDragAndDropFiles();
+    const {droppedFiles, isDragging, dragAndDropProps} = useDragAndDropFiles();
+
+    const [isMessageReceived, setIsMessageReceived] = useState(false);
 
 
 
@@ -94,23 +97,33 @@ const ChatPage = ({}) => {
 
 
 
-    useOnReceivedMessage((message) => {
-        if (message.chat !== chatId) {
-            audioService.play('notification');
-            return;
-        }
+    useOnReceivedMessage(async (message) => {
         if (message.sender.id === userInfo.id) {
             return;
         }
 
+        if (message.chat !== chatId) {
+            audioService.play('notification');
+            await notificationApiService.notify(message);
+            return;
+        }
+
         setMessages((prevState) => ([message, ...prevState]))
+        setIsMessageReceived(true);
         audioService.play('messageReceived');
     })
 
 
+    useEffect(() => {
+        if (isMessageReceived) {
+            mainRef.current.scrollTop = mainRef.current.scrollHeight+500;
+            setIsMessageReceived(false);
+        }
+    }, [isMessageReceived]);
+
 
     return (
-        <Page onDragEnter={onDragEnter} onDragLeave={onDragLeave} onDragOver={onDragOver} onDrop={onDrop}>
+        <Page {...dragAndDropProps}>
             <ChatHeader userInfo={userInfo} chatInfo={chatInfo} onDeleteHistory={onDeleteHistory}/>
             <DefaultMain mainRef={mainRef}>
                 {isDragging && <DragZone />}

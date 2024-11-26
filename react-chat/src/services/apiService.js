@@ -34,6 +34,7 @@ class ApiService {
             headers['Content-Type'] = 'application/json';
         }
 
+
         const response = await fetch(`${this.baseURL}${url}`, { ...options, headers });
 
         if (response.status === 401) {
@@ -57,7 +58,7 @@ class ApiService {
         try {
             return await response.json();
         } catch (e) {
-            return await response.text(); // В случае ошибки JSON, возвращаем текст
+            return await response.text();
         }
     }
 

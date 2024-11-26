@@ -11,6 +11,7 @@ import CreateChat from "../CreateChat/CreateChat.jsx";
 import {chatsApi} from "../../services/api/chats/index.js";
 import {useOnReceivedMessage} from "../../hooks/useOnRecievedMessage.js";
 import audioService from "../../services/audioService.js";
+import {notificationApiService} from "../../services/notificationApiService.js";
 const ConversationList = ({userId, openChatPage, searchQuery}) => {
 
     const {openModal, closeModal} = useModal();
@@ -25,14 +26,19 @@ const ConversationList = ({userId, openChatPage, searchQuery}) => {
         })
     }, [searchQuery, conversations])
 
-    useOnReceivedMessage((message) => {
+    useOnReceivedMessage(async(message) => {
         const messageChat = conversations.find(conversation => {
             return conversation.id === message.chat
         });
-        if (!messageChat) {
-            return;
+
+        const updateLastMessage = () => {
+            if (!messageChat) {
+                return;
+            }
+            messageChat.last_message = message;
         }
-        messageChat.last_message = message;
+
+        updateLastMessage();
 
         setConversations((prevState) => {
             const filteredConversations = prevState.filter(conversation => conversation.id !== messageChat.id);
@@ -40,6 +46,7 @@ const ConversationList = ({userId, openChatPage, searchQuery}) => {
             return newConversations
         });
         audioService.play('messageReceived');
+        await notificationApiService.notify(message);
     }, [conversations])
 
 

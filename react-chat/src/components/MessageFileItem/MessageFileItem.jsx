@@ -10,19 +10,17 @@ const MessageFileItem = ({file}) => {
     const shortenFileName = getShortFilename(fileName);
 
     const onDownloadClick = () => {
-        let fileUrl = file;  // предполагаем, что file содержит URL для скачивания
-
-        // Заменяем 'http' на 'https', если это необходимо
+        let fileUrl = file;
         if (fileUrl.startsWith('http://')) {
             fileUrl = fileUrl.replace('http://', 'https://');
         }
 
         const link = document.createElement('a');
-        link.href = fileUrl;  // используем исправленный URL
-        link.download = fileName;  // задаем имя файла
+        link.href = fileUrl;
+        link.download = fileName;
         document.body.appendChild(link);
-        link.click();  // эмулируем клик по ссылке
-        document.body.removeChild(link);  // удаляем ссылку после скачивания
+        link.click();
+        document.body.removeChild(link);
     };
     return (
         <li className={classes.fileItem}>
