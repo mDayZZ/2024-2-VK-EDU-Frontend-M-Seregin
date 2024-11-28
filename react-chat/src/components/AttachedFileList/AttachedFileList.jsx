@@ -6,7 +6,7 @@ const AttachedFileList = ({attachedFiles, onDeleteFile}) => {
     return (
         <ul className={classes.fileList}>
             {
-                attachedFiles.map((attachedFile, index) => <AttachedFileItem attachedFile={attachedFile} onDeleteFile={onDeleteFile} index={index}  key={index} />)
+                attachedFiles.map((attachedFile, index) => <AttachedFileItem attachedFile={attachedFile} onDeleteFile={onDeleteFile} index={index} key={`${attachedFile.name}${attachedFile.size}${attachedFile.lastModified}`} />)
             }
         </ul>
     );

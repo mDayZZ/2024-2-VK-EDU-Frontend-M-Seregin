@@ -8,4 +8,4 @@ export const getUserVisibleName = (userInfo) => {
     const fullName = `${first_name} ${last_name}`.trim();
 
     return fullName || username || 'Неизвестный пользователь';
-}
+};

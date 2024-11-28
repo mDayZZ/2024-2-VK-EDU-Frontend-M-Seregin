@@ -15,6 +15,8 @@ import PrivateRoute from "./components/PrivateRoute/PrivateRoute.jsx";
 import {useDispatch, useSelector} from "react-redux";
 import {authSelector} from "./store/auth/authSelectors.js";
 import {fetchUserData} from "./store/auth/authThunks.js";
+import {useCheckNotificationPermissions} from "./hooks/useCheckNotificationPermissions.js";
+import {notificationApiService} from "./services/notificationApiService.js";
 
 function App() {
     const dispatch = useDispatch();
@@ -27,7 +29,6 @@ function App() {
 
   return (
       !loading &&
-          <ThemeProvider>
               <ModalProvider>
                   <div id={'app'}>
                       <h1 className={'visually-hidden'}>Chatix Messenger</h1>
@@ -40,7 +41,6 @@ function App() {
                       }
                   </div>
               </ModalProvider>
-          </ThemeProvider>
   )
 }
 

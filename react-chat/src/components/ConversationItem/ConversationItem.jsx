@@ -21,7 +21,7 @@ const ConversationItem = ({userId, conversation, openChatPage}) => {
             return `${text}`.trim();
         }
 
-        if (!conversation.last_message.sender?.username) {
+        if (!conversation.last_message?.sender?.username) {
             return 'Сообщений пока нет';
         }
 

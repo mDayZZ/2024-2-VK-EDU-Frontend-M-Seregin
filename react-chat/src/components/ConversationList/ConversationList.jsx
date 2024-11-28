@@ -14,6 +14,8 @@ import audioService from "../../services/audioService.js";
 import {useFetch} from "../../hooks/useFetch.js";
 import {chatService} from "../../services/api/chatService.js";
 import Loader from "../UI/Loader/Loader.jsx";
+import {notificationApiService} from "../../services/notificationApiService.js";
+import {chatApi} from "../../services/api/chat/index.js";
 const ConversationList = ({userId, openChatPage, searchQuery}) => {
     const {backgroundColor, textColor} = useTheme('mainBackgroundColor');
     const {openModal, closeModal} = useModal();
@@ -34,22 +36,39 @@ const ConversationList = ({userId, openChatPage, searchQuery}) => {
         })
     }, [searchQuery, conversations])
 
-
-    useOnReceivedMessage((message) => {
+    useOnReceivedMessage(async(message) => {
         const messageChat = conversations.find(conversation => {
             return conversation.id === message.chat
         });
         if (!messageChat) {
+            const newChat = await chatService.getChatInfo(message.chat);
+            if (!newChat) {
+                return;
+            }
+            setConversations(prev => ([newChat, ...prev]))
             return;
         }
-        messageChat.last_message = message;
+
+        const updateLastMessage = () => {
+            if (!messageChat) {
+                return;
+            }
+            messageChat.last_message = message;
+        }
+
+        updateLastMessage();
 
         setConversations((prevState) => {
             const filteredConversations = prevState.filter(conversation => conversation.id !== messageChat.id);
             const newConversations = [messageChat, ...filteredConversations];
             return newConversations
         });
-        audioService.play('messageReceived');
+
+        if (message.sender.id !== userId) {
+            audioService.play('messageReceived');
+            await notificationApiService.notify(message);
+            return;
+        }
     }, [conversations])
 
 
