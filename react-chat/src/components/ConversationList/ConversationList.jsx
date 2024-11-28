@@ -1,23 +1,19 @@
-import React, {useContext, useEffect, useMemo, useState} from 'react';
-import {getChatsByUserId} from "../../services/chatService.js";
+import React, {useEffect, useMemo, useState} from 'react';
 import classes from "./ConversationList.module.scss";
 import ConversationItem from "../ConversationItem/ConversationItem.jsx";
-import {getTextColor} from "../../utils/getTextColor.js";
-import {ThemeContext} from "../../contexts/ThemeContext.jsx";
 import {useTheme} from "../../hooks/useTheme.js";
 import UserListItem from "../UI/UserListItem/UserListItem.jsx";
 import {useModal} from "../../contexts/ModalContext.jsx";
 import CreateChat from "../CreateChat/CreateChat.jsx";
-import {chatsApi} from "../../services/api/chats/index.js";
 import {useOnReceivedMessage} from "../../hooks/useOnRecievedMessage.js";
 import audioService from "../../services/audioService.js";
 import {useFetch} from "../../hooks/useFetch.js";
 import {chatService} from "../../services/api/chatService.js";
 import Loader from "../UI/Loader/Loader.jsx";
 import {notificationApiService} from "../../services/notificationApiService.js";
-import {chatApi} from "../../services/api/chat/index.js";
+
 const ConversationList = ({userId, openChatPage, searchQuery}) => {
-    const {backgroundColor, textColor} = useTheme('mainBackgroundColor');
+    const {backgroundColor, textColor} = useTheme('main');
     const {openModal, closeModal} = useModal();
     const [conversations, setConversations] = useState([]);
 

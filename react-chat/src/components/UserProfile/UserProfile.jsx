@@ -3,7 +3,6 @@ import classes from "./UserProfile.module.scss";
 import RoundAvatar from "../UI/RoundAvatar/RoundAvatar.jsx";
 import CopyLink from "../UI/CopyLink/CopyLink.jsx";
 import MyUserProfile from "../MyUserProfile/MyUserProfile.jsx";
-import {useAuth} from "../../contexts/AuthContext.jsx";
 import {getUserVisibleName} from "../../utils/getUserVisibleName.js";
 import {useSelector} from "react-redux";
 import {authSelector} from "../../store/auth/authSelectors.js";

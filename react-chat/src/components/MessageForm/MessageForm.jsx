@@ -1,17 +1,10 @@
-import React, {useContext, useEffect, useReducer, useRef, useState} from 'react';
+import React, {useEffect, useReducer, useRef, useState} from 'react';
 import SendButton from "../SendButton/SendButton.jsx";
 import classes from "./MessageForm.module.scss";
-import {ThemeContext} from "../../contexts/ThemeContext.jsx";
-import {getTextColor} from "../../utils/getTextColor.js";
-import {sendMessage} from "../../services/chatService.js";
-import {messagesApi} from "../../services/api/messages/index.js";
-import {useAuth} from "../../contexts/AuthContext.jsx";
 import audioService from "../../services/audioService.js";
 import {useVoiceMode} from "../../hooks/useVoiceMode.js";
 import {useInputFocusOnStart} from "../../hooks/useInputFocusOnStart.js";
 import {useAttachFiles} from "../../hooks/useAttachFiles.js";
-import IconLink from "../UI/IconLink/IconLink.jsx";
-import IconButton from "../UI/IconButton/IconButton.jsx";
 import {AttachFile, InsertDriveFile, LocationOn} from "@mui/icons-material";
 import DropdownMenu from "../UI/DropDownMenu/DropdownMenu.jsx";
 import AttachedFileList from "../AttachedFileList/AttachedFileList.jsx";
@@ -19,11 +12,11 @@ import {authSelector} from "../../store/auth/authSelectors.js";
 import {useSelector} from "react-redux";
 import {useFetch} from "../../hooks/useFetch.js";
 import {messageService} from "../../services/api/messageService.js";
+import {useTheme} from "../../hooks/useTheme.js";
+
 const MessageForm = ({messages, setMessages, setWitnessMessages, chatInfo, mainRef, droppedFiles}) => {
-    const {theme} = useContext(ThemeContext);
     const {user} = useSelector(authSelector);
-    const backgroundColor = theme.inputBackgroundColor;
-    const textColor = getTextColor(backgroundColor);
+    const {backgroundColor, textColor} = useTheme('input');
     const [messageInput, setMessageInput] = useState('');
     const [isSent, setIsSent] = useState(false);
     const menuOptions = [
