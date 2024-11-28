@@ -24,18 +24,17 @@ function App() {
 
 
   return (
-      <ThemeProvider>
-          <div id={'app'}>
-              {!isLoading &&
-                  <Routes>
-                      <Route path={routes.auth} element={<AuthPage/>}/>
-                      <Route path={routes.chats} element={<PrivateRoute><ConversationsPage/></PrivateRoute>}/>
-                      <Route path={routes.chat(':chatId')} element={<ChatPage/>}/>
-                  </Routes>
-              }
-              <h1 className={'visually-hidden'}>DayZZChat</h1>
-          </div>
-      </ThemeProvider>
+      <div id={'app'}>
+          {!isLoading &&
+              <Routes>
+                  <Route path={routes.auth} element={<AuthPage/>}/>
+                  <Route path={routes.chats} element={<PrivateRoute><ConversationsPage/></PrivateRoute>}/>
+                  <Route path={routes.chat(':chatId')} element={<ChatPage/>}/>
+              </Routes>
+          }
+          <h1 className={'visually-hidden'}>DayZZChat</h1>
+      </div>
+
   )
 }
 
