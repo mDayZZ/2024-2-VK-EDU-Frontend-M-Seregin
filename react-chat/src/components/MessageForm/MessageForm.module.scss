@@ -1,18 +1,39 @@
 .messageForm {
   display: flex;
-  flex-direction: row;
-  background: none;
+  justify-content: space-between;
+  align-items: center;
 
+  background-color: var(--input-bg-color);
+  color: var(--input-text-color);
+
+  &:focus-within {
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.90) inset;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex: 1;
+    gap: 10px;
+  }
 
   &__input {
     flex: 1;
     min-width: 10px;
+    width: 100%;
     padding: 10px;
     border: none;
     outline: none;
+    background-color: transparent;
+    color: var(--input-text-color);
+  }
 
-    &:focus {
-      box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.20) inset;
-    }
+  &__attachButton {
+    margin-left: 10px;
+  }
+
+  &__fileInput {
+    display: none;
   }
 }

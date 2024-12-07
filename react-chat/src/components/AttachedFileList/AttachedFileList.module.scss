@@ -1,0 +1,11 @@
+.fileList {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 30vw;
+  overflow-x: auto;
+  &::-webkit-scrollbar {
+    width: 0px;
+    height: 2px;
+  }
+}

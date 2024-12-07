@@ -1,14 +1,11 @@
 import TokenService from "./tokenService.js";
-import {routes} from "../utils/routes.js";
+import { routes } from "../utils/routes.js";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 class ApiService {
     constructor(baseURL) {
         this.baseURL = baseURL;
-        this.headers = {
-            'Content-Type': 'application/json',
-        };
     }
 
     async setAuthorizationHeader() {
@@ -18,25 +15,29 @@ class ApiService {
             accessToken = await TokenService.refreshAccessToken(this);
         }
         if (!accessToken) {
-            delete this.headers['Authorization'];
-            return;
+            return null;
         }
 
-        this.headers['Authorization'] = `Bearer ${accessToken}`;
+        return `Bearer ${accessToken}`;
     }
 
     async request(url, options = {}) {
-        await this.setAuthorizationHeader();
+        const authorizationHeader = await this.setAuthorizationHeader();
 
         const headers = {
-            ...this.headers,
+            ...(authorizationHeader ? { 'Authorization': authorizationHeader } : {}),
             ...options.headers,
         };
 
-        const response = await fetch(`${this.baseURL}${url}`, {...options, headers });
+        // Если body это FormData, не добавляем Content-Type
+        if (!(options.body instanceof FormData)) {
+            headers['Content-Type'] = 'application/json';
+        }
+
+
+        const response = await fetch(`${this.baseURL}${url}`, { ...options, headers });
 
         if (response.status === 401) {
-            console.log('401 я база ответьте')
             const accessToken = await TokenService.refreshAccessToken(this);
             if (accessToken) {
                 return this.request(url, options);
@@ -54,34 +55,40 @@ class ApiService {
             throw error;
         }
 
-        return response.json();
+        try {
+            return await response.json();
+        } catch (e) {
+            return await response.text();
+        }
     }
 
     async get(url, params, options = {}) {
         const queryString = new URLSearchParams(params).toString();
-        let resultUrl
-        if (queryString) {
-            resultUrl = `${url}?${queryString}`;
-        }
-        else {
-            resultUrl = `${url}`;
-        }
+        const resultUrl = queryString ? `${url}?${queryString}` : url;
 
-        return this.request(resultUrl, {method: 'GET', ...options});
+        return this.request(resultUrl, { method: 'GET', ...options });
     }
 
     async post(url, body, options = {}) {
-        return this.request(url, {method: 'POST', body: JSON.stringify(body), ...options});
+        return this.request(url, { method: 'POST', body: JSON.stringify(body), ...options });
+    }
+
+    async postFormData(url, body, options = {}) {
+        if (!(body instanceof FormData)) {
+            throw new Error('Body must be an instance of FormData');
+        }
+
+        const headers = { ...options.headers }; // FormData не требует Content-Type
+        return this.request(url, { method: 'POST', body, headers, ...options });
     }
 
     async patch(url, body, options = {}) {
-        return this.request(url, {method: 'PATCH', body: JSON.stringify(body), ...options});
+        return this.request(url, { method: 'PATCH', body: JSON.stringify(body), ...options });
     }
 
     async logout() {
         TokenService.clearTokens();
     }
-
 }
 
-export default new ApiService( API_URL || '/api');
+export default new ApiService(API_URL || '/api');

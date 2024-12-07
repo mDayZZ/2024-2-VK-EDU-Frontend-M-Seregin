@@ -23,6 +23,9 @@ import {useOnReceivedMessage} from "../../../hooks/useOnRecievedMessage.js";
 import audioService from "../../../services/audioService.js";
 import apiService from "../../../services/apiService.js";
 import {useLoadMoreMessages} from "../../../hooks/useLoadMoreMessages.js";
+import {useDragAndDropFiles} from "../../../hooks/useDragAndDropFiles.js";
+import DragZone from "../../UI/DragZone/DragZone.jsx";
+import {notificationApiService} from "../../../services/notificationApiService.js";
 
 const ChatPage = ({}) => {
     const {user: userInfo } = useAuth();
@@ -35,6 +38,11 @@ const ChatPage = ({}) => {
     const [isNextPage, setIsNextPage] = useState(false);
     const mainRef = useRef(null);
     const [lastMessageRef] = useLoadMoreMessages({messages, setMessages, chatId, isNextPage, setIsNextPage, mainRef});
+
+
+    const {droppedFiles, isDragging, dragAndDropProps} = useDragAndDropFiles();
+
+    const [isMessageReceived, setIsMessageReceived] = useState(false);
 
 
 
@@ -89,26 +97,39 @@ const ChatPage = ({}) => {
 
 
 
-    useOnReceivedMessage((message) => {
-        if (!message.chat === chatId) {
-            return;
-        }
+    useOnReceivedMessage(async (message) => {
         if (message.sender.id === userInfo.id) {
             return;
         }
+
+        if (message.chat !== chatId) {
+            audioService.play('notification');
+            await notificationApiService.notify(message);
+            return;
+        }
+
         setMessages((prevState) => ([message, ...prevState]))
+        setIsMessageReceived(true);
         audioService.play('messageReceived');
     })
 
 
+    useEffect(() => {
+        if (isMessageReceived) {
+            mainRef.current.scrollTop = mainRef.current.scrollHeight+500;
+            setIsMessageReceived(false);
+        }
+    }, [isMessageReceived]);
+
 
     return (
-        <Page>
+        <Page {...dragAndDropProps}>
             <ChatHeader userInfo={userInfo} chatInfo={chatInfo} onDeleteHistory={onDeleteHistory}/>
             <DefaultMain mainRef={mainRef}>
+                {isDragging && <DragZone />}
                 <MessageList lastMessageRef={lastMessageRef} messages={messages} witnessMessages={witnessMessages} userInfo={userInfo}/>
             </DefaultMain>
-            <MessageForm messages={messages} setMessages={setMessages} setWitnessMessages={setWitnessMessages} userInfo={userInfo} chatInfo={chatInfo} mainRef={mainRef}/>
+            <MessageForm messages={messages} setMessages={setMessages} setWitnessMessages={setWitnessMessages} userInfo={userInfo} chatInfo={chatInfo} mainRef={mainRef} droppedFiles={droppedFiles}/>
         </Page>
     );
 };

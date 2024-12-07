@@ -1,13 +1,13 @@
-.defaultButton {
+.sendButton {
   display: flex;
   justify-content: center;
   align-items: center;
   padding-block: 15px;
   padding-inline: 30px;
-
-  color: inherit;
+  color: var(--input-text-color);
   background-color: transparent;
   border: none;
+  margin-left: auto;
 
   transition-duration: var(--transition-duration);
 

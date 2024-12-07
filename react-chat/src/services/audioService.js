@@ -5,6 +5,7 @@ class AudioService {
         this.loadAudio('messageSent', 'sounds/sentMessage.wav');
         this.loadAudio('messageReceived', 'sounds/receivedMessage.wav');
         this.loadAudio('error', 'sounds/error.wav');
+        this.loadAudio('notification', 'sounds/notification.wav');
     }
 
     loadAudio(key, src) {

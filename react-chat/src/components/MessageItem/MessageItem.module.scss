@@ -2,7 +2,7 @@
 .message {
   display: inline-flex;
   align-items: flex-end;
-  gap: 12px;
+  gap: 10px;
   max-width: 80%;
   margin-right: auto;
   animation: lefttoright 0.2s ease-in-out;
@@ -36,8 +36,10 @@
 
   &__block {
     min-width: 120px;
+    display: flex;
+    flex-direction: column;
 
-    padding-block: 10px;
+    padding-top: 10px;
     padding-inline: 20px;
 
     color: var(--message-text-color);
@@ -56,7 +58,14 @@
   }
 
   &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
     margin-block: 4px;
+  }
+
+  &__text {
+    margin: 0;
   }
 
   &__datetime {

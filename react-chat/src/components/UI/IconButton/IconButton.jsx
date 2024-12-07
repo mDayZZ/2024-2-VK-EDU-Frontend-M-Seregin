@@ -1,11 +1,14 @@
-import React from 'react';
+import React, {forwardRef} from 'react';
 import classes from './IconButton.module.scss';
-const IconButton = ({children, color, onClick, type}) => {
+import cn from "classnames";
+const IconButton = forwardRef(({children, className, color, onClick, type}, ref) => {
+    const btnClasses = cn(classes.iconButton, className);
+
     return (
-        <button type={type || "button"} className={classes.iconButton} onClick={onClick} style={{'color': color}}>
+        <button ref={ref} type={type || "button"} className={btnClasses} onClick={onClick} style={{'color': color}}>
             {children}
         </button>
     );
-};
+});
 
 export default IconButton;

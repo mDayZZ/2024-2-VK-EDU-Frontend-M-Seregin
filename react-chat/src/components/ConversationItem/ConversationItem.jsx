@@ -10,7 +10,7 @@ const ConversationItem = ({userId, conversation, openChatPage}) => {
     const getLastMessage = () => {
 
         const getContent = () => {
-            const text = conversation.last_message?.text.trim() || '';
+            const text = conversation.last_message?.voice ? 'Голосовое сообщение' : conversation.last_message?.text?.trim() || '';
             const filesCount = conversation.last_message?.files.length;
 
             if (filesCount > 0) {
@@ -21,7 +21,7 @@ const ConversationItem = ({userId, conversation, openChatPage}) => {
             return `${text}`.trim();
         }
 
-        if (!conversation.last_message.sender?.username) {
+        if (!conversation.last_message?.sender?.username) {
             return 'Сообщений пока нет';
         }
 

@@ -1,0 +1,9 @@
+.fileItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  background-color: var(--chat-bg-color);
+  padding-right: 20px;
+  border-radius: 50px;
+}
