@@ -9,7 +9,7 @@ import {authSelector} from "../../store/auth/authSelectors.js";
 import Button from "../UI/Button/Button.jsx";
 import {authService} from "../../services/api/authService.js";
 import {routes} from "../../utils/routes.js";
-import {useNavigate} from "react-router-dom";
+import {Navigate, useNavigate} from "react-router-dom";
 
 const UserProfile = ({profileInfo, setOnEdit, closeModal}) => {
     const navigate = useNavigate();
@@ -41,6 +41,9 @@ const UserProfile = ({profileInfo, setOnEdit, closeModal}) => {
         setVisibleBio(info.bio);
     }
 
+    const handlePrivateChatClick = () => {
+        return;
+    }
 
     useEffect(() => {
         if (setOnEdit) {
@@ -77,6 +80,7 @@ const UserProfile = ({profileInfo, setOnEdit, closeModal}) => {
                     </div>
                 </div>
 
+
                 {isProfileMine &&
                     <MyUserProfile info={info} setInfo={setInfo} visibleTitle={visibleTitle} setVisibleTitle={setVisibleTitle} profileInfo={profileInfo} isEdit={isEdit} toggleIsEdit={toggleIsEdit}/>
                 }
@@ -86,6 +90,12 @@ const UserProfile = ({profileInfo, setOnEdit, closeModal}) => {
                 }
                 {isProfileMine &&
                     <Button onClick={logout}>Выйти</Button>
+                }
+
+                {!isProfileMine &&
+                    <ul className='optionList'>
+                        {/*<li><button onClick={handlePrivateChatClick}>Личные сообщения</button></li>*/}
+                    </ul>
                 }
             </div>
         </div>

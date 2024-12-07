@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { userService } from '../../services/api/userService';
 import { tokenService } from '../../services/tokenService';
 import {fetchUserData} from "./authThunks.js";
 
