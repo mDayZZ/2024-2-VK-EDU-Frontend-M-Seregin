@@ -48,9 +48,8 @@ const ChatProfile = ({chatInfo}) => {
                         {
                             chatMembers.map(chatMember => {
                                 const userName = chatMember?.name || chatMember?.username;
-                                const userStatus = chatMember?.status;
-                                const userAvatar = chatMember?.profile_image_url;
-
+                                const userStatus = chatMember?.is_online ? "online" : "offline";
+                                const userAvatar = chatMember?.avatar;
                                 const onUserItemClick = () => {
                                     openModal(<UserProfile profileInfo={chatMember}/>)
                                 }

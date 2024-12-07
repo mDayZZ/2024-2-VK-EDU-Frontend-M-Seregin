@@ -30,7 +30,7 @@ const ChatHeader = ({chatInfo, userInfo, className, onDeleteHistory}) => {
 
     const chatTitle = chatInfo?.title ?? '...';
     let chatStatus = getChatStatus() ?? '...';
-    const chatAvatar = chatInfo?.profile_image_url || null;
+    const chatAvatar = chatInfo?.avatar || null;
 
 
 

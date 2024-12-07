@@ -2,7 +2,7 @@ import {useEffect} from 'react'
 import './App.scss'
 import ConversationsPage from "./components/pages/ConversationsPage/ConversationsPage.jsx";
 import ChatPage from "./components/pages/ChatPage/ChatPage.jsx";
-import {Route, Routes} from "react-router-dom";
+import {Navigate, Route, Routes} from "react-router-dom";
 import {ModalProvider} from "./contexts/ModalContext.jsx";
 import {routes} from "./utils/routes.js";
 import AuthPage from "./components/pages/AuthPage/AuthPage.jsx";
@@ -27,6 +27,7 @@ function App() {
                       <h1 className={'visually-hidden'}>Chatix Messenger</h1>
                       {!loading &&
                           <Routes>
+                              <Route path='/' element={<Navigate to={routes.chats} />} />
                               <Route path={routes.auth} element={<AuthPage/>}/>
                               <Route path={routes.chats} element={<PrivateRoute><ConversationsPage/></PrivateRoute>}/>
                               <Route path={routes.chat(':chatId')} element={<ChatPage/>}/>
