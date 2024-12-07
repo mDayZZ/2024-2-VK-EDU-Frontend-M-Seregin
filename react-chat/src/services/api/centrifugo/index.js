@@ -1,6 +1,6 @@
-import apiService from "../../apiService.js";
+import {axiosInstance} from "../axiosInstance.js";
 
 export const centrifugoApi = {
-    getCentrifugoToken: (ctx) => apiService.post('/centrifugo/connect/', ctx),
-    getSubscribeToken: (ctx) => apiService.post('/centrifugo/subscribe/', ctx),
+    getCentrifugoToken: (ctx) => axiosInstance.post('/centrifugo/connect/', ctx),
+    getSubscribeToken: (ctx) => axiosInstance.post('/centrifugo/subscribe/', ctx),
 }

@@ -1,4 +1,5 @@
-import apiService from "../../apiService.js";
+import apiService, {API_URL} from "../../apiService.js";
+import axios from "axios";
 
 export const authApi = {
     auth: (credentials) => apiService.post('/auth/', credentials),

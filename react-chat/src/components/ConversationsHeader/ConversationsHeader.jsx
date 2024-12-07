@@ -11,11 +11,11 @@ import UserProfile from "../UserProfile/UserProfile.jsx";
 const ConversationsHeader = ({className, userInfo, backgroundColor, searchQuery, handleSearchQueryChange}) => {
     const headerClasses = cn('chatListHeader', className);
 
-    const {openModal, setOnEdit} = useModal();
+    const {openModal, setOnEdit, closeModal } = useModal();
 
     const handleOpenProfile = () => {
         let onModalEditButton = null;
-        openModal(<UserProfile profileInfo={userInfo} myInfo={userInfo} setOnEdit={setOnEdit}/>)
+        openModal(<UserProfile profileInfo={userInfo} myInfo={userInfo} setOnEdit={setOnEdit} closeModal={closeModal}/>)
     }
 
 

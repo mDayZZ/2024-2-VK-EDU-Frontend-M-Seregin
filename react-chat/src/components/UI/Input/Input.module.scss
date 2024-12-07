@@ -1,5 +1,16 @@
 .input {
   background-color: var(--input-bg-color);
   color: var(--input-text-color);
-  border: none;
+
+
+  border: 2px solid rgba(255, 255, 255, 0.17);
+  padding-inline: 10px;
+  padding-block: 10px;
+  border-radius: 10px;
+  transition: border-color 0.3s;
+
+  &:focus {
+    border: 2px solid white;
+    outline: none;
+  }
 }

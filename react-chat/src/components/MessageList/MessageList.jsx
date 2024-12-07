@@ -1,18 +1,11 @@
-import React, {useContext, useEffect} from 'react';
-import {getTextColor} from "../../utils/getTextColor.js";
-import {ThemeContext} from "../../contexts/ThemeContext.jsx";
+import React from 'react';
 import classes from "./MessageList.module.scss";
 import MessageItem from "../MessageItem/MessageItem.jsx";
 import {useTheme} from "../../hooks/useTheme.js";
 
 const MessageList = ({messages, witnessMessages, lastMessageRef, userInfo}) => {
-    const { backgroundColor, textColor } = useTheme('chatBackgroundColor');
+    const { backgroundColor, textColor } = useTheme('chat');
 
-
-    useEffect(() => {
-        document.documentElement.style.setProperty('--chat-bg-color', backgroundColor);
-        document.documentElement.style.setProperty('--chat-text-color', textColor);
-    },[textColor]);
 
     return (
         <ul className={classes.messageList}>
