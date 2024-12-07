@@ -13,7 +13,7 @@ import {fetchUserData} from "./store/auth/authThunks.js";
 
 function App() {
     const dispatch = useDispatch();
-    const {loading} = useSelector(authSelector);
+    const {isAuthorized, loading} = useSelector(authSelector);
 
     useEffect(() => {
         dispatch(fetchUserData());
@@ -28,7 +28,7 @@ function App() {
                       {!loading &&
                           <Routes>
                               <Route path='/' element={<Navigate to={routes.chats} />} />
-                              <Route path={routes.auth} element={<AuthPage/>}/>
+                              <Route path={routes.auth} element={isAuthorized ? <Navigate to='/' /> : <AuthPage/> }/>
                               <Route path={routes.chats} element={<PrivateRoute><ConversationsPage/></PrivateRoute>}/>
                               <Route path={routes.chat(':chatId')} element={<ChatPage/>}/>
                           </Routes>

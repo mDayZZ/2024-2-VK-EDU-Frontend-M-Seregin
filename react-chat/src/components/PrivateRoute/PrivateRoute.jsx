@@ -7,7 +7,6 @@ import {isAuthSelector} from "../../store/auth/authSelectors.js";
 const PrivateRoute = ({children}) => {
     const isAuthenticated = useSelector(isAuthSelector);
 
-    console.log(isAuthenticated)
     return isAuthenticated ? children : <Navigate to={routes.auth} />;
 };
 
