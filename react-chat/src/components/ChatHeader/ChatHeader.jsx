@@ -9,6 +9,7 @@ import IconLink from "../UI/IconLink/IconLink.jsx";
 import DropdownMenu from "../UI/DropDownMenu/DropdownMenu.jsx";
 import {useModal} from "../../contexts/ModalContext.jsx";
 import ChatProfile from "../ChatProfile/ChatProfile.jsx";
+import {getParticipantInfo} from "../../utils/getParticipantInfo.js";
 
 const ChatHeader = ({chatInfo, userInfo, className, onDeleteHistory}) => {
     const {openModal} = useModal();
@@ -19,18 +20,26 @@ const ChatHeader = ({chatInfo, userInfo, className, onDeleteHistory}) => {
         {label: 'Очистить историю', onClick: onDeleteHistory, icon: <DeleteOutline/>},
     ];
     const isPrivate = chatInfo?.is_private;
+    const participant = getParticipantInfo(chatInfo?.members, userInfo);
 
     const getChatStatus = () => {
         if (!isPrivate) {
             const membersCount = chatInfo?.members.length;
             return pluralize(membersCount, 'участник', 'участника', 'участников');
         }
+        return participant.is_online ? 'online' : 'offline';
     }
 
+    const getChatAvatar = () => {
+        if (!isPrivate) {
+            return chatInfo?.avatar;
+        }
+        return participant?.avatar;
+    }
 
     const chatTitle = chatInfo?.title ?? '...';
     let chatStatus = getChatStatus() ?? '...';
-    const chatAvatar = chatInfo?.profile_image_url || null;
+    const chatAvatar = getChatAvatar() || null;
 
 
 

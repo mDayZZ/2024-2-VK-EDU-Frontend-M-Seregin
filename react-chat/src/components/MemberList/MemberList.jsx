@@ -15,7 +15,7 @@ const MemberList = ({users, userInfo, handleCheckboxChange, chosenMembers}) => {
                         return;
                     }
                     const userName = user?.name || user.username;
-                    const userAvatar = user.profile_image_url;
+                    const userAvatar = user?.avatar;
 
                     return (
                         <li key={user.id}>

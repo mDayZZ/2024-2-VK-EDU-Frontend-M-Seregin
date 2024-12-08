@@ -1,10 +1,8 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React from 'react';
 import classes from './SendButton.module.scss';
-import {ThemeContext} from "../../contexts/ThemeContext.jsx";
-import {getTextColor} from "../../utils/getTextColor.js";
 import cn from "classnames";
-import {KeyboardVoice, Send, SendOutlined, Stop} from "@mui/icons-material";
-import {useTheme} from "@mui/material";
+import {KeyboardVoice, Send, Stop} from "@mui/icons-material";
+
 const SendButton = ({className, isVoiceMode,  onVoiceRecording, onVoiceStopRecord, voiceStatus}) => {
     const buttonClasses = cn(className, classes.sendButton);
 

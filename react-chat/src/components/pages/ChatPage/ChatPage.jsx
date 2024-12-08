@@ -9,26 +9,22 @@ import useChatInfo from "../../../hooks/useChatInfo.js";
 import DefaultMain from "../../UI/DefaultMain/DefaultMain.jsx";
 import MessageList from "../../MessageList/MessageList.jsx";
 import MessageForm from "../../MessageForm/MessageForm.jsx";
-import messageList from "../../MessageList/MessageList.jsx";
 import Page from "../../UI/Page/Page.jsx";
 import {useParams} from "react-router-dom";
-import Modal from "../../UI/Modal/Modal.jsx";
-import {useModal} from "../../../contexts/ModalContext.jsx";
-import {useUserContext} from "../../../contexts/UserContext.jsx";
-import {useAuth} from "../../../contexts/AuthContext.jsx";
-import {chatApi} from "../../../services/api/chat/index.js";
-import {messagesApi} from "../../../services/api/messages/index.js";
-import {useCentrifugo} from "../../../contexts/CentrifugoContext.jsx";
 import {useOnReceivedMessage} from "../../../hooks/useOnRecievedMessage.js";
 import audioService from "../../../services/audioService.js";
-import apiService from "../../../services/apiService.js";
 import {useLoadMoreMessages} from "../../../hooks/useLoadMoreMessages.js";
 import {useDragAndDropFiles} from "../../../hooks/useDragAndDropFiles.js";
 import DragZone from "../../UI/DragZone/DragZone.jsx";
+import {useSelector} from "react-redux";
+import {authSelector} from "../../../store/auth/authSelectors.js";
+import {useFetch} from "../../../hooks/useFetch.js";
+import {chatService} from "../../../services/api/chatService.js";
+import {messageService} from "../../../services/api/messageService.js";
 import {notificationApiService} from "../../../services/notificationApiService.js";
 
 const ChatPage = ({}) => {
-    const {user: userInfo } = useAuth();
+    const {user: userInfo } = useSelector(authSelector);
 
     const { chatId } = useParams();
     const [chatInfo, setChatInfo] = useState(null);
@@ -39,11 +35,22 @@ const ChatPage = ({}) => {
     const mainRef = useRef(null);
     const [lastMessageRef] = useLoadMoreMessages({messages, setMessages, chatId, isNextPage, setIsNextPage, mainRef});
 
+    const [fetchMessages, isMessagesLoading, messagesError] = useFetch(async () => {
+        setIsMessageLoading(true)
+        const {count, next, previous, results} = await messageService.getMessages({chatId});
+        setMessages(results);
+        setIsNextPage(!!next);
+        setIsMessageLoading(false)
+    });
+
+    const [fetchChatInfo, isChatInfoLoading, chatInfoError] = useFetch(async () => {
+        const fetchedChatInfo = await chatService.getChatInfo(chatId);
+        setChatInfo(fetchedChatInfo);
+    });
 
     const {droppedFiles, isDragging, dragAndDropProps} = useDragAndDropFiles();
 
     const [isMessageReceived, setIsMessageReceived] = useState(false);
-
 
 
     const fetchDeleteMessages = async () => {
@@ -60,22 +67,6 @@ const ChatPage = ({}) => {
         const result = fetchDeleteMessages();
         setMessages(result);
     };
-
-    const fetchMessages = async (chatId) => {
-        setIsMessageLoading(true)
-
-        const {count, next, previous, results} = await messagesApi.getMessages(chatId);
-        setMessages(results);
-        setIsNextPage(!!next);
-        setIsMessageLoading(false)
-    }
-
-
-    const fetchChatInfo = async () => {
-        const fetchedChatInfo = await chatApi.getChatInfo(chatId);
-        setChatInfo(fetchedChatInfo);
-    }
-
 
     useEffect(() => {
         if (messages.length === 0) {
