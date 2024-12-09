@@ -1,15 +1,14 @@
-import React, {useContext, useMemo} from 'react';
 import classes from "../DefaultMain/DefaultMain.module.scss";
-import {getTextColor} from "../../../utils/getTextColor.js";
-import {ThemeContext} from "../../../contexts/ThemeContext.jsx";
+import {useTheme} from "../../../hooks/useTheme.js";
+import {useEffect} from "react";
 
 
-const DefaultMain = ({children, mainRef, className, backgroundColor = ''}) => {
+const DefaultMain = ({children, mainRef, className}) => {
     const mainClasses = ['main', classes.main, className].join(' ');
-    const {theme} = useContext(ThemeContext);
-    const textColor = useMemo(() => getTextColor(theme.mainBackgroundColor), [theme]);
+    const {backgroundColor, textColor} = useTheme('main');
+
     return (
-        <main ref={mainRef} className={mainClasses} style={{'background': theme.mainBackgroundColor, 'color': textColor}}>
+        <main ref={mainRef} className={mainClasses}>
             {children}
         </main>
     )

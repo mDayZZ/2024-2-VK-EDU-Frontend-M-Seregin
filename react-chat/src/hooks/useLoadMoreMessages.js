@@ -1,5 +1,6 @@
 import {useEffect, useLayoutEffect, useRef, useState} from "react";
 import {messagesApi} from "../services/api/messages/index.js";
+import {messageService} from "../services/api/messageService.js";
 
 export const useLoadMoreMessages = ({messages, setMessages, chatId, isNextPage, setIsNextPage, mainRef}) => {
     const [currentPage, setCurrentPage] = useState(1);
@@ -10,7 +11,7 @@ export const useLoadMoreMessages = ({messages, setMessages, chatId, isNextPage, 
         if (!isNextPage) {
            return;
         }
-        const response = await messagesApi.getMessages(chatId, currentPage+1);
+        const response = await messageService.getMessages({chatId, page: currentPage + 1});
         const newMessages = response.results
         setMessages(prev => [...prev, ...newMessages]);
         setCurrentPage(prevState => prevState + 1);

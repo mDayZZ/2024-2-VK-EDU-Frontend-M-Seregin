@@ -1,8 +1,6 @@
-import React, {forwardRef, useContext, useEffect, useMemo} from 'react';
+import React, {forwardRef, useEffect, useMemo} from 'react';
 import classes from './MessageItem.module.scss';
 import RoundAvatar from "../UI/RoundAvatar/RoundAvatar.jsx";
-import {getTextColor} from "../../utils/getTextColor.js";
-import {ThemeContext} from "../../contexts/ThemeContext.jsx";
 import {getDatetime} from "../../utils/date.js";
 import {useTheme} from "../../hooks/useTheme.js";
 import cn from "classnames";
@@ -11,8 +9,9 @@ import {getFileTypeByUrl} from "../../utils/fileInfo.js";
 import MessageImageList from "../MessageImageList/MessageImageList.jsx";
 import MessageFileList from "../MessageFileList/MessageFileList.jsx";
 import ParseLinks from "../UI/ParseLinks/ParseLinks.jsx";
+
 const MessageItem = forwardRef(({message, isWitnessMessage, userInfo}, ref) => {
-    const { backgroundColor, textColor } = useTheme('chatMessageBackgroundColor');
+    const { backgroundColor, textColor } = useTheme('chatMessage');
 
     const isSelf = userInfo.id === message?.sender.id;
     const senderName = getUserVisibleName(message.sender);

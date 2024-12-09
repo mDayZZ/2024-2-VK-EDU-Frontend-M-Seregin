@@ -2,14 +2,22 @@ import React, {useEffect, useState} from 'react';
 import Input from "../UI/Input/Input.jsx";
 import Form from "../UI/Form/Form.jsx";
 import Button from "../UI/Button/Button.jsx";
-import {changeUserInfo} from "../../services/userService.js";
-import {useUserContext} from "../../contexts/UserContext.jsx";
-import {useAuth} from "../../contexts/AuthContext.jsx";
 import {userApi} from "../../services/api/user/index.js";
+import {authService} from "../../services/api/authService.js";
+import {useNavigate} from "react-router-dom";
+import {routes} from "../../utils/routes.js";
+import {useFetch} from "../../hooks/useFetch.js";
+import {userService} from "../../services/api/userService.js";
 
 const MyUserProfile = ({info, setInfo, setVisibleTitle, profileInfo, isEdit, toggleIsEdit}) => {
+    const navigate = useNavigate();
 
-    const {logout} = useAuth();
+    const [fetchUserInfo, isLoading, error] = useFetch(async (newProfile) => {
+        const response = await userService.changeUserInfo(info.id, newProfile);
+        console.log(response)
+        setInfo(response);
+    });
+
 
     const [editingName, setEditingName] = useState(info.first_name || '');
     const [editingLastName, setEditingLastName] = useState(info.last_name || '');
@@ -29,11 +37,10 @@ const MyUserProfile = ({info, setInfo, setVisibleTitle, profileInfo, isEdit, tog
         bio: editingBio.trim(),
     }
 
-    try {
-        const response = await userApi.changeInfo(info.id, newProfile);
-        console.log('response', response);
-        setInfo(response);
 
+
+    try {
+        await fetchUserInfo(newProfile);
     } catch (e) {
         console.error(e);
     } finally {
@@ -67,7 +74,6 @@ const MyUserProfile = ({info, setInfo, setVisibleTitle, profileInfo, isEdit, tog
                     </Form>
                 </div>
             }
-            <Button onClick={logout}>Выйти</Button>
         </div>
     );
 };

@@ -1,25 +1,22 @@
-import React, {useContext, useEffect, useReducer, useRef, useState} from 'react';
+import React, {useEffect, useReducer, useRef, useState} from 'react';
 import SendButton from "../SendButton/SendButton.jsx";
 import classes from "./MessageForm.module.scss";
-import {ThemeContext} from "../../contexts/ThemeContext.jsx";
-import {getTextColor} from "../../utils/getTextColor.js";
-import {sendMessage} from "../../services/chatService.js";
-import {messagesApi} from "../../services/api/messages/index.js";
-import {useAuth} from "../../contexts/AuthContext.jsx";
 import audioService from "../../services/audioService.js";
 import {useVoiceMode} from "../../hooks/useVoiceMode.js";
 import {useInputFocusOnStart} from "../../hooks/useInputFocusOnStart.js";
 import {useAttachFiles} from "../../hooks/useAttachFiles.js";
-import IconLink from "../UI/IconLink/IconLink.jsx";
-import IconButton from "../UI/IconButton/IconButton.jsx";
 import {AttachFile, InsertDriveFile, LocationOn} from "@mui/icons-material";
 import DropdownMenu from "../UI/DropDownMenu/DropdownMenu.jsx";
 import AttachedFileList from "../AttachedFileList/AttachedFileList.jsx";
+import {authSelector} from "../../store/auth/authSelectors.js";
+import {useSelector} from "react-redux";
+import {useFetch} from "../../hooks/useFetch.js";
+import {messageService} from "../../services/api/messageService.js";
+import {useTheme} from "../../hooks/useTheme.js";
+
 const MessageForm = ({messages, setMessages, setWitnessMessages, chatInfo, mainRef, droppedFiles}) => {
-    const {theme} = useContext(ThemeContext);
-    const {user} = useAuth();
-    const backgroundColor = theme.inputBackgroundColor;
-    const textColor = getTextColor(backgroundColor);
+    const {user} = useSelector(authSelector);
+    const {backgroundColor, textColor} = useTheme('input');
     const [messageInput, setMessageInput] = useState('');
     const [isSent, setIsSent] = useState(false);
     const menuOptions = [
@@ -32,6 +29,14 @@ const MessageForm = ({messages, setMessages, setWitnessMessages, chatInfo, mainR
     const {attachedFiles, fileInputRef, onFileInputChange, onDeleteAttachedFile, onFilesSent} = useAttachFiles({droppedFiles});
     const {isVoiceMode, voiceFile, voiceStatus, onVoiceRecording, onVoiceStopRecord, onVoiceSent    } = useVoiceMode({messageInput, attachedFiles});
 
+    const [fetchSendMessage, isMessageLoading, error] = useFetch(async(messageForm) => {
+        setMessageInput('');
+        const fetchedMessage = await messageService.sendMessage(messageForm);
+        onVoiceSent();
+        onFilesSent();
+        addNewMessage({...fetchedMessage, sender: user});
+    })
+
     const sendGeolocation = () => {
         const sendMessage = async (geoLink)=> {
 
@@ -41,9 +46,7 @@ const MessageForm = ({messages, setMessages, setWitnessMessages, chatInfo, mainR
             messageFormData.append('text', geoLink);
 
             try {
-                setMessageInput('');
-                const fetchedMessage = await messagesApi.sendMessage(messageFormData);
-                addNewMessage({...fetchedMessage, sender: user});
+                await fetchSendMessage(messageFormData);
             } catch (e) {
                 console.error('error sending message', e);
             }
@@ -92,11 +95,7 @@ const MessageForm = ({messages, setMessages, setWitnessMessages, chatInfo, mainR
 
 
         try {
-            setMessageInput('');
-            const fetchedMessage = await messagesApi.sendMessage(messageFormData);
-            onVoiceSent();
-            onFilesSent();
-            addNewMessage({...fetchedMessage, sender: user});
+            await fetchSendMessage(messageFormData);
         } catch (e) {
             console.error('error sending message', e);
         }

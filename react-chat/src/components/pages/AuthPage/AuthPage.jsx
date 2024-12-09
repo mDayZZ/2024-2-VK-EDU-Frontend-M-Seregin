@@ -1,133 +1,163 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
+
+import classes from './AuthPage.module.scss';
+import DefaultHeader from "../../UI/DefaultHeader/DefaultHeader.jsx";
+import DefaultMain from "../../UI/DefaultMain/DefaultMain.jsx";
+import Page from "../../UI/Page/Page.jsx";
 import Form from "../../UI/Form/Form.jsx";
 import Input from "../../UI/Input/Input.jsx";
 import Button from "../../UI/Button/Button.jsx";
-import tokenService from "../../../services/tokenService.js";
+import TextButton from "../../UI/TextButton/TextButton.jsx";
+import {authService} from "../../../services/api/authService.js";
+import {userService} from "../../../services/api/userService.js";
+import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
-import {routes} from "../../../utils/routes.js";
-import {useAuth} from "../../../contexts/AuthContext.jsx";
-import {authApi} from "../../../services/api/auth/index.js";
+import {fetchUserData} from "../../../store/auth/authThunks.js";
+import Logo from "../../UI/Logo/Logo.jsx";
+import {routes as router} from "../../../utils/routes.js";
 
 const AuthPage = () => {
-    const {login} = useAuth();
-
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [isRegister, setIsRegister] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-    const [requestStatus, setRequestStatus] = useState('');
-    const [formData, setFormData] = useState({
+    const [authData, setAuthData] = useState(
+        {
+            username: '',
+            password: '',
+        }
+    );
+    const [registerData, setRegisterData] = useState(
+        {
+            username: '',
+            password: '',
+            first_name: '',
+            last_name: '',
+            bio: '',
+        }
+    );
+    const [authStatus, setAuthStatus] = useState({
         username: '',
         password: '',
         first_name: '',
         last_name: '',
-        bio: '',
-    });
+        detail: '',
+    })
 
-    const navigate = useNavigate();
-
-    const handleInputChange = (e) => {
+    const handleAuthDataChange = (e) => {
         const {name, value} = e.target;
-        setFormData((prevState) => ({
-            ...prevState, [name]: value
-        }));
-    };
-
-    const onRequestStart = () => {
-        setRequestStatus('');
-        setIsLoading(prevState => true);
-    }
-
-    const onRequestFinally = () => {
-        setIsLoading(prevState => false);
+        setAuthData(prevState => ({...prevState, [name]: value}));
     }
 
 
-    const postRegister = async (userCreate) => {
-        onRequestStart();
-        try {
-            const response = await authApi.register(userCreate);
-            setRequestStatus('Успешно! Авторизуйтесь, используя ваши данные');
-            setIsRegister(false);
-        } catch (e) {
-            console.log(e.message);
-            setRequestStatus(JSON.stringify(e.response))
-            console.log(e.response);
-        }
-        finally {
-            onRequestFinally();
-        }
-    }
-
-
-    const onRegisterFormSubmit = (event) => {
+    const onAuthSubmit = async (event) => {
         event.preventDefault();
-        const userCreate = {
-            username: formData.username,
-            password: formData.password,
-            first_name: formData.first_name,
-            last_name: formData.last_name,
-            bio: formData.bio,
-        }
-        postRegister(userCreate);
-    }
-
-    const postAuth = async (credentials) => {
-        onRequestStart();
+        const formData = new FormData();
+        formData.append("username", authData.username);
+        formData.append("password", authData.password);
         try {
-            await login(credentials);
-        } catch (e) {
-            console.log('бу', e.message);
-            setRequestStatus(JSON.stringify(e.response))
-            console.log('e resp:', e.response);
-        }
-        finally {
-            onRequestFinally();
+            await authService.login(formData);
+            dispatch(fetchUserData());
+            navigate(router.chats);
+
+
+
+
+        } catch (error) {
+            const errorData = error.response.data;
+            setAuthStatus(prevState => ({username: errorData?.username, password: errorData?.password, detail: errorData?.detail}) );
         }
     }
 
-    const onAuthFormSubmit = event => {
-        event.preventDefault();
-        const credentials  = {
-            username: formData.username,
-            password: formData.password,
-        }
-        postAuth(credentials);
+    const toggleIsRegister = () => {
+        setIsRegister(prev => !prev);
+    }
 
+    const handleRegisterDataChange = (e) => {
+        const {name, value} = e.target;
+        setRegisterData(prevState => ({...prevState, [name]: value}));
+    }
+
+    const onRegisterSubmit = async (event) => {
+        event.preventDefault();
+        const formData = new FormData();
+        formData.append("username", registerData.username);
+        formData.append("password", registerData.password);
+        formData.append("first_name", registerData.first_name);
+        formData.append("last_name", registerData.last_name);
+        formData.append("bio", registerData.bio);
+        // formData.append("avatar", null);
+        try {
+            const data = await authService.register(formData);
+            console.log(data)
+        } catch (error) {
+            console.log(error.response.data)
+            const errorData = error.response.data;
+            setAuthStatus(prevState => ({username: errorData?.username, password: errorData?.password, first_name: errorData?.first_name, last_name: errorData?.last_name, common: errorData?.detail}) );
+        }
     }
 
 
     return (
-        <div>
-            <h2>Авторизация</h2>
-            <Button type='button' onClick={() => setIsRegister(!isRegister)}>{isRegister ? 'Авторизоваться' : 'Создать аккаунт' }</Button>
-            {isRegister
-                ?
-                <Form onSubmit={onRegisterFormSubmit}>
-                    <Input placeholder='Имя пользователя' name='username' value={formData.username}
-                           onInput={handleInputChange} required={true}/>
-                    <Input type='password' placeholder='Пароль' name='password' value={formData.password} onInput={handleInputChange}
-                           required={true}/>
-                    <Input placeholder='Имя' name='first_name' value={formData.first_name} onInput={handleInputChange}
-                           required={true}/>
-                    <Input placeholder='Фамилия' name='last_name' value={formData.last_name} onInput={handleInputChange}
-                           required={true}/>
-                    <Input placeholder='Био' name='bio' value={formData.bio} onInput={handleInputChange}/>
-                    <Button>Зарегистироваться</Button>
-                </Form>
+        <Page>
+            <DefaultHeader>
+                <Logo/>
+            </DefaultHeader>
+            <DefaultMain className={classes.authPage}>
+                <div className={classes.authPage__container}>
+                    {isRegister
+                        ?
+                        <>
+                            <h2>Регистрация</h2>
+                            <Form className={classes.authForm} onSubmit={onRegisterSubmit}>
+                                <div className={classes.authForm__inputFields}>
 
-                :
-                <Form onSubmit={onAuthFormSubmit}>
-                    <Input placeholder='Имя пользователя' value={formData.username} onInput={handleInputChange}
-                           name='username'/>
-                    <Input placeholder='Пароль' type='password' value={formData.password} onInput={handleInputChange} name='password'/>
-                    <Button >Войти</Button>
-                </Form>
-            }
-            {isLoading &&
-                <h3>Загрузка...</h3>
-            }
-            <p>{requestStatus}</p>
-        </div>
-);
+                                    <Input value={registerData.username} name="username" placeholder="Логин"
+                                           onChange={handleRegisterDataChange}></Input>
+                                    <p className={classes.authForm__status}>{authStatus.username}</p>
+                                    <Input value={registerData.password} name="password" placeholder="Пароль"
+                                           type="password" onChange={handleRegisterDataChange}></Input>
+                                    <p className={classes.authForm__status}>{authStatus.password}</p>
+                                    <Input value={registerData.first_name} name="first_name" placeholder="Имя"
+                                           onChange={handleRegisterDataChange}></Input>
+                                    <p className={classes.authForm__status}>{authStatus.first_name}</p>
+                                    <Input value={registerData.last_name} name="last_name" placeholder="Фамилия"
+                                           onChange={handleRegisterDataChange}></Input>
+                                    <p className={classes.authForm__status}>{authStatus.last_name}</p>
+                                    <Input value={registerData.bio} name="bio" placeholder="О себе"
+                                           onChange={handleRegisterDataChange}></Input>
+                                </div>
+                                <Button>Зарегистрироваться</Button>
+                                <p className={classes.authForm__status}>{authStatus.detail}</p>
+                                <TextButton type='button' onClick={toggleIsRegister}>Есть аккаунт</TextButton>
+                            </Form>
+                        </>
+
+                        :
+                        <>
+                            <h2>Авторизация</h2>
+                            <Form className={classes.authForm} onSubmit={onAuthSubmit}>
+                                <div className={classes.authForm__inputFields}>
+                                    <Input value={authData.username} name="username" placeholder="Логин"
+                                           onChange={handleAuthDataChange}></Input>
+                                    <p className={classes.authForm__status}>{authStatus.username}</p>
+                                    <Input value={authData.password} name="password" placeholder="Пароль"
+                                           type="password"
+                                           onChange={handleAuthDataChange}></Input>
+                                    <p className={classes.authForm__status}>{authStatus?.password}</p>
+                                </div>
+                                <Button>Войти</Button>
+                                <p className={classes.authForm__status}>{authStatus.detail}</p>
+                                <TextButton type='button' onClick={toggleIsRegister}>Создать аккаунт</TextButton>
+                            </Form>
+                        </>
+
+                    }
+
+                </div>
+
+            </DefaultMain>
+        </Page>
+    );
 };
 
 export default AuthPage;

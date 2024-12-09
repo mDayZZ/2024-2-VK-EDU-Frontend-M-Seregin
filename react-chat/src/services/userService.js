@@ -1,5 +1,4 @@
 import {mockedChangeUserInfo, mockedGetAllUsers, mockedGetUserById} from "../mock/mockApiHandlers.js";
-import {useUserContext} from "../contexts/UserContext.jsx";
 
 
 export const getUserById = async (userId) => {

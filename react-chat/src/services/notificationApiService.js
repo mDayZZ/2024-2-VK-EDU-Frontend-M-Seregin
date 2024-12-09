@@ -1,7 +1,6 @@
 import {getUserVisibleName} from "../utils/getUserVisibleName.js";
-import {chatsApi} from "./api/chats/index.js";
-import {chatApi} from "./api/chat/index.js";
 import {pluralize} from "../utils/pluralize.js";
+import {chatService} from "./api/chatService.js";
 
 export const notificationApiService = {
     notify: async (message) => {
@@ -11,7 +10,7 @@ export const notificationApiService = {
         if (Notification.permission === 'granted') {
             const {sender, text, chat: chatId, voice, files} = message;
             console.log(message)
-            const chat = await chatApi.getChatInfo(chatId);
+            const chat = await chatService.getChatInfo(chatId);
             const { title: chatTitle, avatar: chatAvatar } = chat;
             const {avatar: senderAvatar} = sender;
             const visibleName = getUserVisibleName(sender);

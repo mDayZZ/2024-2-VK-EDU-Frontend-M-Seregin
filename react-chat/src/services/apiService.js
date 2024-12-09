@@ -1,7 +1,7 @@
-import TokenService from "./tokenService.js";
 import { routes } from "../utils/routes.js";
+import {tokenService as TokenService} from "./tokenService.js";
 
-const API_URL = import.meta.env.VITE_API_URL;
+export const API_URL = import.meta.env.VITE_API_URL;
 
 class ApiService {
     constructor(baseURL) {
