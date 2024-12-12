@@ -10,14 +10,19 @@ import Button from "../UI/Button/Button.jsx";
 import {authService} from "../../services/api/authService.js";
 import {routes} from "../../utils/routes.js";
 import {Navigate, useNavigate} from "react-router-dom";
+import {useModal} from "../../contexts/ModalContext.jsx";
+import ModalNewDM from "../ModalNewDM/ModalNewDM.jsx";
+import UserHeader from "../UserHeader/UserHeader.jsx";
+import TextButton from "../UI/TextButton/TextButton.jsx";
 
 const UserProfile = ({profileInfo, setOnEdit, closeModal}) => {
     const navigate = useNavigate();
     const {user: userInfo} = useSelector(authSelector);
-
+    const {openModal} = useModal();
     const isProfileMine = userInfo.id === profileInfo.id;
     const [isEdit, setIsEdit] = useState(false);
     const toggleIsEdit = () => setIsEdit(prevState => !prevState);
+    const [isNewMessage, setIsNewMessage] = useState(false);
 
     const [info, setInfo] = useState(profileInfo);
 
@@ -25,6 +30,7 @@ const UserProfile = ({profileInfo, setOnEdit, closeModal}) => {
     const [visibleTitle, setVisibleTitle] = useState(getUserVisibleName(profileInfo));
     const [visibleUsername, setVisibleUsername] = useState(`@${profileInfo.username}`);
     const [visibleBio, setVisibleBio] = useState(profileInfo.bio);
+
 
     const visibleStatus = '';
 
@@ -42,6 +48,7 @@ const UserProfile = ({profileInfo, setOnEdit, closeModal}) => {
     }
 
     const handlePrivateChatClick = () => {
+        setIsNewMessage(true)
         return;
     }
 
@@ -71,32 +78,36 @@ const UserProfile = ({profileInfo, setOnEdit, closeModal}) => {
     return (
         <div className={classes.userProfile}>
             <div className={classes.userProfile__info}>
-                <div className={classes.userProfile__headInfo}>
-                    <RoundAvatar src={visibleAvatar}/>
-                    <div className={classes.userProfile__headTitles}>
-                        <h2>{visibleTitle}</h2>
-                        <p className={classes.userProfile__status}>{visibleStatus}</p>
-                        <p><CopyLink className={classes.userProfile__username}>{visibleUsername}</CopyLink></p>
-                    </div>
-                </div>
+                <UserHeader username={visibleUsername} avatar={visibleAvatar} status={visibleStatus} title={visibleTitle} />
+                {!isNewMessage
+                    ?
+                    <>
+                        {isProfileMine &&
+                            <MyUserProfile info={info} setInfo={setInfo} visibleTitle={visibleTitle} setVisibleTitle={setVisibleTitle} profileInfo={profileInfo} isEdit={isEdit} toggleIsEdit={toggleIsEdit}/>
+                        }
 
+                        {!isEdit &&
+                            <p>bio: {visibleBio}</p>
+                        }
+                        {isProfileMine &&
+                            <Button onClick={logout}>Выйти</Button>
+                        }
 
-                {isProfileMine &&
-                    <MyUserProfile info={info} setInfo={setInfo} visibleTitle={visibleTitle} setVisibleTitle={setVisibleTitle} profileInfo={profileInfo} isEdit={isEdit} toggleIsEdit={toggleIsEdit}/>
+                        {!isProfileMine &&
+                            <ul className='optionList'>
+                                <li><TextButton  onClick={handlePrivateChatClick}>Личные сообщения</TextButton></li>
+                            </ul>
+                        }
+                    </>
+
+                    :
+
+                    <ModalNewDM participant={profileInfo}/>
+
                 }
 
-                {!isEdit &&
-                    <p>bio: {visibleBio}</p>
-                }
-                {isProfileMine &&
-                    <Button onClick={logout}>Выйти</Button>
-                }
 
-                {!isProfileMine &&
-                    <ul className='optionList'>
-                        {/*<li><button onClick={handlePrivateChatClick}>Личные сообщения</button></li>*/}
-                    </ul>
-                }
+
             </div>
         </div>
 

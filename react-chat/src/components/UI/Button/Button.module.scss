@@ -1,4 +1,5 @@
 .button {
+  position: relative;
   border: none;
   border-radius: 5px;
   padding-block: 10px;
@@ -8,6 +9,7 @@
   color: var(--button-text-color);
   cursor: pointer;
   transition-duration: var(--transition-duration);
+  min-height: 30px;
 
   &:hover {
     filter: brightness(1.1);
@@ -15,5 +17,14 @@
   &:active {
     transition-duration: 0s;
     filter: brightness(0.8);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    pointer-events: none;
+
+    &:hover {
+      filter: brightness(1);
+    }
   }
 }
