@@ -3,11 +3,16 @@ import RoundAvatar from "../UI/RoundAvatar/RoundAvatar.jsx";
 import CopyLink from "../UI/CopyLink/CopyLink.jsx";
 
 import classes from "./UserHeader.module.scss";
-const UserHeader = ({avatar, title, status, username}) => {
+import ChangableAvatar from "../ChangableAvatar/ChangableAvatar.jsx";
+const UserHeader = ({avatar, setNewUserAvatar, title, status, username, isProfileMine}) => {
 
     return (
         <div className={classes.headInfo}>
-            <RoundAvatar src={avatar}/>
+            {isProfileMine
+                ? <ChangableAvatar setNewUserAvatar={setNewUserAvatar} src={avatar}/>
+                : <RoundAvatar src={avatar}/>
+            }
+
             <div className={classes.headInfo__headTitles}>
                 <h2>{title}</h2>
                 <p className={classes.headInfo__status}>{status}</p>

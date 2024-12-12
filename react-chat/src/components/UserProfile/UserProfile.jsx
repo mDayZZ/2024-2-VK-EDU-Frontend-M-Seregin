@@ -4,7 +4,7 @@ import RoundAvatar from "../UI/RoundAvatar/RoundAvatar.jsx";
 import CopyLink from "../UI/CopyLink/CopyLink.jsx";
 import MyUserProfile from "../MyUserProfile/MyUserProfile.jsx";
 import {getUserVisibleName} from "../../utils/getUserVisibleName.js";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {authSelector} from "../../store/auth/authSelectors.js";
 import Button from "../UI/Button/Button.jsx";
 import {authService} from "../../services/api/authService.js";
@@ -16,6 +16,7 @@ import UserHeader from "../UserHeader/UserHeader.jsx";
 import TextButton from "../UI/TextButton/TextButton.jsx";
 
 const UserProfile = ({profileInfo, setOnEdit, closeModal}) => {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const {user: userInfo} = useSelector(authSelector);
     const {openModal} = useModal();
@@ -23,13 +24,16 @@ const UserProfile = ({profileInfo, setOnEdit, closeModal}) => {
     const [isEdit, setIsEdit] = useState(false);
     const toggleIsEdit = () => setIsEdit(prevState => !prevState);
     const [isNewMessage, setIsNewMessage] = useState(false);
-
+    const [newUserAvatar, setNewUserAvatar] = useState(null);
     const [info, setInfo] = useState(profileInfo);
 
     const [visibleAvatar, setVisibleAvatar] = useState(profileInfo.avatar);
     const [visibleTitle, setVisibleTitle] = useState(getUserVisibleName(profileInfo));
     const [visibleUsername, setVisibleUsername] = useState(`@${profileInfo.username}`);
     const [visibleBio, setVisibleBio] = useState(profileInfo.bio);
+
+
+
 
 
     const visibleStatus = '';
@@ -70,7 +74,8 @@ const UserProfile = ({profileInfo, setOnEdit, closeModal}) => {
     useEffect(() => {
        setVisibleTitle(getUserVisibleName(info));
        updateVisibleStates();
-    }, [isEdit])
+
+    }, [isEdit, info])
 
 
 
@@ -78,12 +83,12 @@ const UserProfile = ({profileInfo, setOnEdit, closeModal}) => {
     return (
         <div className={classes.userProfile}>
             <div className={classes.userProfile__info}>
-                <UserHeader username={visibleUsername} avatar={visibleAvatar} status={visibleStatus} title={visibleTitle} />
+                <UserHeader setNewUserAvatar={setNewUserAvatar} isProfileMine={isProfileMine} username={visibleUsername} avatar={visibleAvatar} status={visibleStatus} title={visibleTitle} />
                 {!isNewMessage
                     ?
                     <>
                         {isProfileMine &&
-                            <MyUserProfile info={info} setInfo={setInfo} visibleTitle={visibleTitle} setVisibleTitle={setVisibleTitle} profileInfo={profileInfo} isEdit={isEdit} toggleIsEdit={toggleIsEdit}/>
+                            <MyUserProfile newUserAvatar={newUserAvatar} info={info} setInfo={setInfo} visibleTitle={visibleTitle} setVisibleTitle={setVisibleTitle} profileInfo={profileInfo} isEdit={isEdit} toggleIsEdit={toggleIsEdit}/>
                         }
 
                         {!isEdit &&
@@ -103,11 +108,7 @@ const UserProfile = ({profileInfo, setOnEdit, closeModal}) => {
                     :
 
                     <ModalNewDM participant={profileInfo}/>
-
                 }
-
-
-
             </div>
         </div>
 
