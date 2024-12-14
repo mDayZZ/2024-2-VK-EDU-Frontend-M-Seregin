@@ -40,8 +40,8 @@ const UserProfile = ({profileInfo, setOnEdit, closeModal}) => {
 
     const logout = () => {
         closeModal();
-        authService.logout();
         navigate(routes.auth);
+        authService.logout();
     }
 
     const updateVisibleStates = () => {

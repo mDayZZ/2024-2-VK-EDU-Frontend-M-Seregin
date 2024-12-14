@@ -11,7 +11,6 @@ const MyUserProfile = ({info, setInfo, setVisibleTitle, isEdit, toggleIsEdit, ne
 
     const [fetchUserInfo, isLoading, error] = useFetch(async (newProfile) => {
         const response = await userService.changeUserInfo(info.id, newProfile);
-        console.log(response)
         setInfo(response);
     });
 
