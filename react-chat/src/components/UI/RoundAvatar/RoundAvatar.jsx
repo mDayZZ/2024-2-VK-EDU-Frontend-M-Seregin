@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import classes from './RoundAvatar.module.scss';
 import cn from "classnames";
 
@@ -6,6 +6,7 @@ const DEFAULT_AVATAR_PATH = 'images/avatars/default_avatar.png';
 
 const RoundAvatar = ({src = DEFAULT_AVATAR_PATH, className}) => {
     const avatarClasses = cn(className, classes.roundAvatar);
+
 
     const onLoadError = (e) => {
         e.target.onerror = null;

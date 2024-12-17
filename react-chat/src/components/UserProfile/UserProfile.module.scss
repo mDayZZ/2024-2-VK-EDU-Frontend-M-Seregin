@@ -5,21 +5,7 @@
   &__info {
     display: flex;
     flex-direction: column;
-    gap: 20px;
-  }
-
-  &__headInfo {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-
-    & h2 {
-      margin: 0px;
-    }
-  }
-
-  &__username {
-    font-size: 14px;
+    gap: 10px;
   }
 
   &__userList {

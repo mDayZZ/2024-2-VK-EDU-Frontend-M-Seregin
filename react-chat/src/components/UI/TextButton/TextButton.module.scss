@@ -3,7 +3,9 @@
   border: none;
   background: none;
   color: var(--header-text-color);
+  filter: brightness(0.8);
   cursor: pointer;
+  padding: 0;
 
   &:hover {
     color: #b0a1d5;

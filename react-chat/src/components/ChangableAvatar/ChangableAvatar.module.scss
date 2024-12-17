@@ -1,0 +1,33 @@
+.changableAvatar {
+  position: relative;
+  border-radius: 50%;
+  border: none;
+  aspect-ratio: 1;
+  padding: 0;
+
+  &:hover {
+
+    .changableAvatar__icon {
+      display: flex;
+    }
+  }
+
+  &__icon {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    z-index: 0;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+
+  &__fileInput {
+    display: none;
+  }
+}

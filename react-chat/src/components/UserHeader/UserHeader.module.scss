@@ -1,0 +1,21 @@
+.headInfo {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  & h2 {
+    margin: 0px;
+  }
+
+  &__headTitles {
+
+  }
+
+  &__status {
+
+  }
+
+  &__username {
+    font-size: 14px;
+  }
+}

@@ -15,33 +15,16 @@ import {useNavigate} from "react-router-dom";
 import {fetchUserData} from "../../../store/auth/authThunks.js";
 import Logo from "../../UI/Logo/Logo.jsx";
 import {routes as router} from "../../../utils/routes.js";
+import {defaultVars} from "../../../utils/defaultVars.js";
 
 const AuthPage = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [isRegister, setIsRegister] = useState(false);
-    const [authData, setAuthData] = useState(
-        {
-            username: '',
-            password: '',
-        }
+    const [authData, setAuthData] = useState(defaultVars.authData
     );
-    const [registerData, setRegisterData] = useState(
-        {
-            username: '',
-            password: '',
-            first_name: '',
-            last_name: '',
-            bio: '',
-        }
-    );
-    const [authStatus, setAuthStatus] = useState({
-        username: '',
-        password: '',
-        first_name: '',
-        last_name: '',
-        detail: '',
-    })
+    const [registerData, setRegisterData] = useState(defaultVars.registerData);
+    const [authStatus, setAuthStatus] = useState(defaultVars.authStatus);
 
     const handleAuthDataChange = (e) => {
         const {name, value} = e.target;
@@ -88,7 +71,6 @@ const AuthPage = () => {
         // formData.append("avatar", null);
         try {
             const data = await authService.register(formData);
-            console.log(data)
         } catch (error) {
             console.log(error.response.data)
             const errorData = error.response.data;

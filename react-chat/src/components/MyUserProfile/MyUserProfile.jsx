@@ -2,21 +2,24 @@ import React, {useEffect, useState} from 'react';
 import Input from "../UI/Input/Input.jsx";
 import Form from "../UI/Form/Form.jsx";
 import Button from "../UI/Button/Button.jsx";
-import {userApi} from "../../services/api/user/index.js";
-import {authService} from "../../services/api/authService.js";
 import {useNavigate} from "react-router-dom";
-import {routes} from "../../utils/routes.js";
 import {useFetch} from "../../hooks/useFetch.js";
 import {userService} from "../../services/api/userService.js";
 
-const MyUserProfile = ({info, setInfo, setVisibleTitle, profileInfo, isEdit, toggleIsEdit}) => {
+const MyUserProfile = ({info, setInfo, setVisibleTitle, isEdit, toggleIsEdit, newUserAvatar}) => {
     const navigate = useNavigate();
 
     const [fetchUserInfo, isLoading, error] = useFetch(async (newProfile) => {
         const response = await userService.changeUserInfo(info.id, newProfile);
-        console.log(response)
         setInfo(response);
     });
+
+    const [fetchUpdateAvatar, isAvatarLoading, avatarError] = useFetch(async (newAvatar) => {
+        const data = new FormData();
+        data.append('avatar', newAvatar)
+        const response = await userService.changeUserInfo(info.id, data)
+        setInfo(response);
+    })
 
 
     const [editingName, setEditingName] = useState(info.first_name || '');
@@ -29,25 +32,32 @@ const MyUserProfile = ({info, setInfo, setVisibleTitle, profileInfo, isEdit, tog
 
 
     const onSubmit = async (e) => {
-    e.preventDefault();
+        e.preventDefault();
 
-    const newProfile = {
-        first_name: editingName.trim(),
-        last_name: editingLastName.trim(),
-        bio: editingBio.trim(),
-    }
+        const newProfile = {
+            first_name: editingName.trim(),
+            last_name: editingLastName.trim(),
+            bio: editingBio.trim(),
+        }
 
 
-
-    try {
-        await fetchUserInfo(newProfile);
-    } catch (e) {
-        console.error(e);
-    } finally {
-        toggleIsEdit();
-    }
+        try {
+            await fetchUserInfo(newProfile);
+        } catch (e) {
+            console.error(e);
+        } finally {
+            toggleIsEdit();
+        }
 
     };
+
+
+    useEffect(() => {
+        if (!newUserAvatar) {
+            return;
+        }
+        fetchUpdateAvatar(newUserAvatar);
+    }, [newUserAvatar])
 
     return (
         <div>

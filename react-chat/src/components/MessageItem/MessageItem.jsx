@@ -6,7 +6,7 @@ import {useTheme} from "../../hooks/useTheme.js";
 import cn from "classnames";
 import {getUserVisibleName} from "../../utils/getUserVisibleName.js";
 import {getFileTypeByUrl} from "../../utils/fileInfo.js";
-import MessageImageList from "../MessageImageList/MessageImageList.jsx";
+import   MessageImageList from "../MessageImageList/MessageImageList.jsx";
 import MessageFileList from "../MessageFileList/MessageFileList.jsx";
 import ParseLinks from "../UI/ParseLinks/ParseLinks.jsx";
 

@@ -83,7 +83,7 @@ const ChatPage = ({}) => {
     useEffect(() => {
         fetchChatInfo();
         fetchMessages(chatId);
-    }, [])
+    }, [chatId])
 
 
 

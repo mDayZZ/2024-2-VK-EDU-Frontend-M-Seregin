@@ -19,7 +19,6 @@ const ConversationList = ({userId, openChatPage, searchQuery}) => {
 
     const [fetchConversations, isLoading, error] = useFetch(async () => {
         const {count, next, previous, results} = await chatService.getChats();
-
         setConversations(results);
     })
 
