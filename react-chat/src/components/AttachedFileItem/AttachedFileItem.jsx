@@ -6,7 +6,6 @@ import IconButton from "../UI/IconButton/IconButton.jsx";
 
 const AttachedFileItem = ({attachedFile, onDeleteFile, index}) => {
     const fileTitle = getShortFilename(attachedFile?.name, 15);
-    console.log(attachedFile);
     return (
         <li className={classes.fileItem}>
             <IconButton onClick={() => onDeleteFile(index)}><Clear fontSize='small'/></IconButton>

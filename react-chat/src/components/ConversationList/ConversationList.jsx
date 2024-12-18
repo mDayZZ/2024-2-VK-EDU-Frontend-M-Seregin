@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import classes from "./ConversationList.module.scss";
 import ConversationItem from "../ConversationItem/ConversationItem.jsx";
 import {useTheme} from "../../hooks/useTheme.js";
@@ -17,10 +17,6 @@ const ConversationList = ({userId, openChatPage, searchQuery}) => {
     const {openModal, closeModal} = useModal();
     const [conversations, setConversations] = useState([]);
 
-    const [fetchConversations, isLoading, error] = useFetch(async () => {
-        const {count, next, previous, results} = await chatService.getChats();
-        setConversations(results);
-    })
 
     const filteredConversations = useMemo(() => {
         return conversations.filter(conversation => {
@@ -66,10 +62,53 @@ const ConversationList = ({userId, openChatPage, searchQuery}) => {
         }
     }, [conversations])
 
-
     const onCreateChat = () => {
         openModal(<CreateChat closeModal={closeModal}/>);
     }
+
+    const useDynamicPagination = (setElementsState) => {
+        const lastElementRef = useRef(null);
+
+        const [fetchConversations, isLoading, error] = useFetch(async () => {
+            const {count, next, previous, results} = await chatService.getChats();
+            setElementsState(results);
+        })
+
+        useEffect(() => {
+            if (!lastElementRef.current) {
+                return;
+            }
+
+
+            const observer = new IntersectionObserver(entries => {
+                if (entries.length === 0) {
+                    return;
+                }
+                if (entries[entries.length - 1].isIntersecting) {
+                    console.log('Отмечательки')
+                }
+            });
+
+            observer.observe(lastElementRef.current);
+            return () => {
+                if (lastElementRef.current) {
+                    observer.unobserve(lastElementRef.current);
+                }
+            };
+        },[conversations])
+
+        return [lastElementRef, isLoading, error];
+    }
+
+
+
+
+    const [lastConversationRef,  isConversationsLoading,] = useDynamicPagination(setConversations);
+
+    const [fetchConversations, isLoading, error] = useFetch(async () => {
+        const {count, next, previous, results} = await chatService.getChats();
+        setConversations(results);
+    })
 
 
     useEffect(() => {
@@ -82,10 +121,10 @@ const ConversationList = ({userId, openChatPage, searchQuery}) => {
 
     return (
             <ul className={classes.chatList} style={{color: textColor}}>
-                {!isLoading
-                    ? <>{filteredConversations.map(conversation => <ConversationItem userId={userId} conversation={conversation}
+                {!isConversationsLoading
+                    ? <>{filteredConversations.map((conversation, index) => <ConversationItem userId={userId} conversation={conversation}
                                                                                      openChatPage={openChatPage}
-                                                                                     key={conversation.id}/>)}
+                                                                                     key={conversation.id} lastConversationRef={lastConversationRef} index={index} conversationsCount={filteredConversations.length}/>)}
                         {(searchQuery || filteredConversations.length === 0) &&
                             <>
                                 <UserListItem heading={'Создать чат'} comment={'Для совместного общения'}

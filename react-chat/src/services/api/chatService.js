@@ -1,7 +1,7 @@
 import {axiosInstance} from "./axiosInstance.js";
 
 export const chatService = {
-    getChats: async () => {
+    getChats: async (page = null) => {
         const {data} = await axiosInstance.get('/chats/');
         return data;
     },
