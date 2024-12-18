@@ -1,8 +1,10 @@
 import {axiosInstance} from "./axiosInstance.js";
 
 export const chatService = {
-    getChats: async (page = null) => {
-        const {data} = await axiosInstance.get('/chats/');
+    getChats: async ({page}) => {
+        const {data} = await axiosInstance.get('/chats/', {
+            params: page ? {page} : {},
+        });
         return data;
     },
     getChatInfo: async (id) => {

@@ -11,6 +11,11 @@ import {useFetch} from "../../hooks/useFetch.js";
 import {chatService} from "../../services/api/chatService.js";
 import Loader from "../UI/Loader/Loader.jsx";
 import {notificationApiService} from "../../services/notificationApiService.js";
+import {useSelector} from "react-redux";
+import {authSelector} from "../../store/auth/authSelectors.js";
+import {getPagesCount} from "../../utils/getPagesCount.js";
+import useDebounce from "../../hooks/useDebounce.js";
+import {useDynamicPagination} from "../../hooks/useDynamicPagination.js";
 
 const ConversationList = ({userId, openChatPage, searchQuery}) => {
     const {backgroundColor, textColor} = useTheme('main');
@@ -66,62 +71,11 @@ const ConversationList = ({userId, openChatPage, searchQuery}) => {
         openModal(<CreateChat closeModal={closeModal}/>);
     }
 
-    const useDynamicPagination = (setElementsState) => {
-        const lastElementRef = useRef(null);
-
-        const [fetchConversations, isLoading, error] = useFetch(async () => {
-            const {count, next, previous, results} = await chatService.getChats();
-            setElementsState(results);
-        })
-
-        useEffect(() => {
-            if (!lastElementRef.current) {
-                return;
-            }
-
-
-            const observer = new IntersectionObserver(entries => {
-                if (entries.length === 0) {
-                    return;
-                }
-                if (entries[entries.length - 1].isIntersecting) {
-                    console.log('Отмечательки')
-                }
-            });
-
-            observer.observe(lastElementRef.current);
-            return () => {
-                if (lastElementRef.current) {
-                    observer.unobserve(lastElementRef.current);
-                }
-            };
-        },[conversations])
-
-        return [lastElementRef, isLoading, error];
-    }
-
-
-
-
-    const [lastConversationRef,  isConversationsLoading,] = useDynamicPagination(setConversations);
-
-    const [fetchConversations, isLoading, error] = useFetch(async () => {
-        const {count, next, previous, results} = await chatService.getChats();
-        setConversations(results);
-    })
-
-
-    useEffect(() => {
-        if (!userId) {
-            return;
-        }
-        fetchConversations();
-    }, [userId])
-
+    const [lastConversationRef] = useDynamicPagination(setConversations, conversations, chatService.getChats);
 
     return (
             <ul className={classes.chatList} style={{color: textColor}}>
-                {!isConversationsLoading
+                {conversations.length !== 0
                     ? <>{filteredConversations.map((conversation, index) => <ConversationItem userId={userId} conversation={conversation}
                                                                                      openChatPage={openChatPage}
                                                                                      key={conversation.id} lastConversationRef={lastConversationRef} index={index} conversationsCount={filteredConversations.length}/>)}
