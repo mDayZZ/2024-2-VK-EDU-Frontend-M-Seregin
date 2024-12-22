@@ -25,7 +25,6 @@ export const ModalProvider = ({children}) => {
             {isOpen &&
                 <Modal isOpen={isOpen} onEdit={onEdit} onClose={closeModal} content={content} />
             }
-
         </ModalContext.Provider>
     )
 }
