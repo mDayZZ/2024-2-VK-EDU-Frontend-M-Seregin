@@ -1,3 +1,5 @@
+/ts/utils/*.js
+
 /certs/
 ### Ansible files ###
 *.retry
