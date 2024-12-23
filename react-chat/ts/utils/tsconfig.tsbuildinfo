@@ -1,1 +1,1 @@
-{"root":["./translate/apiService.ts","./translate/cache.ts","./translate/index.ts","./translate/module.ts","./translate/testTranslate.ts","./translate/types.ts"],"version":"5.7.2"}
+{"root":["./translate/apiService.ts","./translate/cache.ts","./translate/index.ts","./translate/translate.ts","./translate/testTranslate.ts","./translate/types.ts"],"version":"5.7.2"}

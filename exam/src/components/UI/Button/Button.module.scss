@@ -1,0 +1,13 @@
+.button {
+  background-color: #e3eaf8;
+  color: #1e6ad3;
+  //border: 1px solid #fdfdfd;
+  border-radius: 2px;
+  border: none;
+  min-width: 60px;
+  min-height: 30px;
+
+  &:hover {
+    background-color: #b9d4ff;
+  }
+}
