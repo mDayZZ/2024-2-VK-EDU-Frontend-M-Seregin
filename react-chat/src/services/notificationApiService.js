@@ -9,7 +9,6 @@ export const notificationApiService = {
         }
         if (Notification.permission === 'granted') {
             const {sender, text, chat: chatId, voice, files} = message;
-            console.log(message)
             const chat = await chatService.getChatInfo(chatId);
             const { title: chatTitle, avatar: chatAvatar } = chat;
             const {avatar: senderAvatar} = sender;
@@ -31,9 +30,13 @@ export const notificationApiService = {
             const visibleImg = chatAvatar || senderAvatar || `${import.meta.env.BASE_URL}/images/avatars/default_avatar.png`;
             const notification = new Notification(chatTitle, {body, icon: visibleImg });
 
+            const conversationLink = `${import.meta.env.BASE_URL}#/chats/${chatId}`
             notification.onclick = () => {
-                window.open(`${import.meta.env.BASE_URL}#/chats/${chatId}`, '_blank');
+                notificationApiService._openConversation(conversationLink);
             };
         }
+    },
+    _openConversation: (link) => {
+        window.open(link, '_blank');
     }
 }

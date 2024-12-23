@@ -14,6 +14,7 @@ import {useModal} from "../../contexts/ModalContext.jsx";
 import ModalNewDM from "../ModalNewDM/ModalNewDM.jsx";
 import UserHeader from "../UserHeader/UserHeader.jsx";
 import TextButton from "../UI/TextButton/TextButton.jsx";
+import {logoutAction} from "../../store/auth/authSlice.js";
 
 const UserProfile = ({profileInfo, setOnEdit, closeModal}) => {
     const dispatch = useDispatch();
@@ -40,6 +41,7 @@ const UserProfile = ({profileInfo, setOnEdit, closeModal}) => {
 
     const logout = () => {
         closeModal();
+        dispatch(logoutAction());
         navigate(routes.auth);
         authService.logout();
     }

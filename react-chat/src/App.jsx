@@ -10,10 +10,13 @@ import PrivateRoute from "./components/PrivateRoute/PrivateRoute.jsx";
 import {useDispatch, useSelector} from "react-redux";
 import {authSelector} from "./store/auth/authSelectors.js";
 import {fetchUserData} from "./store/auth/authThunks.js";
+import {useCheckNotificationPermissions} from "./hooks/useCheckNotificationPermissions.js";
+import NotificationPermissions from "./components/NotificationPermissions/NotificationPermissions.jsx";
 
 function App() {
     const dispatch = useDispatch();
     const {isAuthorized, loading} = useSelector(authSelector);
+
 
     useEffect(() => {
         dispatch(fetchUserData());
@@ -24,6 +27,7 @@ function App() {
       !loading &&
               <ModalProvider>
                   <div id={'app'}>
+                      <NotificationPermissions isAuthorized={isAuthorized}/>
                       <h1 className={'visually-hidden'}>Chatix Messenger</h1>
                       {!loading &&
                           <Routes>
