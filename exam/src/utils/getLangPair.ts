@@ -1,4 +1,4 @@
-export const getLangPair = (from:string, to:string,): => {
+export const getLangPair = (from:string, to:string,):string => {
 
 
 
