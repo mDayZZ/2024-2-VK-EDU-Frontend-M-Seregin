@@ -5,7 +5,7 @@ import {routes} from "../../utils/routes.js";
 import {pluralize} from "../../utils/pluralize.js";
 import {getUserVisibleName} from "../../utils/getUserVisibleName.js";
 
-const ConversationItem = ({userId, conversation, openChatPage}) => {
+const ConversationItem = ({userId, conversation, openChatPage, lastConversationRef, conversationsCount, index}) => {
 
     const getLastMessage = () => {
 
@@ -31,8 +31,10 @@ const ConversationItem = ({userId, conversation, openChatPage}) => {
     }
     let conversationLastMessage = getLastMessage();
 
+    const isLastConversation = index === conversationsCount-1;
+
     return (
-        <UserListItem avatarUrl={conversation?.avatar} heading={conversation?.title} comment={conversationLastMessage} date={getDatetime(conversation?.last_message?.created_at)} linkTo={routes.chat(conversation.id)}></UserListItem>
+        <UserListItem lastConversationRef={isLastConversation ? lastConversationRef : null} avatarUrl={conversation?.avatar} heading={conversation?.title} comment={conversationLastMessage} date={getDatetime(conversation?.last_message?.created_at)} linkTo={routes.chat(conversation.id)}></UserListItem>
     );
 };
 
