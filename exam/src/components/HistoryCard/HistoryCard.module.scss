@@ -1,6 +1,7 @@
 
 .historyCard {
   width: 100vw;
+  overflow: hidden;
   position: relative;
   padding: 20px;
   border-top: 1px solid var(--color-gray-outline);

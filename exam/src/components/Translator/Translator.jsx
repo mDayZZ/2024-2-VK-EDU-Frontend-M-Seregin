@@ -35,26 +35,26 @@ const Translator = () => {
         setSourceText(e.target.value);
     }
 
-    // useEffect(() => {
-    //     if (!debouncedSourceText) {
-    //         return;
-    //     }
-    //     const sourceText = debouncedSourceText.trim()
-    //
-    //     translate({text: sourceText, from: langFrom, to: langTo})
-    //         .then(result => {
-    //             setTranslatedText(result);
-    //             dispatch(saveTranslate({
-    //                 id: uuidv4(),
-    //                 from: langFrom,
-    //                 to: langTo,
-    //                 sourceText: sourceText,
-    //                 resultedText: result
-    //             }));
-    //         }).catch(err => {
-    //             setTranslatedText(`Произошла ошибка: ${err?.message}`)
-    //     })
-    // }, [debouncedSourceText, langFrom, langTo])
+    useEffect(() => {
+        if (!debouncedSourceText) {
+            return;
+        }
+        const sourceText = debouncedSourceText.trim()
+
+        translate({text: sourceText, from: langFrom, to: langTo})
+            .then(result => {
+                setTranslatedText(result);
+                dispatch(saveTranslate({
+                    id: uuidv4(),
+                    from: langFrom,
+                    to: langTo,
+                    sourceText: sourceText,
+                    resultedText: result
+                }));
+            }).catch(err => {
+                setTranslatedText(`Произошла ошибка: ${err?.message}`)
+        })
+    }, [debouncedSourceText, langFrom, langTo])
 
     const handleSwapLangs = () => {
         const pastLangFrom = langFrom;
