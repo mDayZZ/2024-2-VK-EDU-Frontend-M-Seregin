@@ -1,0 +1,11 @@
+.selector {
+  width: 100%;
+  max-width: 200px;
+  font-size: 12px;
+
+  border: 1px solid var(--color-gray-outline);
+  background-color: #fff;
+  color: var(--color-identity-color);
+  padding-block: 4px;
+  border-radius: 4px;
+}

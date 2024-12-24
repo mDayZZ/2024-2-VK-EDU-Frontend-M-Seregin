@@ -1,0 +1,46 @@
+
+.historyCard {
+  width: 100vw;
+  overflow: hidden;
+  position: relative;
+  padding: 20px;
+  border-top: 1px solid var(--color-gray-outline);
+  box-shadow: 0px 2px 2px 0px var(--color-gray-outline);
+
+
+  & p {
+    margin: 0;
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  color: var(--color-gray-color);
+  gap: 8px;
+}
+
+.translateInfo {
+  display: flex;
+  color: var(--color-gray-color);
+  gap: 8px;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+}
+
+.sourceText {
+
+}
+
+.translatedText {
+  color: var(--color-gray-color);
+}
