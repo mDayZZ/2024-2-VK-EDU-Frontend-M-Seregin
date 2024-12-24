@@ -9,7 +9,7 @@ const Header = () => {
     const navigate = useNavigate();
 
     const handleHistoryButtonClick = () => {
-        navigate('/history')
+        navigate('history')
     }
 
     return (
