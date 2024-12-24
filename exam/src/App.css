@@ -1,0 +1,18 @@
+html {
+    font-family: 'Roboto', sans-serif;
+}
+
+:root {
+    --color-identity-color: #5991df;
+    --color-gray-color: #686868;
+    --color-gray-outline: #dadada;
+    --transition-duration: 0.3s;
+}
+
+body {
+    background-color: #fafafa;
+}
+
+a {
+    text-decoration: none;
+}
