@@ -3,10 +3,10 @@ import classes from './Button.module.scss';
 import clsx from "clsx";
 
 
-const Button = ({children, color, ...props}) => {
+const Button = ({children, color, style, ...props}) => {
 
     return (
-        <button {...props} className={clsx(classes.button, classes.color)}>
+        <button {...props} className={clsx(classes.button, color && classes[color], style && classes[style])}>
             {children}
         </button>
     );

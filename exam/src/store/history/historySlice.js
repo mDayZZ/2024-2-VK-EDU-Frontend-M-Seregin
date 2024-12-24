@@ -1,8 +1,9 @@
 import {createSlice} from "@reduxjs/toolkit";
+import storageService from "../../services/storageService/index.js";
 
 
 const initialState = {
-    translates: [{id: '12', from: 'en-GB', to: 'ru-RU', sourceText: 'haha', resultedText: 'хехе'}],
+    translates: storageService.translate.getHistoryData(),
 }
 
 export const historySlice = createSlice({
@@ -10,13 +11,18 @@ export const historySlice = createSlice({
     initialState,
     reducers: {
         saveTranslate: (state, action) => {
-            state.translates.push(action.payload);
+            state.translates = [action.payload, ...state.translates];
+            storageService.translate.saveHistoryData(state.translates);
+
         },
         deleteAll: (state) => {
             state.translates = [];
+            storageService.translate.saveHistoryData(state.translates);
+
         },
         deleteById: (state, action) => {
             state.translates = state.translates.filter(translate => translate.id !== action.payload);
+            storageService.translate.saveHistoryData(state.translates);
         },
     },
 })

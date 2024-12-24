@@ -6,6 +6,9 @@ html {
     --color-identity-color: #5991df;
     --color-gray-color: #686868;
     --color-gray-outline: #dadada;
+    --color-red-dark-color: #bf2929;
+    --color-red-color: #ff5454;
+    --color-red-light-color: #f87777;
     --transition-duration: 0.3s;
 }
 

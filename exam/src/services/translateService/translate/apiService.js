@@ -12,7 +12,6 @@ export const apiService = {
                 throw new Error(`Error: ${response.statusText}`);
             }
             const data = await response.json();
-            console.log(data)
             return data.responseData.translatedText;
         } catch (error) {
             console.error(error);

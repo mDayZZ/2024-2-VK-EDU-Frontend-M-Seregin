@@ -34,7 +34,6 @@ const Translator = () => {
 
         translate({text: sourceText, from: langFrom, to: langTo})
             .then(result => {
-                console.log(result);
                 setTranslatedText(result);
                 dispatch(saveTranslate({
                     id: uuidv4(),
@@ -43,7 +42,9 @@ const Translator = () => {
                     sourceText: sourceText,
                     resultedText: result
                 }));
-            })
+            }).catch(err => {
+                setTranslatedText(`Произошла ошибка: ${err?.message}`)
+        })
     }, [debouncedSourceText, langFrom, langTo])
 
     const handleSwapLangs = () => {
