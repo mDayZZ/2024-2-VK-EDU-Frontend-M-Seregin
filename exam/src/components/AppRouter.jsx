@@ -6,7 +6,7 @@ import HistoryPage from "./pages/HistoryPage.jsx";
 const AppRouter = () => {
     return (
         <Routes>
-            <Route path='/' index element={<Navigate to={'/translate'}/>} />
+            <Route path='/' index element={<Navigate to={'translate'}/>} />
             <Route path='translate' element={<TranslatePage/>} />
             <Route path='history' element={<HistoryPage/>} />
         </Routes>
