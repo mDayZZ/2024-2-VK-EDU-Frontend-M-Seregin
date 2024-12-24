@@ -10,10 +10,10 @@ jobs:
         with:
           node-version: 16
       - name: Install npm deps
-        working-directory: ./exam
+        working-directory: ./exam_backup
         run: npm i
       - name: Build app
-        working-directory: ./exam
+        working-directory: ./exam_backup
         run: npm run build
         env:
           VITE_API_URL: 'https://vkedu-fullstack-div2.ru/api'

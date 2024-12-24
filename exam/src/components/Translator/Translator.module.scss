@@ -1,7 +1,23 @@
 .translator {
-  box-shadow: 0 1px 3px #818181;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 4px #757575;
+  min-height: 200px;
 }
 
-.header {
+.container {
   display: flex;
+  justify-content: space-between;
+  gap: 20px;
 }
+
+.block {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+

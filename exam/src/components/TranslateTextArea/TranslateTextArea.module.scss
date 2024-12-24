@@ -1,0 +1,23 @@
+.container {
+
+}
+
+.textarea {
+  position: relative;
+  padding: 10px;
+  border: 1px solid #e8e8e8;
+  border-radius: 10px;
+  width: 100%;
+  min-height: 150px;
+
+  outline: none;
+  resize: none;
+}
+
+.symbolsCounter {
+  position: absolute;
+  font-size: 12px;
+  bottom: 10px;
+  right: 10px;
+  color: var(--color-gray-color)
+}
