@@ -1,13 +1,18 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import classes from './TranslateTextArea.module.scss';
+import clsx from "clsx";
 
-const TranslateTextArea = ({sourceText, setSourceText}) => {
-    const maxValue = 500;
+const TranslateTextArea = ({sourceText, onChangeText, maxValue}) => {
+
     const symbolsValue = sourceText.length;
+    const isOverflow = symbolsValue >= maxValue;
+
+
     return (
         <div className={classes.container}>
-            <textarea className={classes.textarea} value={sourceText} onChange={(e) => setSourceText(e.target.value)}/>
-            <p className={classes.symbolsCounter}>{symbolsValue}/{maxValue}</p>
+            <textarea className={classes.textarea} value={sourceText} onChange={onChangeText}/>
+            <p className={clsx(classes.symbolsCounter)}>
+                <span className={clsx({[classes.overflow]: isOverflow})}>{symbolsValue}</span>/{maxValue}</p>
         </div>
     );
 };
