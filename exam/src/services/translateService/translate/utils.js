@@ -1,10 +1,10 @@
 export const getLangPair = (from, to) => {
-    if (!from || from === 'Autodetect') {
-        return `mt|${to}`;
+    if (!from) {
+        return `Autodetect|${to}`;
     }
 
-    if (!to || to === 'Autodetect') {
-        return `${from}|mt`;
+    if (!to) {
+        return `${from}|Autodetect`;
     }
 
     return `${from}|${to}`;
