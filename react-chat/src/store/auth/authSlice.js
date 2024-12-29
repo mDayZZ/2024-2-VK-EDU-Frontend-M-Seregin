@@ -16,7 +16,7 @@ const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        logout: (state) => {
+        logoutAction: (state) => {
             tokenService.clearTokens(); // Очистим токены
             state.user = null;
             state.isAuthorized = false;
@@ -45,6 +45,6 @@ const authSlice = createSlice({
     },
 });
 
-export const { logout, setUser } = authSlice.actions;
+export const { logoutAction, setUser } = authSlice.actions;
 
 export const authReducer = authSlice.reducer;

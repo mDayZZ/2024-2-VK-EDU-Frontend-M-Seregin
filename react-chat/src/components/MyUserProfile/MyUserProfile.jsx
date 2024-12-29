@@ -5,13 +5,17 @@ import Button from "../UI/Button/Button.jsx";
 import {useNavigate} from "react-router-dom";
 import {useFetch} from "../../hooks/useFetch.js";
 import {userService} from "../../services/api/userService.js";
+import {useDispatch} from "react-redux";
+import {setUser} from "../../store/auth/authSlice.js";
 
 const MyUserProfile = ({info, setInfo, setVisibleTitle, isEdit, toggleIsEdit, newUserAvatar}) => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const [fetchUserInfo, isLoading, error] = useFetch(async (newProfile) => {
         const response = await userService.changeUserInfo(info.id, newProfile);
         setInfo(response);
+        dispatch(setUser(response));
     });
 
     const [fetchUpdateAvatar, isAvatarLoading, avatarError] = useFetch(async (newAvatar) => {
@@ -19,6 +23,7 @@ const MyUserProfile = ({info, setInfo, setVisibleTitle, isEdit, toggleIsEdit, ne
         data.append('avatar', newAvatar)
         const response = await userService.changeUserInfo(info.id, data)
         setInfo(response);
+        dispatch(setUser(response));
     })
 
 

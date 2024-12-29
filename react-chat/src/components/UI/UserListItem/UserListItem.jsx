@@ -3,7 +3,7 @@ import classes from './UserListItem.module.scss';
 import RoundAvatar from "../RoundAvatar/RoundAvatar.jsx";
 import {getDatetime} from "../../../utils/date.js";
 import {Link} from "react-router-dom";
-const UserListItem = ({avatarUrl, heading, comment, date, linkTo, onClick}) => {
+const UserListItem = ({avatarUrl, heading, comment, date, linkTo, onClick, lastConversationRef}) => {
 
     const itemTitle = heading || '...';
     const itemComment = comment || '';
@@ -11,7 +11,7 @@ const UserListItem = ({avatarUrl, heading, comment, date, linkTo, onClick}) => {
 
 
     return (
-        <li>
+        <li ref={lastConversationRef}>
             {onClick
                 ? <button className={classes.userListItem__button} onClick={onClick}>
                     <RoundAvatar src={avatarUrl}/>

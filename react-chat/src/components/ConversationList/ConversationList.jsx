@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import classes from "./ConversationList.module.scss";
 import ConversationItem from "../ConversationItem/ConversationItem.jsx";
 import {useTheme} from "../../hooks/useTheme.js";
@@ -11,16 +11,17 @@ import {useFetch} from "../../hooks/useFetch.js";
 import {chatService} from "../../services/api/chatService.js";
 import Loader from "../UI/Loader/Loader.jsx";
 import {notificationApiService} from "../../services/notificationApiService.js";
+import {useSelector} from "react-redux";
+import {authSelector} from "../../store/auth/authSelectors.js";
+import {getPagesCount} from "../../utils/getPagesCount.js";
+import useDebounce from "../../hooks/useDebounce.js";
+import {useDynamicPagination} from "../../hooks/useDynamicPagination.js";
 
 const ConversationList = ({userId, openChatPage, searchQuery}) => {
     const {backgroundColor, textColor} = useTheme('main');
     const {openModal, closeModal} = useModal();
     const [conversations, setConversations] = useState([]);
 
-    const [fetchConversations, isLoading, error] = useFetch(async () => {
-        const {count, next, previous, results} = await chatService.getChats();
-        setConversations(results);
-    })
 
     const filteredConversations = useMemo(() => {
         return conversations.filter(conversation => {
@@ -66,26 +67,18 @@ const ConversationList = ({userId, openChatPage, searchQuery}) => {
         }
     }, [conversations])
 
-
     const onCreateChat = () => {
         openModal(<CreateChat closeModal={closeModal}/>);
     }
 
-
-    useEffect(() => {
-        if (!userId) {
-            return;
-        }
-        fetchConversations();
-    }, [userId])
-
+    const [lastConversationRef] = useDynamicPagination(setConversations, conversations, chatService.getChats);
 
     return (
             <ul className={classes.chatList} style={{color: textColor}}>
-                {!isLoading
-                    ? <>{filteredConversations.map(conversation => <ConversationItem userId={userId} conversation={conversation}
+                {conversations.length !== 0
+                    ? <>{filteredConversations.map((conversation, index) => <ConversationItem userId={userId} conversation={conversation}
                                                                                      openChatPage={openChatPage}
-                                                                                     key={conversation.id}/>)}
+                                                                                     key={conversation.id} lastConversationRef={lastConversationRef} index={index} conversationsCount={filteredConversations.length}/>)}
                         {(searchQuery || filteredConversations.length === 0) &&
                             <>
                                 <UserListItem heading={'Создать чат'} comment={'Для совместного общения'}
