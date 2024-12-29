@@ -76,7 +76,7 @@ const Translator = () => {
                 <IconButton onClick={handleSwapLangs} icon={<SwapHoriz/>}/>
                 <div className={classes.block}>
                     <LanguageSelector languagesList={languagesList.filter(lang => lang.code !== 'Autodetect')} langState={langTo} setLangState={setLangTo} excludeLang={langFrom}/>
-                    <p>{translatedText}</p>
+                    <p className={classes.translatedText}>{translatedText}</p>
                 </div>
             </div>
         </div>
