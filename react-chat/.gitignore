@@ -352,7 +352,7 @@ typings/
 # Optional eslint cache
 .eslintcache
 
-# Optional REPL translator
+# Optional REPL history
 .node_repl_history
 
 # Output of 'npm pack'
@@ -507,7 +507,7 @@ bower.json
 # Ignore pow environment settings
 .powenv
 
-# Ignore Byebug command translator file.
+# Ignore Byebug command history file.
 .byebug_history
 
 ### Sass files ###
