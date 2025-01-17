@@ -1,4 +1,4 @@
-import {ITranslateParams, ITranslateResponse} from "./types";
+import {ITranslateParams, ITranslateResponse} from "./types.js";
 
 const API_URL = 'https://api.mymemory.translated.net';
 

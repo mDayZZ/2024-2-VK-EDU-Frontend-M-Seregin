@@ -1,6 +1,6 @@
-import {cache} from "./cache";
-import {apiService} from "./apiService";
-import {ITranslateParams} from "./types";
+import {cache} from "./cache.js";
+import {apiService} from "./apiService.js";
+import {ITranslateParams} from "./types.js";
 
 
 

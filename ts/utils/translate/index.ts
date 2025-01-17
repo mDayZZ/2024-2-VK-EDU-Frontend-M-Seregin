@@ -1,1 +1,1 @@
-export { translate } from './module';
+export { translate } from './module.js';
