@@ -1,10 +1,8 @@
-/*Translates string to different languages
-*
-* */
-
 import {cache} from "./cache";
 import {apiService} from "./apiService";
 import {ITranslateParams} from "./types";
+
+
 
 export const translate = async (params: ITranslateParams) : Promise<string> => {
     const cachedTranslate = cache.getText(params);
@@ -17,3 +15,4 @@ export const translate = async (params: ITranslateParams) : Promise<string> => {
 
     return fetchedTranslate;
 }
+

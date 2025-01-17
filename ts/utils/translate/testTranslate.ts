@@ -1,4 +1,4 @@
-import translate from "./index";
+import { translate } from './module';
 
 
 const startTesting = async ()  => {
@@ -7,4 +7,5 @@ const startTesting = async ()  => {
     console.log(translatedText);
 }
 console.log('te')
+
 startTesting();
